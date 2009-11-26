@@ -1,8 +1,0 @@
-com.grt192.actuator
-com.grt192.controller.partybot
-com.grt192.controller.teleop
-com.grt192.core
-com.grt192.mechanism
-com.grt192.mechanism.partybot
-com.grt192.sensor
-edu.wpi.first.wpilibj.templates
