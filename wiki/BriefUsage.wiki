@@ -17,13 +17,13 @@ A mechanism is an object--it is not executed continuously, but it has methods th
 === Usage ===
 
 For each of the mechanisms on your robot:
-# Create a class that {{{ extends Mechanism }}}
-# Create a constructor for that class with parameters of ALL the electronic components you will use:
+  # Create a class that {{{ extends Mechanism }}}
+  # Create a constructor for that class with parameters of ALL the electronic components you will use:
 {{{
 public GRTRobotBase(GRTDriveTrain dt, GRTGyro gy,
             GRTAccelerometer ax) {
 }}}
-# For each of the electronic components, start it and then add it to the mechanism as either a Sensor or an Actuator:
+  # For each of the electronic components, start it and then add it to the mechanism as either a Sensor or an Actuator:
 {{{
         gy.start();
         ax.start();
@@ -33,7 +33,7 @@ public GRTRobotBase(GRTDriveTrain dt, GRTGyro gy,
         addSensor("Accelerometer", ax);
 }}}
 Note that you can call the electronic components whatever you like. Each part is added to a hashtable maintained by the mechanism.
-# Write high-level methods associated with that mechanism--for robotbase that means driving & turning commands(driveForward, turnLeft..etc)
+  # Write high-level methods associated with that mechanism--for robotbase that means driving & turning commands(driveForward, turnLeft..etc)
 
 == A Word About Writing "High-Level" Methods ==
 First, to get your actuators out from your mechanism, just call 
@@ -52,8 +52,8 @@ You can issue as many commands as you like, whenever you like, and as long as an
 
 Once your mechanisms are written, all you need to do is write the logic that controls them...This logic sits in Controllers, which are independently running(Threads) that exercise control over a mechanism or many mechanisms
 To do this:
-# Create a class {{{ extends Controller }}}
-# Create a constructor for that class with parameters of ALL the mechanisms you will use, and "addMechanism" them:
+  # Create a class {{{ extends Controller }}}
+  # Create a constructor for that class with parameters of ALL the mechanisms you will use, and "addMechanism" them:
 {{{
     public DriveController(GRTRobotBase rb, GRTDriverStation ds) {
         super();
@@ -61,7 +61,7 @@ To do this:
         addMechanism("RobotBase", rb);
     }
 }}}
-# Write a run() method that contains your logic!
+  # Write a run() method that contains your logic!
 
 === A Word About StepControllers ===
 A StepController is a variant on the controller system, where instead of populating a run() method with an inifinite loop, you can simply write an act() method, that is executed repeatedly inside a loop that happens behind the scenes. This allows for easy statemachine code(each act call executes a different piece of code based on the state), and our code behind the scenes takes care of thread execution safety and cleanup.
