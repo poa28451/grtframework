@@ -32,7 +32,7 @@ public GRTRobotBase(GRTDriveTrain dt, GRTGyro gy,
         addSensor("Gyro", gy);
         addSensor("Accelerometer", ax);
 }}}
-Note that you can call the electronic components whatever you like. Each part is added to a hashtable maintained by the mechanism.
+
   # Write high-level methods associated with that mechanism--for robotbase that means driving & turning commands(driveForward, turnLeft..etc)
 
 == A Word About Writing "High-Level" Methods ==
