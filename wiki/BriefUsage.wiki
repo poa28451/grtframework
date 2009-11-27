@@ -6,7 +6,7 @@ The GRTFramework is built in such a way that developers can easily develop sophi
 
 = Details =
 
-All user code in the GRTFramework falls under either Mechanism, Controller, or Main Robot. 
+All user code in the GRTFramework falls under either Mechanism, Controller, or MainRobot. For example of these explore the classes already contained under com.grt192.controller.* and com.grt192.mechanism.*
 
 == Mechanisms ==
 
@@ -50,4 +50,22 @@ You can issue as many commands as you like, whenever you like, and as long as an
 
 == Controllers ==
 
+Once your mechanisms are written, all you need to do is write the logic that controls them...This logic sits in Controllers, which are independently running(Threads) that exercise control over a mechanism or many mechanisms
+To do this:
+# Create a class {{{ extends Controller }}}
+# Create a constructor for that class with parameters of ALL the mechanisms you will use, and "addMechanism" them:
+{{{
+    public DriveController(GRTRobotBase rb, GRTDriverStation ds) {
+        super();
+        addMechanism("DriverStation", ds);
+        addMechanism("RobotBase", rb);
+    }
+}}}
+# Write a run() method that contains your logic!
+
+=== A Word About StepControllers ===
+A StepController is a variant on the controller system, where instead of populating a run() method with an inifinite loop, you can simply write an act() method, that is executed repeatedly inside a loop that happens behind the scenes. This allows for easy statemachine code(each act call executes a different piece of code based on the state), and our code behind the scenes takes care of thread execution safety and cleanup.
+
 == MainRobot ==
+This is really really simple even though it looks super long. 
+A MainRobot houses the controller and mechanism instances, and instantiates all of them on VM start. see the included example for more information.
