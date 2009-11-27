@@ -44,7 +44,7 @@ this.getActuator("actuatorName");
 Ok so there's one trick you should know about actually using Actuators (GRTVictor, GRTServo, GRTJaguar..etc)
 You can't call GRTJaguar.setSpeed(XX). Instead what you need to do is send it a command, which it will execute as it is available. 
 {{{
-   getActuator("Victor")).enqueueCommand(new Command(speed);
+   getActuator("Victor").enqueueCommand(new Command(speed));
 }}}
 You can issue as many commands as you like, whenever you like, and as long as an actuator is not suspended or disabled, it'll do them. 
 
