@@ -1,4 +1,4 @@
-#This document briefly describes how the GRTFramework is used
+#summary This document briefly describes how the GRTFramework is used
 
 = Introduction =
 
@@ -51,4 +51,3 @@ You can issue as many commands as you like, whenever you like, and as long as an
 == Controllers ==
 
 == MainRobot ==
-
