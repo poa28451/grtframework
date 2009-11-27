@@ -1,0 +1,54 @@
+#This document briefly describes how the GRTFramework is used
+
+= Introduction =
+
+The GRTFramework is built in such a way that developers can easily develop sophisticated code for their robots, without the hassles of execution management or pseudokernels. Understanding how to use it is mostly a function of figuring out what to ignore, and where your code goes! 
+
+= Details =
+
+All user code in the GRTFramework falls under either Mechanism, Controller, or Main Robot. 
+
+== Mechanisms ==
+
+A Mechanism is a _model_ of a robot mechanism, containing all the actuators(motors, servos, pneumatics) and sensors that are a part of that mechanism's function. Examples include: Arms, Shooting mechanisms, Elevators, and Wheeled-bases.
+
+A mechanism is an object--it is not executed continuously, but it has methods that allow for specific actions to take space. 
+
+=== Usage ===
+
+For each of the mechanisms on your robot:
+# Create a class that {{{ extends Mechanism }}}
+# Create a constructor for that class with parameters of ALL the electronic components you will use:
+{{{
+public GRTRobotBase(GRTDriveTrain dt, GRTGyro gy,
+            GRTAccelerometer ax) {
+}}}
+# For each of the electronic components, start it and then add it to the mechanism as either a Sensor or an Actuator:
+{{{
+        gy.start();
+        ax.start();
+        dt.start();
+        addActuator("DriveTrain", dt);
+        addSensor("Gyro", gy);
+        addSensor("Accelerometer", ax);
+}}}
+Note that you can call the electronic components whatever you like. Each part is added to a hashtable maintained by the mechanism.
+# Write high-level methods associated with that mechanism--for robotbase that means driving & turning commands(driveForward, turnLeft..etc)
+
+== A Word About Writing "High-Level" Methods ==
+First, to get your actuators out from your mechanism, just call 
+{{{
+this.getActuator("actuatorName");
+}}}
+
+Ok so there's one trick you should know about actually using Actuators (GRTVictor, GRTServo, GRTJaguar..etc)
+You can't call GRTJaguar.setSpeed(XX). Instead what you need to do is send it a command, which it will execute as it is available. 
+{{{
+((GRTVictor) getActuator("Victor")).enqueueCommand(new Command(speed));
+}}}
+You can issue as many commands as you like, whenever you like, and as long as an actuator is not suspended or disabled, it'll do them. 
+
+== Controllers ==
+
+== MainRobot ==
+
