@@ -32,7 +32,6 @@ public GRTRobotBase(GRTDriveTrain dt, GRTGyro gy,
         addSensor("Gyro", gy);
         addSensor("Accelerometer", ax);
 }}}
-
   # Write high-level methods associated with that mechanism--for robotbase that means driving & turning commands(driveForward, turnLeft..etc)
 
 == A Word About Writing "High-Level" Methods ==
