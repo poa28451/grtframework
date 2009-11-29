@@ -7,7 +7,7 @@ The GRTFramework is built in such a way that developers can easily develop sophi
 
 = Details =
 
-All user code in the GRTFramework falls under either Mechanism, Controller, or MainRobot. For example of these explore the classes already contained under com.grt192.controller.* and com.grt192.mechanism.*
+All user code in the GRTFramework falls under either Mechanism, Controller, or MainRobot. For example of these explore the classes already contained under {{{ com.grt192.controller.* and com.grt192.mechanism.* }}}
 
 == Mechanisms ==
 
@@ -35,7 +35,7 @@ public GRTRobotBase(GRTDriveTrain dt, GRTGyro gy,
 }}}
   # Write high-level methods associated with that mechanism--for robotbase that means driving & turning commands(driveForward, turnLeft..etc)
 
-== A Word About Writing "High-Level" Methods ==
+=== A Word About Writing "High-Level" Methods ===
 First, to get your actuators out from your mechanism, just call 
 {{{
 this.getActuator("actuatorName");
