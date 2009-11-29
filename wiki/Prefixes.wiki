@@ -1,4 +1,4 @@
-#Some notes about prefixes
+#summary Some notes about prefixes
 
 = Prefix Use =
 
