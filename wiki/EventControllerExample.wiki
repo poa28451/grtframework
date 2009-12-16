@@ -1,4 +1,5 @@
 #summary A quick description of how EventControllers are used in a teleoperated tankdrive mode
+#labels Featured
 
 Consider the file DriveEventController.java ({{{com.grt192.controllers.teleop.DriveEventController.java}}}), which is the code that takes input from joysticks and instructs the robot's base to move motors appropriately for "Tank-drive" locomotion.
 
