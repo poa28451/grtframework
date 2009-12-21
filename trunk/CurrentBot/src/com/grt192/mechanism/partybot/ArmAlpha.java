@@ -73,7 +73,7 @@ public class ArmAlpha extends Mechanism{
         addActuator("Arm", new GRTVictor(victorPort));
         getActuator("Arm").start();
 
-        addSensor("Gyro", new GRTGyro(gyroPort, 50));
+        addSensor("Gyro", new GRTGyro(gyroPort, 50, "armGyro"));
         getSensor("Gyro").start();
         for(int i = 1; i <= NUM_OF_SWITCH; i++) {
             addSensor("Switch" + i, new GRTSwitch(switchPorts[i], 25));

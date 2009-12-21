@@ -28,11 +28,13 @@ public class GRTDriverStation extends Mechanism {
     }
 
     public boolean getLeftButton(int button) {
-        return getSensor("leftJoystick").getState("Button" + button) == Sensor.TRUE;
+        return getSensor("leftJoystick").getState("Button" + button)
+                                                                == Sensor.TRUE;
     }
 
     public boolean getRightButton(int button) {
-        return getSensor("leftJoystick").getState("Button" + button) == Sensor.TRUE;
+        return getSensor("leftJoystick").getState("Button" + button)
+                                                                == Sensor.TRUE;
     }
 
     public double getXLeftJoystick() {

@@ -33,10 +33,10 @@ public class GRTRobotBase extends Mechanism {
         addActuator("DriveTrain", new GRTDriveTrain(DTports[0],DTports[1]));
         getActuator("DriveTrain").start();
 
-        addSensor("Accelerometer", new GRTAccelerometer(accelerometerPort, 50));
+        addSensor("Accelerometer", new GRTAccelerometer(accelerometerPort, 50, "baseAcc"));
         getSensor("Accelerometer").start();
 
-        addSensor("Gyro", new GRTGyro(gyroPort, 50));
+        addSensor("Gyro", new GRTGyro(gyroPort, 50, "baseGyro"));
         getSensor("Gyro").start();
     }
 
