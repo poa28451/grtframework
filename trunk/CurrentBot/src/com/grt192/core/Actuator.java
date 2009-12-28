@@ -95,6 +95,10 @@ public abstract class Actuator extends Thread {
      * Add a command to be executed by this actuator
      * @param c
      */
+    public synchronized void enqueueCommand(double c) {
+        commands.addElement(new Command(c));
+    }
+
     public synchronized void enqueueCommand(Command c) {
         commands.addElement(c);
     }
@@ -110,6 +114,12 @@ public abstract class Actuator extends Thread {
     }
 
     public synchronized void enqueueCommands(Command[] commandList){
+        for(int i=0; i<commandList.length; i++){
+            enqueueCommand(commandList[i]);
+        }
+    }
+
+    public synchronized void enqueueCommands(double[] commandList){
         for(int i=0; i<commandList.length; i++){
             enqueueCommand(commandList[i]);
         }
@@ -134,6 +144,21 @@ public abstract class Actuator extends Thread {
        commands.removeElementAt(0);
        return removed;
     }
+
+    /**
+     * Supercedes commands in the queue and does the command provided
+     * @param c
+     */
+    public void doCommand(Command c){
+        this.pause();
+        this.executeCommand(c);
+        this.resume();
+    }
+
+    public void doCommand(double c){
+        doCommand(new Command(c));
+    }
+
 
     /**
      * Clear All commands from the queue. 
@@ -174,10 +199,17 @@ public abstract class Actuator extends Thread {
     }
 
     /**
-     * Pause execution of commands in the queue
+     * Pause execution of commands in the queue and stop the action of this actuator
      */
     public void suspend() {
         halt();
+        this.suspended = true;
+    }
+
+    /**
+     * Pause execution of new commands in the queue
+     */
+    public void pause(){
         this.suspended = true;
     }
 
