@@ -45,7 +45,7 @@ public class GRTADXL345 extends Sensor {
         notifyADXL345Listeners(ADXL345Event.X, getState("X"));
 
         previousValue = getState("Y");
-        setState("Y", accel.getXAxis());
+        setState("Y", accel.getYAxis());
         if (Math.abs(getState("Y") - previousValue) >= SPIKE_THRESHOLD) {
             notifyAccelerometerSpike(ADXL345Event.Y, getState("Y"));
         }
@@ -55,7 +55,7 @@ public class GRTADXL345 extends Sensor {
         notifyADXL345Listeners(ADXL345Event.Y, getState("Y"));
 
         previousValue = getState("Z");
-        setState("Z", accel.getXAxis());
+        setState("Z", accel.getZAxis());
         if (Math.abs(getState("Z") - previousValue) >= SPIKE_THRESHOLD) {
             notifyAccelerometerSpike(ADXL345Event.Z, getState("Z"));
         }
