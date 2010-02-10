@@ -91,7 +91,7 @@ public class GRTAccelerometer extends Sensor implements PIDSource{
     }
 
     public double pidGet() {
-        return this.pidGet();
+        return accelerometer.pidGet();
     }
 
     
