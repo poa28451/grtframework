@@ -51,6 +51,8 @@ public abstract class Actuator extends Thread {
                         //Allow for hardware operation delays
                         if(current.getSleepTime()>0){
                             sleep(current.getSleepTime());
+                            if(current.isAtomic())
+                                this.halt();
                         }
                         for(int i=0; i<actuatorCommandListeners.size(); i++){
                             ((ActuatorCommandListener)

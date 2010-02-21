@@ -1,6 +1,8 @@
 package com.grt192.core;
 
 import com.grt192.controller.WatchDogController;
+import com.grt192.event.GlobalEvent;
+import com.grt192.event.GlobalListener;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -9,22 +11,26 @@ import java.util.Vector;
  *
  * @author anand
  */
-public abstract class GRTRobot extends SimpleRobot{
+public abstract class GRTRobot extends SimpleRobot {
     //Shared objects
+
     protected Hashtable globals;
     protected Vector autonomousControllers;
     protected Vector teleopControllers;
-
+    protected Vector globalListeners;
+    protected static GRTRobot instance;
     private WatchDogController watchDogCtl;
 
-    public GRTRobot(){
+    public GRTRobot() {
         globals = new Hashtable();
         autonomousControllers = new Vector();
         teleopControllers = new Vector();
 
+        globalListeners = new Vector();
         watchDogCtl = new WatchDogController(getWatchdog());
         watchDogCtl.start();
         System.out.println("Started GRT Framework");
+        instance = this;
     }
 
     public synchronized Hashtable getGlobals() {
@@ -45,8 +51,9 @@ public abstract class GRTRobot extends SimpleRobot{
      * @param key
      * @param value
      */
-    public synchronized void putGlobal(String key, Object value){
+    public synchronized void putGlobal(String key, Object value) {
         globals.put(key, value);
+        notifyGlobalListeners(key);
     }
 
     /**
@@ -57,17 +64,19 @@ public abstract class GRTRobot extends SimpleRobot{
     public void autonomous() {
         System.out.println("AUTO");
         //Stop teleopcontrollers if started
-        for(int i=0; i<teleopControllers.size(); i++){
+        for (int i = 0; i < teleopControllers.size(); i++) {
             Controller c = (Controller) teleopControllers.elementAt(i);
-            if(c.isRunning())
+            if (c.isRunning()) {
                 c.stopControl();
+            }
         }
-        
+
         //Start
-        for(int i=0; i<autonomousControllers.size(); i++){
+        for (int i = 0; i < autonomousControllers.size(); i++) {
             Controller c = (Controller) autonomousControllers.elementAt(i);
-            if(!c.isRunning())
+            if (!c.isRunning()) {
                 c.start();
+            }
         }
 
     }
@@ -80,19 +89,37 @@ public abstract class GRTRobot extends SimpleRobot{
     public void operatorControl() {
         //Stop AutonomousControllers if started
         System.out.println("OP");
-        for(int i=0; i<autonomousControllers.size(); i++){
+        for (int i = 0; i < autonomousControllers.size(); i++) {
             Controller c = (Controller) autonomousControllers.elementAt(i);
-            if(c.isRunning())
+            if (c.isRunning()) {
                 c.stopControl();
+            }
         }
 
         //Start
-        for(int i=0; i<teleopControllers.size(); i++){
+        for (int i = 0; i < teleopControllers.size(); i++) {
             Controller c = (Controller) teleopControllers.elementAt(i);
-            if(!c.isRunning())
+            if (!c.isRunning()) {
                 c.start();
+            }
         }
     }
 
-    
+    protected void notifyGlobalListeners(String key) {
+        for (int i = 0; i < globalListeners.size(); i++) {
+            ((GlobalListener) globalListeners.elementAt(i)).globalChanged(new GlobalEvent(GlobalEvent.DEFAULT, key, globals));
+        }
+    }
+
+    public void addGlobalListener(GlobalListener gl) {
+        this.globalListeners.addElement(gl);
+    }
+
+    public void removeGlobalListener(GlobalListener gl) {
+        this.globalListeners.removeElement(gl);
+    }
+
+    public static GRTRobot getInstance() {
+        return instance;
+    }
 }
