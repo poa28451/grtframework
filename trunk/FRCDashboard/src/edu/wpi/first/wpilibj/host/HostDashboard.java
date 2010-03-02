@@ -75,10 +75,6 @@ public class HostDashboard {
             dashboardPacket.dashboardSerializableReadFrom(dataIn);
             
             panel.update();
-            System.out.println(dashboardPacket.cRioState.digitalModule1.pwmValues[2] +
-                    " "+ dashboardPacket.cRioState.analogModule1.input0 +" "
-                    +dashboardPacket.cRioState.digitalModule1.pwmValues[4] +" "
-                    +dashboardPacket.cRioState.analogModule1.input1);
             try {
                 //Thread.sleep(100);
                 bytesIn.reset();
