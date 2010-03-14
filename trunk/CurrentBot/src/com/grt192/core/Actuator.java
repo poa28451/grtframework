@@ -4,6 +4,7 @@
  */
 package com.grt192.core;
 
+import com.grt192.actuator.exception.ActuatorException;
 import com.grt192.event.ActuatorCommandListener;
 import com.grt192.event.ActuatorEvent;
 import java.util.Vector;
@@ -87,7 +88,7 @@ public abstract class Actuator extends Thread {
      * Each actuator must have this method.
      * @param c
      */ 
-    protected abstract void executeCommand(Command c);
+    protected abstract void executeCommand(Command c) throws ActuatorException;
 
     public Vector getCommands() {
         return commands;
@@ -150,14 +151,15 @@ public abstract class Actuator extends Thread {
     /**
      * Supercedes commands in the queue and does the command provided
      * @param c
+     * @throws ActuatorException 
      */
-    public void doCommand(Command c){
+    public void doCommand(Command c) throws ActuatorException{
         this.pause();
         this.executeCommand(c);
         this.resume();
     }
 
-    public void doCommand(double c){
+    public void doCommand(double c) throws ActuatorException{
         doCommand(new Command(c));
     }
 
