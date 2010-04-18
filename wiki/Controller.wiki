@@ -1,0 +1,13 @@
+#summary Controllers are used to control [Mechanism mechanisms]
+
+= Introduction =
+
+Controllers are used to control [Mechanism mechanisms]. They contain all of the logic necessary to tell a [Mechanism] what to do. For example, a kicker [Mechanism] might have to turn a motor until a limit switch is hit. The Controller of that [Mechanism] would contain the necessary if-then statement.
+
+= Usage =
+
+TODO Usage
+
+=== Types of Controller ===
+
+Note that there are three three variants of Controller: StepController, EventController, and Controller. Each has its own flavor, detailed on their wiki pages.
