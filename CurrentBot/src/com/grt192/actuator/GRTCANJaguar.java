@@ -11,219 +11,379 @@ import edu.wpi.first.addons.CANJaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
 
 public class GRTCANJaguar extends Actuator implements PIDOutput {
-	// Control Modes
-	public static final int PERCENT_CONTROL = 1;
-	public static final int SPEED_CONTROL = 2;
-	public static final int POSITION_CONTROL = 3;
-	public static final int CURRENT_CONTROL = 4;
-	// Position Sensors
-	public static final int POTENTIOMETER = 0;
-	public static final int ENCODER = 1;
-	// Neutral Modes
-	public static final int COAST = 0;
-	public static final int BRAKE = 1;
-	public static final int JUMPER = 2;
+    // Control Modes
 
-	private CANJaguar jaguar;
-	
-	private GRTJagEncoder encoder;
-	private GRTJagPowerSensor powerSensor;
-	private GRTJagSwitch switches;
+    public static final int PERCENT_CONTROL = 1;
+    public static final int SPEED_CONTROL = 2;
+    public static final int POSITION_CONTROL = 3;
+    public static final int CURRENT_CONTROL = 4;
+    // Position Sensors
+    public static final int POTENTIOMETER = 0;
+    public static final int ENCODER = 1;
+    // Neutral Modes
+    public static final int COAST = 0;
+    public static final int BRAKE = 1;
+    public static final int JUMPER = 2;
+    private CANJaguar jaguar;
+    private GRTJagEncoder encoder;
+    private GRTJagPowerSensor powerSensor;
+    private GRTJagSwitch switches;
 
-	public GRTCANJaguar(int channel) {
-		this(channel, 0);
-	}
+    /**
+     * Constructs  GRTCANJaguar on a channel and in a default control mode of 0
+     * @param channel
+     */
+    public GRTCANJaguar(int channel) {
+        this(channel, 0);
+    }
 
-	public GRTCANJaguar(int channel, int controlMode) {
-		switch (controlMode) {
-		case PERCENT_CONTROL:
-			jaguar = new CANJaguar(channel,
-					CANJaguar.ControlMode.kPercentVoltage);
-			break;
-		case SPEED_CONTROL:
-			jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kSpeed);
-			break;
-		case POSITION_CONTROL:
-			jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kPosition);
-			break;
-		case CURRENT_CONTROL:
-			jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kCurrent);
-			break;
-		default:
-			jaguar = new CANJaguar(channel);
-		}
-	}
+    /**
+     * Constructs GRTCANJaguar at a certain channel and using a specified control
+     * @param channel
+     * @param controlMode
+     */
+    public GRTCANJaguar(int channel, int controlMode) {
+        switch (controlMode) {
+            case PERCENT_CONTROL:
+                jaguar = new CANJaguar(channel,
+                        CANJaguar.ControlMode.kPercentVoltage);
+                break;
+            case SPEED_CONTROL:
+                jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kSpeed);
+                break;
+            case POSITION_CONTROL:
+                jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kPosition);
+                break;
+            case CURRENT_CONTROL:
+                jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kCurrent);
+                break;
+            default:
+                jaguar = new CANJaguar(channel);
+        }
+    }
 
-	public void setPositionSensor(int sensor) {
-		if (sensor == ENCODER) {
-			jaguar.setPositionReference(CANJaguar.PositionReference.kEncoder);
-		} else if (sensor == POTENTIOMETER) {
-			jaguar
-					.setPositionReference(CANJaguar.PositionReference.kPotentiometer);
-		}
-	}
+    /**
+     *Sets the encoder or potentiometer used to gauge position
+     * @param sensor
+     */
+    public void setPositionSensor(int sensor) {
+        if (sensor == ENCODER) {
+            jaguar.setPositionReference(CANJaguar.PositionReference.kEncoder);
+        } else if (sensor == POTENTIOMETER) {
+            jaguar.setPositionReference(CANJaguar.PositionReference.kPotentiometer);
+        }
+    }
 
-	public void setPID(double p, double i, double d) {
-		jaguar.setPID(p, i, d);
-	}
+    /**
+     *
+     * @param p
+     * @param i
+     * @param d
+     */
+    public void setPID(double p, double i, double d) {
+        jaguar.setPID(p, i, d);
+    }
 
-	public void setP(double p) {
-		jaguar.setPID(p, jaguar.getI(), jaguar.getD());
-	}
+    /**
+     *
+     * @param p
+     */
+    public void setP(double p) {
+        jaguar.setPID(p, jaguar.getI(), jaguar.getD());
+    }
 
-	public void setI(double i) {
-		jaguar.setPID(jaguar.getP(), i, jaguar.getD());
-	}
+    /**
+     *
+     * @param i
+     */
+    public void setI(double i) {
+        jaguar.setPID(jaguar.getP(), i, jaguar.getD());
+    }
 
-	public void setD(double d) {
-		jaguar.setPID(jaguar.getP(), jaguar.getI(), d);
-	}
+    /**
+     *
+     * @param d
+     */
+    public void setD(double d) {
+        jaguar.setPID(jaguar.getP(), jaguar.getI(), d);
+    }
 
-	public double getP() {
-		return jaguar.getP();
-	}
+    /**
+     *
+     * @return
+     */
+    public double getP() {
+        return jaguar.getP();
+    }
 
-	public double getI() {
-		return jaguar.getI();
-	}
+    /**
+     *
+     * @return
+     */
+    public double getI() {
+        return jaguar.getI();
+    }
 
-	public double getD() {
-		return jaguar.getD();
-	}
+    /**
+     *
+     * @return
+     */
+    public double getD() {
+        return jaguar.getD();
+    }
 
-	public void enableClosedLoop() {
-		enableClosedLoop(0.0);
-	}
+    /**
+     *
+     */
+    public void enableClosedLoop() {
+        enableClosedLoop(0.0);
+    }
 
-	public void enableClosedLoop(double initialPosition) {
-		jaguar.enableControl(initialPosition);
-	}
+    /**
+     *
+     * @param initialPosition
+     */
+    public void enableClosedLoop(double initialPosition) {
+        jaguar.enableControl(initialPosition);
+    }
 
-	public void disableClosedLoop() {
-		jaguar.disableControl();
-	}
+    /**
+     *
+     */
+    public void disableClosedLoop() {
+        jaguar.disableControl();
+    }
 
-	public double getInputVoltage() {
-		return jaguar.getBusVoltage();
-	}
+    /**
+     *Will return the input voltage of the jaguar speed controller
+     * @return
+     */
+    public double getInputVoltage() {
+        return jaguar.getBusVoltage();
+    }
 
-	public double getOutputVoltage() {
-		return jaguar.getOutputVoltage();
-	}
+    /**
+     *Will return the output voltage of the jaguar
+     * @return
+     */
+    public double getOutputVoltage() {
+        return jaguar.getOutputVoltage();
+    }
 
-	public double getOutputCurrent() {
-		return jaguar.getOutputCurrent();
-	}
+    /**
+     *Will return the output current of the jaguar
+     * @return
+     */
+    public double getOutputCurrent() {
+        return jaguar.getOutputCurrent();
+    }
 
-	public double getTemperature() {
-		return jaguar.getTemperature();
-	}
+    /**
+     *will return the temperature in the Jaguar
+     * @return
+     */
+    public double getTemperature() {
+        return jaguar.getTemperature();
+    }
 
-	public double getPosition() {
-		return jaguar.getPosition();
-	}
+    /**
+     *Get the position of the encoder or potentiometer.
+     * @return
+     */
+    public double getPosition() {
+        return jaguar.getPosition();
+    }
 
-	public double getSpeed() {
-		return jaguar.getSpeed();
-	}
+    /**
+     *Gets the Speed of the motor in RPM
+     * @return
+     */
+    public double getSpeed() {
+        return jaguar.getSpeed();
+    }
 
-	public boolean getLeftLimitStatus() {
-		return jaguar.getForwardLimitOK();
-	}
+    /**
+     *The motor can turn forward if true
+     * @return
+     */
+    public boolean getLeftLimitStatus() {
+        return jaguar.getForwardLimitOK();
+    }
 
-	public boolean getRightLimitStatus() {
-		return jaguar.getReverseLimitOK();
-	}
+    /**
+     *The motor can turn backward if true
+     * @return
+     */
+    public boolean getRightLimitStatus() {
+        return jaguar.getReverseLimitOK();
+    }
 
-	public void setVoltageRampRate(double rate) {
-		jaguar.setVoltageRampRate(rate);
-	}
+    /**
+     *Set the maximum voltage change rate.
+     *
+     * When in percent voltage output mode, the rate at which the voltage changes can
+     * be limited to reduce current spikes.  Set this to 0.0 to disable rate limiting.
+     *
+     * @param rate
+     */
+    public void setVoltageRampRate(double rate) {
+        jaguar.setVoltageRampRate(rate);
+    }
 
-	public void setEncoderResolution(int countsPerRev) {
-		jaguar.configEncoderCodesPerRev((short) (countsPerRev));
-	}
+    /**
+     *Sets the encoder resolution
+     * @param countsPerRev
+     */
+    public void setEncoderResolution(int countsPerRev) {
+        jaguar.configEncoderCodesPerRev((short) (countsPerRev));
+    }
 
-	public void setSoftLimits(double leftLimit, double rightLimit) {
-		jaguar.configSoftPositionLimits(leftLimit, rightLimit);
-	}
-	
-	public void disableSoftLimits(){
-		jaguar.disableSoftPositionLimits();
-	}
+    /**
+     * Configure Soft Position Limits when in Position Controller mode.
+     *
+     * When controlling position, you can add additional limits on top of the limit switch inputs
+     * that are based on the position feedback.  If the position limit is reached or the
+     * switch is opened, that direction will be disabled.
+     *
+     *
+     * @param leftLimit
+     * @param rightLimit
+     */
+    public void setSoftLimits(double leftLimit, double rightLimit) {
+        jaguar.configSoftPositionLimits(leftLimit, rightLimit);
+    }
 
-	public void setNeutralMode(int mode) {
-		switch(mode){
-		case COAST:
-			jaguar.configNeutralMode(CANJaguar.NeutralMode.kCoast);
-			break;
-		case BRAKE:
-			jaguar.configNeutralMode(CANJaguar.NeutralMode.kBrake);
-			break;
-		case JUMPER:
-			jaguar.configNeutralMode(CANJaguar.NeutralMode.kJumper);
-			break;
-		}
-	}
+    /**
+     *
+     */
+    public void disableSoftLimits() {
+        jaguar.disableSoftPositionLimits();
+    }
 
-	public void setPotentiometerTurns(int turns) {
-		jaguar.configPotentiometerTurns((short) turns);
-	}
+    /**
+     * Configure what the controller does to the H-Bridge when neutral (not driving the output).
+     *
+     * This allows you to override the jumper configuration for brake or coast.
+     *
+     * @param mode
+     */
+    public void setNeutralMode(int mode) {
+        switch (mode) {
+            case COAST:
+                jaguar.configNeutralMode(CANJaguar.NeutralMode.kCoast);
+                break;
+            case BRAKE:
+                jaguar.configNeutralMode(CANJaguar.NeutralMode.kBrake);
+                break;
+            case JUMPER:
+                jaguar.configNeutralMode(CANJaguar.NeutralMode.kJumper);
+                break;
+        }
+    }
 
-	public double getLastCommand() {
-		return jaguar.get();
-	}
+    /**
+     * Configure the number of turns on the potentiometer.
+     *
+     * There is no special support for continuous turn potentiometers.
+     * Only integer numbers of turns are supported.
+     *
+     * @param turns
+     */
+    public void setPotentiometerTurns(int turns) {
+        jaguar.configPotentiometerTurns((short) turns);
+    }
 
-	protected void executeCommand(Command c) throws GRTCANJaguarException {
-		double value = c.getValue();
-		jaguar.set(value);
-		// TODO throw fault exceptions
-	}
+    /**
+     * Get the recently set outputValue setpoint.
+     *
+     * In PercentVoltage Mode, the outputValue is in the range -1.0 to 1.0
+     *
+     * @return
+     */
+    public double getLastCommand() {
+        return jaguar.get();
+    }
 
-	
-	protected void halt() {
-		jaguar.set(0);
-	}
+    /**
+     *
+     * @param c
+     * @throws GRTCANJaguarException
+     */
+    protected void executeCommand(Command c) throws GRTCANJaguarException {
+        double value = c.getValue();
+        jaguar.set(value);
+        // TODO throw fault exceptions
+    }
 
-	public void pidWrite(double output) {
-		jaguar.pidWrite(output);
-	}
-	
-	public GRTJagEncoder getEncoder(){
-		if(encoder == null)	{
-			encoder = new GRTJagEncoder(this, 25, "Encoder"+this);
-		    encoder.start();
-		}
-		return encoder;
-	}
-	
-	public GRTJagPowerSensor getPowerSensor(){
-		if(powerSensor == null){
-			powerSensor = new GRTJagPowerSensor(this, 50, "PowerSensor"+this);
-			powerSensor.start();
-		}
-		return powerSensor;
-	}
-	
-	public GRTJagSwitch getSwitches(){
-		if(switches == null){
-			switches = new GRTJagSwitch(this, 5, "Switch"+this);
-			switches.start();
-		}
-		return switches;
-	}
+    protected void halt() {
+        jaguar.set(0);
+    }
 
-	public void setEncoder(GRTJagEncoder encoder) {
-		this.encoder = encoder;
-	}
+    /**
+     *
+     * @param output
+     */
+    public void pidWrite(double output) {
+        jaguar.pidWrite(output);
+    }
 
-	public void setPowerSensor(GRTJagPowerSensor powerSensor) {
-		this.powerSensor = powerSensor;
-	}
+    /**
+     *
+     * @return
+     */
+    public GRTJagEncoder getEncoder() {
+        if (encoder == null) {
+            encoder = new GRTJagEncoder(this, 25, "Encoder" + this);
+            encoder.start();
+        }
+        return encoder;
+    }
 
-	public void setSwitches(GRTJagSwitch switches) {
-		this.switches = switches;
-	}
-	
-	
+    /**
+     *
+     * @return
+     */
+    public GRTJagPowerSensor getPowerSensor() {
+        if (powerSensor == null) {
+            powerSensor = new GRTJagPowerSensor(this, 50, "PowerSensor" + this);
+            powerSensor.start();
+        }
+        return powerSensor;
+    }
 
+    /**
+     *
+     * @return
+     */
+    public GRTJagSwitch getSwitches() {
+        if (switches == null) {
+            switches = new GRTJagSwitch(this, 5, "Switch" + this);
+            switches.start();
+        }
+        return switches;
+    }
+
+    /**
+     *
+     * @param encoder
+     */
+    public void setEncoder(GRTJagEncoder encoder) {
+        this.encoder = encoder;
+    }
+
+    /**
+     *
+     * @param powerSensor
+     */
+    public void setPowerSensor(GRTJagPowerSensor powerSensor) {
+        this.powerSensor = powerSensor;
+    }
+
+    /**
+     *
+     * @param switches
+     */
+    public void setSwitches(GRTJagSwitch switches) {
+        this.switches = switches;
+    }
 }
