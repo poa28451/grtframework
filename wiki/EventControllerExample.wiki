@@ -3,11 +3,11 @@
 
 Consider the file DriveEventController.java ({{{com.grt192.controllers.teleop.DriveEventController.java}}}), which is the code that takes input from joysticks and instructs the robot's base to move motors appropriately for "Tank-drive" locomotion.
 
-http://code.google.com/p/grtframework/source/browse/trunk/CurrentBot/src/com/grt192/controller/teleop/DriveEventController.java?spec=svn31&r=31
+http://code.google.com/p/grtframework/source/browse/trunk/CurrentBot/src/com/grt192/controller/teleop/DriveEventController.java
 
 First, we are in a {{{DriveEventController}}}, which is an {{{EventController}}} and a {{{JoystickListener}}}. This means it can operate Robot mechanisms as well as act on Joystick events.
 
-In the constructor we register the {{{GRTRobotBase}}} (Drivetrains and sensors involved in moving) with this controller by {{{addMechanism}}-ing it. 
+In the constructor we register the {{{GRTRobotBase}}} (Drivetrains and sensors involved in moving) with this controller by {{{addMechanism}}}-ing it. 
 {{{
 addMechanism("DriverStation", ds);
 }}}
