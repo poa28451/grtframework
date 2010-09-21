@@ -75,7 +75,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     *Set PID controls
      * @param p
      * @param i
      * @param d
