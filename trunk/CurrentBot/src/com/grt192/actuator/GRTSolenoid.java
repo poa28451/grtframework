@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.grt192.actuator;
 
 import com.grt192.core.Actuator;
@@ -9,8 +5,7 @@ import com.grt192.core.Command;
 import edu.wpi.first.wpilibj.Solenoid;
 
 /**
- *
- * @author Student
+ * Abstraction for any single solenoid valve for pneumatics
  */
 public class GRTSolenoid extends Actuator {
 
@@ -19,13 +14,21 @@ public class GRTSolenoid extends Actuator {
     public static final double OFF = 0.0;
 
     /**
-     * Creates a new solenoid on a defined channel. Note this is for one way solenoids
-     * only
-     *
+     * Creates a new solenoid on a defined channel.
+     * Note: uses the default slot: 8
      * @param channel
      */
     public GRTSolenoid(int channel) {
         solenoid = new Solenoid(channel);
+    }
+
+    /**
+     * Creates a new solenoid on a desired channel in a specific slot.
+     * @param slot The slot where the 9472 "relay" module is plugged into.
+     * @param channel
+     */
+    public GRTSolenoid(int slot, int channel) {
+        solenoid = new Solenoid(slot, channel);
     }
 
     /**

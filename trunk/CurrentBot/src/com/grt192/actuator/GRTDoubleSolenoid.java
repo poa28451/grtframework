@@ -6,7 +6,10 @@ import com.grt192.core.Command;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
-public class GRTTwoWaySolenoid extends Actuator {
+/**
+ * Abstraction for a double solenoid valve for pneumatics.
+ */
+public class GRTDoubleSolenoid extends Actuator {
 
     public static final double FORWARD = 1.0;
     public static final double REVERSE = -1.0;
@@ -15,13 +18,13 @@ public class GRTTwoWaySolenoid extends Actuator {
     private Solenoid reverseValve;
 
     /**
-     * Creates a TwoWaySolenoid which needs a forward and reverse port. The pin numbers
+     * Creates a GRTDoubleSolenoid which needs a forward and reverse port. The pin numbers
      * must be specified
      *
      * @param fwdPin
      * @param revPin
      */
-    public GRTTwoWaySolenoid(int fwdPin, int revPin) {
+    public GRTDoubleSolenoid(int fwdPin, int revPin) {
         forwardValve = new Solenoid(fwdPin);
         reverseValve = new Solenoid(revPin);
     }
