@@ -52,7 +52,7 @@ public class GRTSingleClientServer extends Thread implements GRTSocket {
 	public synchronized void sendData(String data) {
 		if (connected) {
 			try {
-				out.write(data);
+				out.write(data+"\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
