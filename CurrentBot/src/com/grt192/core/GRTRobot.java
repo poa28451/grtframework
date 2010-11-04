@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.SimpleRobot;
 
 /**
  * 
- * @author anand
+ * @author anand, ajc
  */
 public abstract class GRTRobot extends SimpleRobot {
 	// Shared objects
@@ -22,6 +22,7 @@ public abstract class GRTRobot extends SimpleRobot {
 	protected Vector globalListeners;
 	protected static GRTRobot instance;
 	private WatchDogController watchDogCtl;
+        private GRTLogger logger;
 
 	public GRTRobot() {
 		globals = new Hashtable();
@@ -31,6 +32,7 @@ public abstract class GRTRobot extends SimpleRobot {
 		globalListeners = new Vector();
 		watchDogCtl = new WatchDogController(getWatchdog());
 		watchDogCtl.start();
+                logger = new GRTLogger();
 		System.out.println("Started GRT Framework");
 		instance = this;
 	}
