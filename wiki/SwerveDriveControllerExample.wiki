@@ -1,3 +1,5 @@
+#summary An example Controller of a swerve drive
+
 {{{
 
 import com.grt192.core.EventController;
