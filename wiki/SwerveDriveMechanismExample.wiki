@@ -1,5 +1,4 @@
-# summary an example Mechanism for a Swerve Drive
-
+#summary An example Mechanism of a swerve drive
 {{{
 
 // add needed imports
