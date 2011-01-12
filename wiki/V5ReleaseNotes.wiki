@@ -1,5 +1,5 @@
 #summary Release notes for GRTFramework v5
-#labels Phase-Deploy
+#labels Phase-Deploy,Featured
 
 = Release notes v5 =
 
