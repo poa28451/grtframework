@@ -1,11 +1,7 @@
 #summary Release notes for GRTFramework v5
 #labels Phase-Deploy
 
-= Introduction =
-
-Notes for the first release of the GRTFramework for 2011
-
-= Details =
+= Release notes v5 =
 
 The GRTFramework has been tested under the 2011 FRC Java SDK with its updates to the WPILib and Squawk VM. All features are currently working, and new 2011 systems are supported. This includes support for the CAN interface for Jaguars, the I2C interface to the ADXL345, and the new Line Detecting sensors (Rockwell Automation). 
 
