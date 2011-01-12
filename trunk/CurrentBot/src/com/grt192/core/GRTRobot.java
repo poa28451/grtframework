@@ -6,7 +6,7 @@ import java.util.Vector;
 import com.grt192.controller.WatchDogController;
 import com.grt192.event.GlobalEvent;
 import com.grt192.event.GlobalListener;
-
+import com.grt192.controller.DashBoardController;
 import edu.wpi.first.wpilibj.SimpleRobot;
 
 /**
@@ -22,19 +22,41 @@ public abstract class GRTRobot extends SimpleRobot {
     protected Vector globalListeners;
     protected static GRTRobot instance;
     private WatchDogController watchDogCtl;
+    private DashBoardController dashboard;
     private GRTLogger logger;
-
+    
+    
     public GRTRobot() {
-        globals = new Hashtable();
+        //By default the watchdog is disabled, dashboard disabled, logger enabled
+        this(false, false, true);
+    }
+    
+    public GRTRobot(boolean useWatchDog, boolean useDashBoard, boolean useLogger){
         autonomousControllers = new Vector();
         teleopControllers = new Vector();
 
+        globals = new Hashtable();
         globalListeners = new Vector();
-        watchDogCtl = new WatchDogController(getWatchdog());
-        watchDogCtl.start();
-        logger = new GRTLogger();
-        System.out.println("Started GRT Framework");
+        
+        if(useWatchDog){
+            watchDogCtl = new WatchDogController(getWatchdog());
+            watchDogCtl.start();
+        }
+        
+        if(useDashBoard){
+            //Sends hardware status data to dashboard
+            dashboard = new DashBoardController();
+            dashboard.start();
+            System.out.println("Dashboard Streaming: \tREADY");
+        }
+        
+        if(useLogger){
+            logger = new GRTLogger();
+            System.out.println("Logger:              \tREADY");
+        }
+        
         instance = this;
+        System.out.println("GRT Framework:       \tREADY");
     }
 
     public synchronized Hashtable getGlobals() {

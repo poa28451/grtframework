@@ -13,11 +13,12 @@ import java.util.Vector;
  */
 public class GRTADXL345 extends Sensor {
 
-	public static final double SPIKE_THRESHOLD = 1.0;
-	public static final double CHANGE_THRESHOLD = .001;
 	private ADXL345DigitalAccelerometer accel;
 	private int range;
 	private Vector accelerometerListeners;
+	
+	private double spikeThreshold = 1.0;
+	private double changeThreshold = .001;
 
 	public GRTADXL345(int slot, int range, int polltime, String id) {
 		this.range = range;
@@ -28,6 +29,7 @@ public class GRTADXL345 extends Sensor {
 		setState("Y", 0.0);
 		setState("Z", 0.0);
 		this.sleepTime = polltime;
+		accelerometerListeners = new Vector();
 		this.id = id;
 
 	}
@@ -36,30 +38,30 @@ public class GRTADXL345 extends Sensor {
 
 		double previousValue = getState("X");
 		setState("X", accel.getXAxis());
-		if (Math.abs(getState("X") - previousValue) >= SPIKE_THRESHOLD) {
+		if (Math.abs(getState("X") - previousValue) >= spikeThreshold) {
 			notifyAccelerometerSpike(ADXL345Event.X, getState("X"));
 		}
-		if (Math.abs(getState("X") - previousValue) >= CHANGE_THRESHOLD) {
+		if (Math.abs(getState("X") - previousValue) >= changeThreshold) {
 			notifyAccelerometerChange(ADXL345Event.X, getState("X"));
 		}
 		notifyADXL345Listeners(ADXL345Event.X, getState("X"));
 
 		previousValue = getState("Y");
 		setState("Y", accel.getYAxis());
-		if (Math.abs(getState("Y") - previousValue) >= SPIKE_THRESHOLD) {
+		if (Math.abs(getState("Y") - previousValue) >= spikeThreshold) {
 			notifyAccelerometerSpike(ADXL345Event.Y, getState("Y"));
 		}
-		if (Math.abs(getState("Y") - previousValue) >= CHANGE_THRESHOLD) {
+		if (Math.abs(getState("Y") - previousValue) >= changeThreshold) {
 			notifyAccelerometerChange(ADXL345Event.Y, getState("Y"));
 		}
 		notifyADXL345Listeners(ADXL345Event.Y, getState("Y"));
 
 		previousValue = getState("Z");
 		setState("Z", accel.getZAxis());
-		if (Math.abs(getState("Z") - previousValue) >= SPIKE_THRESHOLD) {
+		if (Math.abs(getState("Z") - previousValue) >= spikeThreshold) {
 			notifyAccelerometerSpike(ADXL345Event.Z, getState("Z"));
 		}
-		if (Math.abs(getState("Z") - previousValue) >= CHANGE_THRESHOLD) {
+		if (Math.abs(getState("Z") - previousValue) >= changeThreshold) {
 			notifyAccelerometerChange(ADXL345Event.Z, getState("Z"));
 		}
 		notifyADXL345Listeners(ADXL345Event.Z, getState("Z"));
@@ -69,6 +71,22 @@ public class GRTADXL345 extends Sensor {
 	public int getRange() {
 		return range;
 	}
+
+    public double getSpikeThreshold() {
+        return spikeThreshold;
+    }
+    
+    public void setSpikeThreshold(double threshold) {
+        spikeThreshold = threshold;
+    }
+    
+    public double getChangeThreshold() {
+        return changeThreshold;
+    }
+    
+    public void setChangeThreshold(double threshold) {
+        changeThreshold = threshold;
+    }
 
 	public void setRange(int range) {
 		this.range = range;
@@ -86,6 +104,7 @@ public class GRTADXL345 extends Sensor {
 			accel.setRange(ADXL345DigitalAccelerometer.DATA_FORMAT_16G);
 			break;
 		default:
+		    range = 2;
 			accel.setRange(ADXL345DigitalAccelerometer.DATA_FORMAT_02G);
 		}
 	}

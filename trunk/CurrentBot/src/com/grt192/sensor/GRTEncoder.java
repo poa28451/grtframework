@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.grt192.sensor;
 
 import java.util.Vector;
@@ -15,7 +10,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSource;
 
 /**
- *
+ * Quadrature Encoder
  * @author grtstudent
  */
 public class GRTEncoder extends Sensor implements PIDSource{
@@ -23,11 +18,16 @@ public class GRTEncoder extends Sensor implements PIDSource{
     private Vector encoderListeners;
     public static final double DIST_PER_PULSE = Math.PI * 16.0/(360 * 4 *12);
 
+    public GRTEncoder(int channela, int channelb, int pollTime, 
+                        String id){
+        this(channela, channelb, pollTime, DIST_PER_PULSE, id);
+    }
 
-    public GRTEncoder(int channela, int channelb, int pollTime, String id){
+    public GRTEncoder(int channela, int channelb, int pollTime, 
+                                double pulseDistance, String id){
         rotaryEncoder = new Encoder(channela, channelb);
         rotaryEncoder.start();
-        rotaryEncoder.setDistancePerPulse(DIST_PER_PULSE);
+        rotaryEncoder.setDistancePerPulse(pulseDistance);
         setSleepTime(pollTime);
         encoderListeners = new Vector();
         this.id = id;
