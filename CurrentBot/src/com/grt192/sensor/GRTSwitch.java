@@ -33,14 +33,6 @@ public class GRTSwitch extends Sensor {
         switchListeners = new Vector();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public DigitalInput getInput() {
         return input;
     }

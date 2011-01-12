@@ -11,18 +11,16 @@ import edu.wpi.first.wpilibj.PIDSource;
 
 /**
  * GRTGyro is a continuously running sensor driver that collects and serves data
- * from a single-axis gyro
+ * from a single-axis gyro. Note that integration is done in hardware, independent of polltime
  * 
  * @author anand
  */
 public class GRTGyro extends Sensor implements PIDSource {
 
-	public static final double SPIKE_THRESHOLD = 1.0;
-	public static final double CHANGE_THRESHOLD = .01;
 	private Gyro gyro;
 	private Vector gyroListeners;
-
-	public static double DRIFT_THRESHOLD = 0.5;
+	private double spikeThreshold = 1.0;
+	private double changeThreshold = .01;
 
 	public GRTGyro(int channel, int pollTime, String id) {
 		gyro = new Gyro(channel);
@@ -31,17 +29,34 @@ public class GRTGyro extends Sensor implements PIDSource {
 		gyroListeners = new Vector();
 		this.id = id;
 	}
+	
+	
+    public double getSpikeThreshold() {
+        return spikeThreshold;
+    }
+    
+    public void setSpikeThreshold(double threshold) {
+        spikeThreshold = threshold;
+    }
+    
+    public double getChangeThreshold() {
+        return changeThreshold;
+    }
+    
+    public void setChangeThreshold(double threshold) {
+        changeThreshold = threshold;
+    }
 
 	public void poll() {
 		double previousValue = getState("Angle");
-		double angle = gyro.getAngle() * 360.0 / 208.0;
+		double angle = gyro.getAngle();
 
 		setState("Angle", angle);
 
-		if (Math.abs(getState("Angle") - previousValue) >= SPIKE_THRESHOLD) {
+		if (Math.abs(getState("Angle") - previousValue) >= spikeThreshold) {
 			notifyGyroSpike();
 		}
-		if (Math.abs(getState("Angle") - previousValue) >= CHANGE_THRESHOLD) {
+		if (Math.abs(getState("Angle") - previousValue) >= changeThreshold) {
 			notifyGyroChange();
 		}
 		notifyGyroListeners();
@@ -88,8 +103,8 @@ public class GRTGyro extends Sensor implements PIDSource {
 	}
 
 	public double pidGet() {
-		// fix asap
-		return 0;
+		//TODO: fix asap
+		return getState("Angle");
 	}
 
 }
