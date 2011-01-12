@@ -8,7 +8,7 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 
 import com.sun.squawk.io.BufferedReader;
-import com.sun.squawk.microedition.io.SocketConnection;
+import javax.microedition.io.SocketConnection;
 
 public class GRTClientSocket extends Thread implements GRTSocket {
 	public static final int POLL_TIME = 50;

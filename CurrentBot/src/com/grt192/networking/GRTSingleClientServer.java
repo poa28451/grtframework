@@ -9,7 +9,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
 import com.sun.squawk.io.BufferedReader;
-import com.sun.squawk.microedition.io.ServerSocketConnection;
+import javax.microedition.io.ServerSocketConnection;
 
 public class GRTSingleClientServer extends Thread implements GRTSocket {
 	public static final int POLL_TIME = 50;
