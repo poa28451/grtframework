@@ -1,7 +1,7 @@
 package com.grt192.networking;
 
 import com.sun.squawk.io.BufferedReader;
-import com.sun.squawk.microedition.io.ServerSocketConnection;
+import javax.microedition.io.ServerSocketConnection;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Vector;

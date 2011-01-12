@@ -7,7 +7,7 @@ import com.grt192.sensor.canjaguar.GRTJagEncoder;
 import com.grt192.sensor.canjaguar.GRTJagPowerSensor;
 import com.grt192.sensor.canjaguar.GRTJagSwitch;
 
-import edu.wpi.first.addons.CANJaguar;
+import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
 
 public class GRTCANJaguar extends Actuator implements PIDOutput {
@@ -46,7 +46,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
         switch (controlMode) {
             case PERCENT_CONTROL:
                 jaguar = new CANJaguar(channel,
-                        CANJaguar.ControlMode.kPercentVoltage);
+                        CANJaguar.ControlMode.kPercentVbus);
                 break;
             case SPEED_CONTROL:
                 jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kSpeed);
@@ -68,7 +68,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      */
     public void setPositionSensor(int sensor) {
         if (sensor == ENCODER) {
-            jaguar.setPositionReference(CANJaguar.PositionReference.kEncoder);
+            jaguar.setPositionReference(CANJaguar.PositionReference.kQuadEncoder);
         } else if (sensor == POTENTIOMETER) {
             jaguar.setPositionReference(CANJaguar.PositionReference.kPotentiometer);
         }
