@@ -41,11 +41,6 @@ public class GRTSingleClientServer extends Thread implements GRTSocket {
 		running = true;
 		while (running) {
 			poll();
-			try {
-				Thread.sleep(POLL_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 

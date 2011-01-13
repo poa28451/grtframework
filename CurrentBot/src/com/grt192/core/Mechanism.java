@@ -10,7 +10,7 @@ import java.util.Hashtable;
  * 
  * @author anand
  */
-public abstract class Mechanism {
+public abstract class Mechanism extends GRTObject{
 
 	protected Hashtable actuators;
 	protected Hashtable sensors;

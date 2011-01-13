@@ -31,12 +31,12 @@ public class GRTLogger implements SocketListener{
     }
 
     public void initPrinters() {
-        printers.addElement("SwitchController");
+        printers.addElement("GRTRobot");
     }
 
     public void write(String key, String data) {
         if (printers.contains(key)) {
-            System.out.println(key + ": " + data);
+            System.out.println("["+key +"]: " + data);
         }
 
         gs.sendData(key + ": " + data);
@@ -52,6 +52,7 @@ public class GRTLogger implements SocketListener{
     }
 
     public void onConnect(SocketEvent e) {
+        System.out.println("connection!");
     }
 
     public void onDisconnect(SocketEvent e) {

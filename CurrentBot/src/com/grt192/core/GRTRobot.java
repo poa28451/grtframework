@@ -24,40 +24,40 @@ public abstract class GRTRobot extends SimpleRobot {
     private WatchDogController watchDogCtl;
     private DashBoardController dashboard;
     private GRTLogger logger;
-    
-    
+
     public GRTRobot() {
-        //By default the watchdog is disabled, dashboard disabled, logger enabled
         this(false, false, true);
     }
-    
-    public GRTRobot(boolean useWatchDog, boolean useDashBoard, boolean useLogger){
+    public GRTRobot(boolean useWatchDog, boolean useDashBoard, boolean useLogger) {
         autonomousControllers = new Vector();
         teleopControllers = new Vector();
 
         globals = new Hashtable();
         globalListeners = new Vector();
-        
-        if(useWatchDog){
+
+        if (useWatchDog) {
             watchDogCtl = new WatchDogController(getWatchdog());
             watchDogCtl.start();
         }
-        
-        if(useDashBoard){
+
+        if (useDashBoard) {
             //Sends hardware status data to dashboard
             dashboard = new DashBoardController();
             dashboard.start();
             System.out.println("Dashboard Streaming: \tREADY");
         }
-        
-        if(useLogger){
+
+        if (useLogger) {
             logger = new GRTLogger();
-            System.out.println("Logger:              \tREADY");
+            log("Logger:              \tREADY");
         }
-        
+
         instance = this;
-        System.out.println("GRT Framework:       \tREADY");
+        log("GRT Framework:       \tREADY");
+        startRobot();
     }
+
+    public abstract void startRobot();
 
     public synchronized Hashtable getGlobals() {
         return globals;
@@ -154,5 +154,21 @@ public abstract class GRTRobot extends SimpleRobot {
 
     public GRTLogger getLogger() {
         return logger;
+    }
+
+    protected void log(String message) {
+        logger.write("GRTRobot", message);
+    }
+
+    protected void log(String type, String message) {
+        logger.write(type, message);
+    }
+
+    protected void logVar(String name, String message) {
+        logger.write("(var)" + name, message);
+    }
+
+    protected void logVar(String string, double i) {
+        logVar(string, Double.toString(i));
     }
 }

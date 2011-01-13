@@ -7,7 +7,7 @@ import java.util.Hashtable;
  * 
  * @author anand
  */
-public abstract class Controller extends Thread {
+public abstract class Controller extends GRTObject {
 	protected Hashtable mechanisms;
 	protected boolean running;
 
