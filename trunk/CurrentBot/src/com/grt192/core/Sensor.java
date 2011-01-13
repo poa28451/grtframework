@@ -12,7 +12,7 @@ import com.grt192.event.SensorEvent;
  * 
  * @author anand
  */
-public abstract class Sensor extends Thread {
+public abstract class Sensor extends GRTObject {
 
 	public static final double FALSE = 0.0;
 	public static final double TRUE = 1.0;

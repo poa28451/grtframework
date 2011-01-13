@@ -1,11 +1,14 @@
 package com.grt192.networking;
 
+import com.grt192.core.GRTRobot;
 import com.sun.squawk.io.BufferedReader;
-import javax.microedition.io.ServerSocketConnection;
+//import com.sun.squawk.microedition.io.ServerSocketConnection;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Vector;
 import javax.microedition.io.Connector;
+import javax.microedition.io.ServerSocketConnection;
 import javax.microedition.io.StreamConnection;
 
 /**
@@ -30,6 +33,7 @@ public class GRTServer extends Thread implements GRTSocket {
         public GRTSingleConnect(StreamConnection client) {
             try {
                 this.client = client;
+                GRTRobot.getInstance().getLogger().write("GRTServer", client.toString());
                 serverSocketListeners = new Vector();
                 in = new BufferedReader(new InputStreamReader(client.openInputStream()));
                 out = new OutputStreamWriter(client.openOutputStream());
@@ -58,9 +62,14 @@ public class GRTServer extends Thread implements GRTSocket {
         public void sendData(String data) {
             try {
                 out.write(data + "\n");
+            } catch (IOException e) {
+                //GRTRobot.getInstance().getLogger().write("GRTServer", "disconnected from client");
+                this.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
+                
             }
+
         }
 
         public boolean isConnected() {
@@ -77,6 +86,7 @@ public class GRTServer extends Thread implements GRTSocket {
                 out.close();
                 client.close();
                 clients.removeElement(this);
+                running = false;
                 notifyMyDisconnect();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -119,6 +129,7 @@ public class GRTServer extends Thread implements GRTSocket {
             server = null;
         }
         serverSocketListeners = new Vector();
+        clients = new Vector();
 
     }
     private ServerSocketConnection server;

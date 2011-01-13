@@ -14,7 +14,7 @@ import java.util.Vector;
  * Runs continously, waiting for commands. A driver of sorts
  * @author anand
  */
-public abstract class Actuator extends Thread {
+public abstract class Actuator extends GRTObject {
 
     protected static final int MAGIC = 999; //protects actuators from overriding
                                             //this must be passed to clear a command queue
