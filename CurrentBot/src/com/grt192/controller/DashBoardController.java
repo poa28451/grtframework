@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.AnalogModule;
 import edu.wpi.first.wpilibj.Dashboard;
 import edu.wpi.first.wpilibj.DigitalModule;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SolenoidBase;
 
 /**
  * 
@@ -100,8 +100,11 @@ public class DashBoardController extends StepController {
 
 			}
 			lowDashData.finalizeCluster();
-
-			lowDashData.addByte(Solenoid.getAll());
+            
+            // Solenoid data: currently not functional
+            // API change -- need to instantiate a SolenoidBase before
+            // Reading getAll()
+			lowDashData.addByte((byte) 0);
 		}
 		lowDashData.finalizeCluster();
 		lowDashData.commit();
