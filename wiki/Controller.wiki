@@ -10,4 +10,4 @@ TODO Usage
 
 === Types of Controller ===
 
-Note that there are three three variants of Controller: StepController, EventController, and Controller. Each has its own flavor, detailed on their wiki pages.
+Note that there are two variants of Controller: StepController and EventController. Each has its own flavor, detailed on their wiki pages.
