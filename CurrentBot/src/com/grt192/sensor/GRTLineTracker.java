@@ -1,6 +1,7 @@
 package com.grt192.sensor;
 
 import com.grt192.core.Sensor;
+import com.grt192.event.component.LineTraceEvent;
 import edu.wpi.first.wpilibj.*;
 import java.util.Vector;
 import com.grt192.event.component.LineTrackerListener;
@@ -27,7 +28,7 @@ public class GRTLineTracker extends Sensor {
 
     public void poll() {
         double previous = getState("Line");
-        setState("Line", input.get() ? PRESENT : ABSENT);
+        setState("Line", input.get());
         if(previous != getState("Line")){
             notifyListeners(getState("Line") == PRESENT);
         }
@@ -35,13 +36,10 @@ public class GRTLineTracker extends Sensor {
 
     private void notifyListeners(boolean present) {
         for (int i = 0; i < lineStateListeners.size(); i++) {
-            if (present) {
-                ((LineTrackerListener) lineStateListeners.elementAt(i)).lineDetected(this);
-            }else
-                ((LineTrackerListener) lineStateListeners.elementAt(i)).lineLost(this);
+                ((LineTrackerListener) lineStateListeners.elementAt(i)).lineStateChange(new LineTraceEvent(this, present));
         }
     }
-    
+
     public void addLineTrackerListener(LineTrackerListener listener) {
         lineStateListeners.addElement(listener);
     }
