@@ -9,9 +9,9 @@ import java.util.Vector;
  *  A daemon which runs a log server and regulates CRIO output
  * @author ajc, data
  */
-public class GRTLogger implements SocketListener{
-    public static final int PORT = 192;
+public class GRTLogger implements SocketListener {
 
+    public static final int PORT = 192;
     /**
      * List of all keys to accept to print
      */
@@ -24,7 +24,7 @@ public class GRTLogger implements SocketListener{
         initPrinters();
     }
 
-    public void initServer(){
+    public void initServer() {
         gs = new GRTServer(PORT);
         gs.addSocketListener(this);
         gs.start();
@@ -36,18 +36,22 @@ public class GRTLogger implements SocketListener{
 
     public void write(String key, String data) {
         if (printers.contains(key)) {
-            System.out.println("["+key +"]: " + data);
+            System.out.println("[" + key + "]: " + data);
         }
 
         gs.sendData(key + ": " + data);
 
     }
 
-    public void addPrinter(String key){
+    public static void extLog(String source, String message) {
+        GRTRobot.getInstance().getLogger().write(source, message);
+    }
+
+    public void addPrinter(String key) {
         printers.addElement(key);
     }
 
-    public void removePrinter(String key){
+    public void removePrinter(String key) {
         printers.removeElement(key);
     }
 
@@ -61,5 +65,4 @@ public class GRTLogger implements SocketListener{
     //TODO implement printer control
     public void dataRecieved(SocketEvent e) {
     }
-
 }
