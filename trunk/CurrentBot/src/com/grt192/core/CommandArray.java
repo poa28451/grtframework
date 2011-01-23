@@ -5,7 +5,7 @@ package com.grt192.core;
  * It is backwards compatible.
  * @author data, ajc
  */
-public class CommandArray extends Command {
+public final class CommandArray extends Command {
 
     private double[] values;
 
@@ -38,16 +38,8 @@ public class CommandArray extends Command {
         return getValue(0);
     }
 
-    public void setValue(double val) {
-        setValue(0,val);
-    }
-
     public double getValue(int index){
         return values[index];
-    }
-
-    public void setValue( int index, double value){
-        values[index] = value;
     }
 
     public int size(){

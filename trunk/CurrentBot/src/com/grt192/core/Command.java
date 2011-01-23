@@ -24,14 +24,6 @@ public class Command {
         this.atomic = reset;
     }
 
-    public void setSleepTime(int sleepTime) {
-        this.sleepTime = sleepTime;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-
     public int getSleepTime() {
         return sleepTime;
     }
@@ -42,10 +34,6 @@ public class Command {
 
     public boolean isAtomic() {
         return atomic;
-    }
-
-    public void setAtomic(boolean atomic) {
-        this.atomic = atomic;
     }
 
     
