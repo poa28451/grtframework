@@ -4,7 +4,7 @@ package com.grt192.core;
  * Message carrying object that represents an order for a specific actuator
  * @author Ryo
  */
-public final class Command {
+public class Command {
 
     private double value;
     private int sleepTime;
