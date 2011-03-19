@@ -11,7 +11,7 @@ import java.util.Vector;
  * An event driven daemon which makes multiple single client connections
  * @author data, ajc
  */
-public class RadioServer extends Thread implements GRTSocket {
+public class GRTSRadioServer extends Thread implements GRTSocket {
 
     private class RadioSingleConnect extends Thread implements GRTSocket {
 
@@ -98,7 +98,7 @@ public class RadioServer extends Thread implements GRTSocket {
     private boolean running;
     private Vector serverSocketListeners;
 
-    public RadioServer(int port) {
+    public GRTSRadioServer(int port) {
         this.port = port;
         serverSocketListeners = new Vector();
         clients = new Vector();

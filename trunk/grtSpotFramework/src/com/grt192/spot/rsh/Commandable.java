@@ -2,7 +2,7 @@
 package com.grt192.spot.rsh;
 
 /**
- * Interface for generic remote actuation with rsh
+ * Interface for generic command interpretation with rsh
  * @author ajc
  */
 public interface Commandable {

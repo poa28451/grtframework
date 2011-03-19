@@ -12,7 +12,7 @@ import com.sun.spot.resources.transducers.ITriColorLEDArray;
  * A SunSPOT sensorboard TriColorLED
  * @author ajc
  */
-public class SPOTLED extends Actuator {
+public class GRTSDemoTriLED extends Actuator {
 
     /** CommandArray indicies **/
     public static final int POWER = 0;
@@ -39,7 +39,7 @@ public class SPOTLED extends Actuator {
     private ITriColorLED led;
     private final int id;
 
-    public SPOTLED(int id) {
+    public GRTSDemoTriLED(int id) {
         this.id = id;
         led = ((ITriColorLEDArray) Resources.lookup(ITriColorLEDArray.class)).getLED(id);
 
