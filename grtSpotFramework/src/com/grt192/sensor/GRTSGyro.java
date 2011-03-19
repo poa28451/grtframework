@@ -10,19 +10,19 @@ import com.sun.spot.sensorboard.EDemoBoard;
  * Generic Analog gyro
  * @author ajc
  */
-public class SPOTGyro extends Sensor{
+public class GRTSGyro extends Sensor{
 
     private IAnalogInput rate;
     private IAnalogInput temp;
 
     private double angle;
 
-    public SPOTGyro(int rate, int temp, int pollTime, String id) {
+    public GRTSGyro(int rate, int temp, int pollTime, String id) {
         this(EDemoBoard.getInstance().getAnalogInputs()[rate],
                 EDemoBoard.getInstance().getAnalogInputs()[temp], pollTime, id);
     }
 
-    public SPOTGyro(IAnalogInput rate, IAnalogInput temp, int pollTime, String id) {
+    public GRTSGyro(IAnalogInput rate, IAnalogInput temp, int pollTime, String id) {
         this.rate = rate;
         this.temp = temp;
 

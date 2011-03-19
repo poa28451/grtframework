@@ -3,19 +3,18 @@ package com.grt192.core;
 import com.grt192.networking.SocketEvent;
 import com.grt192.networking.SocketListener;
 import com.grt192.radio.Ports;
-import com.grt192.radio.RadioServer;
+import com.grt192.radio.GRTSRadioServer;
 import java.util.Vector;
 
 /**
- *  A daemon which runs a log server and regulates CRIO output
+ *  A daemon which runs a log server and regulates CRIO console output
  * @author ajc, data
  */
 public class GRTLogger implements SocketListener, Ports{
-    public static final int PORT = 192;
 
     /** List of all keys to accept to print  */
     private Vector printers;
-    private RadioServer rs;
+    private GRTSRadioServer rs;
 
     public GRTLogger() {
         printers = new Vector();
@@ -24,7 +23,7 @@ public class GRTLogger implements SocketListener, Ports{
     }
 
     public void initServer(){
-        rs = new RadioServer(LOGGER_PORT);
+        rs = new GRTSRadioServer(LOGGER_PORT);
         rs.addSocketListener(this);
         rs.start();
     }

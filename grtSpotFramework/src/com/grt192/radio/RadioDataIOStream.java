@@ -57,7 +57,7 @@ public class RadioDataIOStream implements DataInput, DataOutput {
         if(port <= ProtectedPortException.NUM_PROTECTED_PORTS){
             System.err.println("Bad port: " + port + " is less than " + ProtectedPortException.NUM_PROTECTED_PORTS);
         }
-        return open(SpotListener.getAddress(port),port);
+        return open(GRTSSpotListener.getAddress(port),port);
     }
 
     /**

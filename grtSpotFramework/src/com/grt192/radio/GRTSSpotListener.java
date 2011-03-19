@@ -13,7 +13,7 @@ import javax.microedition.io.*;
  * A small utility to find the mac address of another spot for the same port.
  * @author ajc
  */
-public class SpotListener {
+public class GRTSSpotListener {
 
     public static final byte PING = 1;
     public static final byte RESPOND = 2;
@@ -32,12 +32,12 @@ public class SpotListener {
     }
 
     public static String getAddress(int port, boolean debug) {
-        SpotListener sl = new SpotListener(port, debug);
+        GRTSSpotListener sl = new GRTSSpotListener(port, debug);
         sl.broadcast();
         return sl.RAMERIEZ_listenForSpots();
     }
 
-    private SpotListener(int service, boolean debug) {
+    private GRTSSpotListener(int service, boolean debug) {
         try {
             rcvConn = (RadiogramConnection) Connector.open("radiogram://:" + BROADCAST_PORT);
             txConn = (DatagramConnection) Connector.open("radiogram://broadcast:" + BROADCAST_PORT);
