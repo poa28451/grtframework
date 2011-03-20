@@ -1,18 +1,26 @@
-
-package com.grt192.radio;
+package com.grt192.spot.networking;
 
 import com.grt192.networking.GRTSocket;
 import com.grt192.networking.SocketEvent;
 import com.grt192.networking.SocketListener;
+import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
 import java.io.IOException;
 import java.util.Vector;
+import javax.microedition.io.Connector;
+import javax.microedition.io.Datagram;
 
 /**
- * An event driven daemon which makes multiple single client connections
+ * A stream <code>GRTSocket</code> that handles multiple <code>RadioClient</code>
+ * connections. <code>RadioServer</code> automatically connects to
+ * <code> RadioClient</code>s.
+ * @see RadioClient
  * @author data, ajc
  */
-public class GRTSRadioServer extends Thread implements GRTSocket {
+public class RadioServer extends Thread implements GRTSocket, PacketTypes {
 
+    /**
+     * A singleConnect, an instance of a single connection to a <code>RadioClient</code>
+     */
     private class RadioSingleConnect extends Thread implements GRTSocket {
 
         private RadioDataIOStream client;
@@ -29,15 +37,23 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
             running = true;
             while (running) {
                 try {
-                    notifyMyListeners(client.readUTF());
+                    debug("Listening for data...");
+                    String data = client.readUTF();
+                    if (data != null) {
+                        notifyMyListeners(data);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    this.disconnect();
                 }
 
             }
         }
 
-        public void stop() {
+        /**
+         * Pause reading
+         */
+        public void pause() {
             running = false;
         }
 
@@ -46,12 +62,13 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
                 client.writeUTF(data);
                 client.flush();
             } catch (IOException ex) {
+                this.disconnect();
                 ex.printStackTrace();
             }
         }
 
         public boolean isConnected() {
-            return connected;
+            return connected && client.isOpen();
         }
 
         public void connect() {
@@ -59,10 +76,16 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
         }
 
         public void disconnect() {
-            client.close();
-            clients.removeElement(this);
-            running = false;
-            notifyMyDisconnect();
+            try {
+                client.flush();
+                client.close();
+                clients.removeElement(this);
+                running = false;
+                notifyMyDisconnect();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
         }
 
         public void addSocketListener(SocketListener s) {
@@ -87,19 +110,31 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
         private void notifyMyDisconnect() {
             for (int i = 0; i < serverSocketListeners.size(); i++) {
                 SocketListener s = (SocketListener) serverSocketListeners.elementAt(i);
-                s.dataRecieved(new SocketEvent(this, SocketEvent.ON_DISCONNECT, null));
+                s.onDisconnect(new SocketEvent(this, SocketEvent.ON_DISCONNECT, null));
             }
             notifyDisconnect(this);
         }
     }
-    
-    private final int port;
+
     private Vector clients;
+    private final int port;
     private boolean running;
+    private boolean debug;
+    private RadiogramConnection radio = null;
     private Vector serverSocketListeners;
 
-    public GRTSRadioServer(int port) {
+    public RadioServer(int port) {
+        this(port, false);
+    }
+
+    public RadioServer(int port, boolean debug) {
         this.port = port;
+        this.debug = debug;
+        try {
+            radio = (RadiogramConnection) Connector.open("radiogram://:" + port);
+        } catch (Exception e) {
+            System.err.println("Caught " + e + " in connection initialization.");
+        }
         serverSocketListeners = new Vector();
         clients = new Vector();
     }
@@ -114,11 +149,41 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
         return clients.size() > 0;
     }
 
+    /**
+     * Listen for a new client connection and accept if found
+     */
     public void connect() {
-        RadioSingleConnect rsc = new RadioSingleConnect(RadioDataIOStream.open(port));
-        rsc.start();
-        clients.addElement(rsc);
-        notifyConnect(rsc);
+
+        try {
+            debug("listening for packet...");
+            Datagram dg = radio.newDatagram(radio.getMaximumLength());
+            radio.receive(dg);
+            byte packetType = dg.readByte();
+            debug("Received: " + packetType + "from " + dg.getAddress());
+
+            if (packetType == PACKET_REQUEST_CONNECTION) {
+                debug("Request packet read from " + dg.getAddress() + ": sending respond");
+                Datagram rdg = radio.newDatagram(radio.getMaximumLength());
+                rdg.reset();
+                rdg.setAddress(dg.getAddress());
+                rdg.writeByte(PACKET_RESPOND);
+                //rdg.writeLong(otherAddressAsNumber);// not needed because we send packet directly to sender-- not broadcast
+                radio.send(rdg);
+            }
+            if (packetType == PACKET_CONFIRM) {
+                debug("Confirm packet read from " + dg.getAddress());
+                RadioSingleConnect rsc =
+                        new RadioSingleConnect(
+                        RadioDataIOStream.open(dg.getAddress(), port));
+                clients.addElement(rsc);
+                notifyConnect(rsc);
+                rsc.start();
+
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     public void run() {
@@ -128,13 +193,17 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
         }
     }
 
+    /**
+     * Disconnect all clients 
+     */
     public void disconnect() {
         for (int i = 0; i < clients.size(); i++) {
-            ((RadioSingleConnect) clients.elementAt(i)).stop();
+//            ((RadioSingleConnect) clients.elementAt(i)).stop();
+            ((RadioSingleConnect) clients.elementAt(i)).disconnect();
         }
     }
 
-   public void addSocketListener(SocketListener s) {
+    public void addSocketListener(SocketListener s) {
         serverSocketListeners.addElement(s);
     }
 
@@ -152,14 +221,20 @@ public class GRTSRadioServer extends Thread implements GRTSocket {
     private void notifyDisconnect(GRTSocket source) {
         for (int i = 0; i < serverSocketListeners.size(); i++) {
             SocketListener s = (SocketListener) serverSocketListeners.elementAt(i);
-            s.dataRecieved(new SocketEvent(source, SocketEvent.ON_DISCONNECT, null));
+            s.onDisconnect(new SocketEvent(source, SocketEvent.ON_DISCONNECT, null));
         }
     }
 
     private void notifyConnect(GRTSocket source) {
         for (int i = 0; i < serverSocketListeners.size(); i++) {
             SocketListener s = (SocketListener) serverSocketListeners.elementAt(i);
-            s.dataRecieved(new SocketEvent(source, SocketEvent.ON_CONNECT, null));
+            s.onConnect(new SocketEvent(source, SocketEvent.ON_CONNECT, null));
+        }
+    }
+
+    private void debug(String s) {
+        if (debug) {
+            System.out.println("[SimpleRadioServer]: " + s);
         }
     }
 }

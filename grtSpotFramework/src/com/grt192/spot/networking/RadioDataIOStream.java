@@ -19,15 +19,13 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  **/
-package com.grt192.radio;
+package com.grt192.spot.networking;
 
-import com.sun.spot.util.IEEEAddress;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Random;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
@@ -46,19 +44,6 @@ public class RadioDataIOStream implements DataInput, DataOutput {
     DataOutputStream dos;
     private int portNumber;
     private boolean open = false;
-
-    /**
-     * Broadcasts and listens for requests for a connection for a known port.
-     * @param port to connect to
-     * @return
-     * @throws ProtectedPortException
-     */
-    public static RadioDataIOStream open(int port){
-        if(port <= ProtectedPortException.NUM_PROTECTED_PORTS){
-            System.err.println("Bad port: " + port + " is less than " + ProtectedPortException.NUM_PROTECTED_PORTS);
-        }
-        return open(GRTSSpotListener.getAddress(port),port);
-    }
 
     /**
      * Opens a connection to a known address and port.

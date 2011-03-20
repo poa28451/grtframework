@@ -18,6 +18,10 @@ public abstract class GRTObject extends Thread {
         classname = classname.substring(dot + 1);
     }
 
+    public String getClassName(){
+        return classname;
+    }
+
     protected void setPrinting(boolean b) {
         if (b) {
             l.addPrinter(classname);

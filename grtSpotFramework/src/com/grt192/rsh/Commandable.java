@@ -1,5 +1,5 @@
 
-package com.grt192.spot.rsh;
+package com.grt192.rsh;
 
 /**
  * Interface for generic command interpretation with rsh

@@ -1,5 +1,5 @@
 
-package com.grt192.sensor;
+package com.grt192.spot.sensor;
 
 import com.grt192.core.Sensor;
 import com.sun.spot.resources.transducers.IAnalogInput;
@@ -10,17 +10,17 @@ import java.io.IOException;
  * 
  * @author ajc
  */
-public class GRTSSonar extends Sensor {
+public class GRTSonar extends Sensor {
 
     private static double MV_PER_VOLT = 1000;
     private static double INCH_PER_MV = 1.0/9.8;
     private IAnalogInput analog;//note: min pollTime is 17ms.
 
-    public GRTSSonar(int pin, int pollTime, String id) {
+    public GRTSonar(int pin, int pollTime, String id) {
         this(EDemoBoard.getInstance().getAnalogInputs()[pin], pollTime, id);
     }
 
-    public GRTSSonar(IAnalogInput analog, int pollTime, String id) {
+    public GRTSonar(IAnalogInput analog, int pollTime, String id) {
         this.analog = analog;
         setSleepTime(pollTime);
         setId(id);

@@ -1,50 +1,81 @@
 package com.grt192.core;
 
+import com.grt192.spot.actuator.GRTDemoLED;
+import com.grt192.networking.GRTSocket;
 import com.grt192.networking.SocketEvent;
+import com.grt192.networking.SocketFactory;
 import com.grt192.networking.SocketListener;
-import com.grt192.radio.Ports;
-import com.grt192.radio.GRTSRadioServer;
+import com.grt192.networking.Ports;
+import com.grt192.spot.networking.RadioServer;
 import java.util.Vector;
 
 /**
- *  A daemon which runs a log server and regulates CRIO console output
+ *  A daemon which runs a log server and regulates robot console output.
+ * Sends log messages and variable data to clients.
  * @author ajc, data
  */
-public class GRTLogger implements SocketListener, Ports{
+public class GRTLogger implements SocketListener, Ports {
 
+    private static class RSHSingleton {
+        public static final GRTLogger INSTANCE = new GRTLogger();
+    }
+
+    /**
+     * Get the singleton <code>GRTLogger</code> that is thread-safe.
+     * @return 
+     */
+    public static GRTLogger getInstance() {
+        return RSHSingleton.INSTANCE;
+    }
+
+    
     /** List of all keys to accept to print  */
     private Vector printers;
-    private GRTSRadioServer rs;
+    private GRTSocket socket;
 
-    public GRTLogger() {
+    private GRTLogger() {
         printers = new Vector();
         initServer();
         initPrinters();
     }
 
-    public void initServer(){
-        rs = new GRTSRadioServer(LOGGER_PORT);
-        rs.addSocketListener(this);
-        rs.start();
+    private void initServer() {
+        socket = SocketFactory.createServer(LOGGER_PORT);
+        socket.addSocketListener(this);
+        ((Thread) socket).start();
     }
 
-    public void initPrinters() {
+    private void initPrinters() {
         printers.addElement("GRTRobot");
     }
 
+    /**
+     * Receives log message from <code>key</code>, message <code>message</code>
+     * for sending to logger clients and printing to console output.
+     * @param key
+     * @param data
+     */
     public void write(String key, String data) {
         if (printers.contains(key)) {
-            System.out.println("["+key + "]: " + data);
+            System.out.println("[" + key + "]: " + data);
         }
-        rs.sendData(key + "/" + data);
+        socket.sendData(key + "/" + data);
 
     }
 
-    public void addPrinter(String key){
+    /**
+     * Enables printing of all messages with a provided key </code> key</code>
+     * @param key 
+     */
+    public void addPrinter(String key) {
         printers.addElement(key);
     }
 
-    public void removePrinter(String key){
+    /**
+     * Disables printing of all messages with a provided key </code> key</code>
+     * @param key
+     */
+    public void removePrinter(String key) {
         printers.removeElement(key);
     }
 
@@ -57,5 +88,4 @@ public class GRTLogger implements SocketListener, Ports{
     //TODO implement printer control
     public void dataRecieved(SocketEvent e) {
     }
-
 }
