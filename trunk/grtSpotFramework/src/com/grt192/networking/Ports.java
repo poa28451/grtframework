@@ -1,8 +1,8 @@
 
-package com.grt192.radio;
+package com.grt192.networking;
 
 /**
- *
+ * Ports of all server and client services for use with <code>GRTSocket</code>s
  * @author ajc
  */
 public interface Ports {

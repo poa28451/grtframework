@@ -1,5 +1,6 @@
-package com.grt192.radio;
+package com.grt192.spot.networking;
 
+import com.grt192.networking.Ports;
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
 import java.io.IOException;
 import javax.microedition.io.Connector;

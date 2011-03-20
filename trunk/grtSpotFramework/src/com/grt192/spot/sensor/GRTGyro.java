@@ -1,4 +1,4 @@
-package com.grt192.sensor;
+package com.grt192.spot.sensor;
 
 import java.io.IOException;
 
@@ -10,19 +10,19 @@ import com.sun.spot.sensorboard.EDemoBoard;
  * Generic Analog gyro
  * @author ajc
  */
-public class GRTSGyro extends Sensor{
+public class GRTGyro extends Sensor{
 
     private IAnalogInput rate;
     private IAnalogInput temp;
 
     private double angle;
 
-    public GRTSGyro(int rate, int temp, int pollTime, String id) {
+    public GRTGyro(int rate, int temp, int pollTime, String id) {
         this(EDemoBoard.getInstance().getAnalogInputs()[rate],
                 EDemoBoard.getInstance().getAnalogInputs()[temp], pollTime, id);
     }
 
-    public GRTSGyro(IAnalogInput rate, IAnalogInput temp, int pollTime, String id) {
+    public GRTGyro(IAnalogInput rate, IAnalogInput temp, int pollTime, String id) {
         this.rate = rate;
         this.temp = temp;
 

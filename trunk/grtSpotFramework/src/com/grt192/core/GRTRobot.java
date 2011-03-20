@@ -35,7 +35,7 @@ public abstract class GRTRobot extends MIDlet {
         globalListeners = new Vector();
 
         if(useLogger){
-            logger = new GRTLogger();
+            logger = GRTLogger.getInstance();
             System.out.println("Logger:              \tREADY");
         }
 

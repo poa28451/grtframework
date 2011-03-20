@@ -1,5 +1,5 @@
 
-package com.grt192.sensor;
+package com.grt192.spot.sensor;
 
 import com.grt192.core.Sensor;
 import com.sun.spot.peripheral.II2C;
@@ -11,17 +11,17 @@ import java.util.Vector;
  * Honeywell HMC6352 compass driver
  * @author ajc
  */
-public class GRTSCompass extends Sensor {
+public class GRTCompass extends Sensor {
 
     public static final byte SLA_HMC6352_READ = (byte) 0x42;
     public static final byte SLA_HMC6352_WRITE = (byte) 0x41;
     private II2C i2cDevice;
 
-    public GRTSCompass(double changeThreshold, int pollTime, String id) {
+    public GRTCompass(double changeThreshold, int pollTime, String id) {
         this(EDemoBoard.getInstance().getI2C(), changeThreshold,pollTime,id);
     }
 
-    public GRTSCompass(II2C e, double changeThreshold, int pollTime, String id) {
+    public GRTCompass(II2C e, double changeThreshold, int pollTime, String id) {
         i2cDevice = e;
         for (int i = 0; i < 4; i++) {
             try {
