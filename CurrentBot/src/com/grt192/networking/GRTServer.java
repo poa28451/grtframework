@@ -49,6 +49,7 @@ public class GRTServer extends Thread implements GRTSocket {
                     String text = in.readLine();
                     notifyMyListeners(text);
                 } catch (Exception e) {
+                    this.disconnect();
                     e.printStackTrace();
                 }
 
@@ -115,7 +116,7 @@ public class GRTServer extends Thread implements GRTSocket {
         private void notifyMyDisconnect() {
             for (int i = 0; i < serverSocketListeners.size(); i++) {
                 SocketListener s = (SocketListener) serverSocketListeners.elementAt(i);
-                s.dataRecieved(new SocketEvent(this, SocketEvent.ON_DISCONNECT, null));
+                s.onDisconnect(new SocketEvent(this, SocketEvent.ON_DISCONNECT, null));
             }
             notifyDisconnect(this);
         }
@@ -192,14 +193,14 @@ public class GRTServer extends Thread implements GRTSocket {
     private void notifyDisconnect(GRTSocket source) {
         for (int i = 0; i < serverSocketListeners.size(); i++) {
             SocketListener s = (SocketListener) serverSocketListeners.elementAt(i);
-            s.dataRecieved(new SocketEvent(source, SocketEvent.ON_DISCONNECT, null));
+            s.onDisconnect(new SocketEvent(source, SocketEvent.ON_DISCONNECT, null));
         }
     }
 
     private void notifyConnect(GRTSocket source) {
         for (int i = 0; i < serverSocketListeners.size(); i++) {
             SocketListener s = (SocketListener) serverSocketListeners.elementAt(i);
-            s.dataRecieved(new SocketEvent(source, SocketEvent.ON_CONNECT, null));
+            s.onConnect(new SocketEvent(source, SocketEvent.ON_CONNECT, null));
         }
     }
 }
