@@ -15,7 +15,7 @@ Mechanisms are collections of sensors and actuators that represent a specific ro
 
 === Controllers ===
 
-Controllers are governing 'applications' that provide instructions for the various mechanisms on a robot. A controller may operate over one or more mechanisms, defining the logic by which each assembly is used. Controllers may be fully autonomous or draw on sensor or user feedback to command Mechanisms in the appropriate way.
+Controllers are governing 'applications' that provide instructions for the various mechanisms on a robot. A controller may operate over one or more mechanisms, defining the logic by which each assembly is used. Controllers may be fully autonomous or draw on sensor or user feedback to command Mechanisms in the appropriate way. As a matter of abstraction, Controllers should never have direct access to Sensors or Actuators.
 
 Many controllers can run on the same robot completely in parallel, and controllers may share mechanisms as is needed. Controllers can communicate through the globals hashtable provided via GRTRobot.
 
