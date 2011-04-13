@@ -1,15 +1,22 @@
 package com.grt192.actuator;
 
 import com.grt192.actuator.exception.GRTCANJaguarException;
+import com.grt192.actuator.exception.GRTCANTimeoutException;
 import com.grt192.core.Actuator;
 import com.grt192.core.Command;
+import com.grt192.event.ActuatorCommandListener;
+import com.grt192.event.component.CANJaguarFaultListener;
+import com.grt192.event.component.CANTimeoutListener;
 import com.grt192.sensor.canjaguar.GRTJagEncoder;
+import com.grt192.sensor.canjaguar.GRTJagFaultSensor;
 import com.grt192.sensor.canjaguar.GRTJagPowerSensor;
 import com.grt192.sensor.canjaguar.GRTJagSwitch;
+import com.grt192.utils.GRTFileIO;
 
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
+import java.util.Vector;
 
 public class GRTCANJaguar extends Actuator implements PIDOutput {
     // Control Modes
@@ -21,22 +28,22 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     // Position Sensors
     public static final int POTENTIOMETER = 0;
     public static final int ENCODER = 1;
-    
-    //Speed Sensors 
+    //Speed Sensors
     public static final int INV_ENCODER = 2;
     public static final int QUAD_ENCODER = 3;
-    
     // Neutral Modes
     public static final int COAST = 0;
     public static final int BRAKE = 1;
     public static final int JUMPER = 2;
-    
     public static final int ERROR = -999;
-    
     private CANJaguar jaguar;
+    //sensors
     private GRTJagEncoder encoder;
     private GRTJagPowerSensor powerSensor;
     private GRTJagSwitch switches;
+    private GRTJagFaultSensor faultSensor;
+    //CANTimeoutListener list
+    private Vector listeners;
 
     /**
      * Constructs  GRTCANJaguar on a channel and in a default control mode of 0
@@ -52,7 +59,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param controlMode
      */
     public GRTCANJaguar(int channel, int controlMode) {
-        try{
+        listeners = new Vector();
+        try {
             switch (controlMode) {
                 case PERCENT_CONTROL:
                     jaguar = new CANJaguar(channel,
@@ -70,13 +78,17 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
                 default:
                     jaguar = new CANJaguar(channel);
             }
-        }catch(CANTimeoutException e){
-           e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
-    
-    public void changeControlMode(int controlMode){
-        try{
+
+    /**
+     * Changes the control mode, or how the jaguar responds to commands
+     * @param controlMode
+     */
+    public void changeControlMode(int controlMode) {
+        try {
             switch (controlMode) {
                 case PERCENT_CONTROL:
                     jaguar.changeControlMode(CANJaguar.ControlMode.kPercentVbus);
@@ -93,8 +105,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
                 default:
                     jaguar.changeControlMode(CANJaguar.ControlMode.kPercentVbus);
             }
-        }catch(CANTimeoutException e){
-           e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -103,7 +115,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param sensor
      */
     public void setPositionSensor(int sensor) {
-        try{
+        try {
             if (sensor == ENCODER) {
                 jaguar.setPositionReference(CANJaguar.PositionReference.kQuadEncoder);
             } else if (sensor == POTENTIOMETER) {
@@ -111,28 +123,32 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
             } else {
                 jaguar.setPositionReference(CANJaguar.PositionReference.kNone);
             }
-        }catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
-
-    public void setSpeedSensor(int sensor){
-        try{
+    /**
+     * Sets the position sensor used to gauge speed.
+     * This is different from <code>setPositionSensor()</code>.
+     * @param sensor
+     */
+    public void setSpeedSensor(int sensor) {
+        try {
             if (sensor == QUAD_ENCODER) {
                 jaguar.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
             } else if (sensor == ENCODER) {
                 jaguar.setSpeedReference(CANJaguar.SpeedReference.kEncoder);
-            } else if(sensor == INV_ENCODER){
+            } else if (sensor == INV_ENCODER) {
                 jaguar.setSpeedReference(CANJaguar.SpeedReference.kInvEncoder);
             } else {
                 jaguar.setSpeedReference(CANJaguar.SpeedReference.kNone);
             }
-        }catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
-    
+
     /**
      *Set PID controls
      * @param p
@@ -142,8 +158,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public void setPID(double p, double i, double d) {
         try {
             jaguar.setPID(p, i, d);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -154,8 +170,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public void setP(double p) {
         try {
             jaguar.setPID(p, jaguar.getI(), jaguar.getD());
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -166,8 +182,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public void setI(double i) {
         try {
             jaguar.setPID(jaguar.getP(), i, jaguar.getD());
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -178,8 +194,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public void setD(double d) {
         try {
             jaguar.setPID(jaguar.getP(), jaguar.getI(), d);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -190,8 +206,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getP() {
         try {
             return jaguar.getP();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -203,8 +219,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getI() {
         try {
             return jaguar.getI();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -216,8 +232,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getD() {
         try {
             return jaguar.getD();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -230,14 +246,14 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Enables closed loop PID, which is entirely run on the Jaguar.
      * @param initialPosition
      */
     public void enableClosedLoop(double initialPosition) {
         try {
             jaguar.enableControl(initialPosition);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -247,9 +263,9 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public void disableClosedLoop() {
         try {
             jaguar.disableControl();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
-        }    
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
+        }
     }
 
     /**
@@ -259,8 +275,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getInputVoltage() {
         try {
             return jaguar.getBusVoltage();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -272,10 +288,10 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getOutputVoltage() {
         try {
             return jaguar.getOutputVoltage();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
-        return ERROR;   
+        return ERROR;
     }
 
     /**
@@ -285,8 +301,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getOutputCurrent() {
         try {
             return jaguar.getOutputCurrent();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -298,8 +314,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getTemperature() {
         try {
             return jaguar.getTemperature();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -311,8 +327,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getPosition() {
         try {
             return jaguar.getPosition();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -324,8 +340,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getSpeed() {
         try {
             return jaguar.getSpeed();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -337,8 +353,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public boolean getLeftLimitStatus() {
         try {
             return jaguar.getForwardLimitOK();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return false;
     }
@@ -350,10 +366,21 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public boolean getRightLimitStatus() {
         try {
             return jaguar.getReverseLimitOK();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return false;
+    }
+
+    public short faults;
+    public short getFaults() {
+                    return faults;
+
+//        try {
+//        } catch (CANTimeoutException ex) {
+//            notifyCANTimeout();
+//        }
+//        return 0;
     }
 
     /**
@@ -365,10 +392,10 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param rate
      */
     public void setVoltageRampRate(double rate) {
-        try{
+        try {
             jaguar.setVoltageRampRate(rate);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -377,11 +404,11 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param countsPerRev
      */
     public void setEncoderResolution(int countsPerRev) {
-        try{
+        try {
             jaguar.configEncoderCodesPerRev(countsPerRev);
-        }catch(CANTimeoutException e){
-            e.printStackTrace();
-        }    
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
+        }
     }
 
     /**
@@ -396,21 +423,22 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param rightLimit
      */
     public void setSoftLimits(double leftLimit, double rightLimit) {
-        try{
+        try {
             jaguar.configSoftPositionLimits(leftLimit, rightLimit);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
+
         }
     }
 
     /**
-     *
+     * Disable soft position limits in position control mode
      */
     public void disableSoftLimits() {
         try {
             jaguar.disableSoftPositionLimits();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -422,7 +450,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param mode
      */
     public void setNeutralMode(int mode) {
-        try{
+        try {
             switch (mode) {
                 case COAST:
                     jaguar.configNeutralMode(CANJaguar.NeutralMode.kCoast);
@@ -434,8 +462,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
                     jaguar.configNeutralMode(CANJaguar.NeutralMode.kJumper);
                     break;
             }
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -447,13 +475,13 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      *
      * @param turns
      */
-     public void setPotentiometerTurns(int turns){
-         try {
-             jaguar.configPotentiometerTurns(turns);
-         }catch(CANTimeoutException e){
-             e.printStackTrace();
-         }
-     }
+    public void setPotentiometerTurns(int turns) {
+        try {
+            jaguar.configPotentiometerTurns(turns);
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
+        }
+    }
 
     /**
      * Get the recently set outputValue setpoint.
@@ -465,8 +493,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     public double getLastCommand() {
         try {
             return jaguar.getX();
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
         return ERROR;
     }
@@ -476,21 +504,20 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      * @param c
      * @throws GRTCANJaguarException
      */
-    protected void executeCommand(Command c) throws GRTCANJaguarException {
+    protected void executeCommand(Command c) {
         try {
             double value = c.getValue();
             jaguar.setX(value);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
-        // TODO throw fault exceptions
     }
 
     protected void halt() {
         try {
             jaguar.setX(0);
-        } catch(CANTimeoutException e){
-            e.printStackTrace();
+        } catch (CANTimeoutException e) {
+            notifyCANTimeout();
         }
     }
 
@@ -506,7 +533,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      *
      * @return
      */
-    public GRTJagEncoder getEncoder() {
+    synchronized public GRTJagEncoder getEncoder() {
         if (encoder == null) {
             encoder = new GRTJagEncoder(this, 25, "Encoder" + this);
             encoder.start();
@@ -518,7 +545,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      *
      * @return
      */
-    public GRTJagPowerSensor getPowerSensor() {
+    synchronized public GRTJagPowerSensor getPowerSensor() {
         if (powerSensor == null) {
             powerSensor = new GRTJagPowerSensor(this, 50, "PowerSensor" + this);
             powerSensor.start();
@@ -530,7 +557,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      *
      * @return
      */
-    public GRTJagSwitch getSwitches() {
+    synchronized public GRTJagSwitch getSwitches() {
         if (switches == null) {
             switches = new GRTJagSwitch(this, 5, "Switch" + this);
             switches.start();
@@ -538,4 +565,34 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
         return switches;
     }
 
+    /**
+     * Gets a fault sensor, which polls the Jaguar for faults
+     * @return a fault sensor
+     */
+    synchronized public GRTJagFaultSensor getFaultSensor() {
+        if (faultSensor == null) {
+            faultSensor = new GRTJagFaultSensor(this, 50, "FaultSensor" + this);
+            faultSensor.start();
+        }
+        return faultSensor;
+
+    }
+
+    /** Starts notifying <code>CANTimeoutListener</code> l for all CANTimeouts **/
+    public void addCANTimeoutListener(CANTimeoutListener l) {
+        listeners.addElement(l);
+    }
+
+    /** Stops notifying <code>CANTimeoutListener</code> l for all CANTimeouts **/
+    public void removeCANTimeoutListener(CANTimeoutListener l) {
+        listeners.removeElement(l);
+    }
+
+    /** Notifies all CANTimeoutListeners that a CANTimeoutException has occurred **/
+    public void notifyCANTimeout() {
+        GRTCANJaguarException ex = new GRTCANJaguarException(GRTCANJaguarException.CAN_TIMEOUT, this);
+        for (int i = 0; i < listeners.size(); i++) {
+            ((CANTimeoutListener) listeners.elementAt(i)).CANTimedOut(ex);
+        }
+    }
 }
