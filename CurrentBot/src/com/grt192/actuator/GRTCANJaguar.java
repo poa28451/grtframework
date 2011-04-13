@@ -8,16 +8,28 @@ import com.grt192.sensor.canjaguar.GRTJagEncoder;
 import com.grt192.sensor.canjaguar.GRTJagFaultSensor;
 import com.grt192.sensor.canjaguar.GRTJagPotentiometer;
 import com.grt192.sensor.canjaguar.GRTJagPowerSensor;
-import com.grt192.sensor.canjaguar.GRTJagSwitch;
+import com.grt192.sensor.canjaguar.GRTJagSwitchPair;
 
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.PIDOutput;
 import java.util.Vector;
 
+/**
+ * A GRTCANJaguar is a driver for a Jaguar speed-controller using the
+ * CANbus(Controller Area Network) interface.
+ * The CANBus (v. 2.0B) is optimized for  electromagnetically noisy environments,
+ * and features at 1M bits/s bit rate, and allows access to Jaguar current,
+ * voltage, speed, fault, switch, and other parameters.
+ * @author ajc
+ */
 public class GRTCANJaguar extends Actuator implements PIDOutput {
     // Control Modes
 
+    /*
+     * TODO consider/do Voltage control: ensures 'regulated' voltage?
+     * This would be preferable if bus voltage drops, perhaps 11V: 100%(percent) then becomes 11V.
+     */
     public static final int PERCENT_CONTROL = 1;
     public static final int SPEED_CONTROL = 2;
     public static final int POSITION_CONTROL = 3;
@@ -38,7 +50,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     private GRTJagEncoder encoder;
     private GRTJagPotentiometer potentiometer;
     private GRTJagPowerSensor powerSensor;
-    private GRTJagSwitch switches;
+    private GRTJagSwitchPair switches;
     private GRTJagFaultSensor faultSensor;
     //CANTimeoutListener list
     private Vector listeners;
@@ -128,7 +140,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
 
     /**
      * Sets the position sensor used to gauge speed.
-     * This is different from <code>setPositionSensor()</code>.
+     * This is distinct from <code>setPositionSensor()</code>.
      * @param sensor
      */
     public void setSpeedSensor(int sensor) {
@@ -149,10 +161,10 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Set PID controls
-     * @param p
-     * @param i
-     * @param d
+     * Sets PID gains
+     * @param p the proportional gain for closed loop control
+     * @param i the integral gain for closed loop control
+     * @param d the derivative gain for closed loop control
      */
     public void setPID(double p, double i, double d) {
         try {
@@ -163,7 +175,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Sets the proportional gain for closed loop control
      * @param p
      */
     public void setP(double p) {
@@ -175,7 +187,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Sets the integral gain for closed loop control
      * @param i
      */
     public void setI(double i) {
@@ -187,7 +199,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Sets the derivative gain for closed loop control
      * @param d
      */
     public void setD(double d) {
@@ -199,7 +211,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Gets the value of the proportional gain for closed loop control
      * @return
      */
     public double getP() {
@@ -212,7 +224,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Gets the value of the integral gain for closed loop control
      * @return
      */
     public double getI() {
@@ -225,7 +237,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Gets the value of the derivative gain for closed loop control
      * @return
      */
     public double getD() {
@@ -238,15 +250,33 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
+     * Enable closed loop control, using sensors attached to the control IO on
+     * The CANJaguar.
+     * 
+     * Closed loop control uses feedback from either position, speed, or current sensors,
+     * and runs a PID loop on its onboard CANJag processsor in order to automatically
+     * vary the voltage in order to reach setpoints in position, speed, or current.
+     * The PID Gains must be set with <code>setPID()</code> or <code>setP()</code>, etc.
      *
+     * The corresponding sensor must be activated with <code>setPositionSensor</code>
+     * or <code>setSpeedSensor</code> for position and speed control.
      */
     public void enableClosedLoop() {
         enableClosedLoop(0.0);
     }
 
     /**
-     * Enables closed loop PID, which is entirely run on the Jaguar.
-     * @param initialPosition
+     * Enable closed loop control, using sensors attached to the control IO on
+     * The CANJaguar.
+     *
+     * Closed loop control uses feedback from either position, speed, or current sensors,
+     * and runs a PID loop on its onboard CANJag processsor in order to automatically
+     * vary the voltage in order to reach setpoints in position, speed, or current.
+     * The PID Gains must be set with <code>setPID()</code> or <code>setP()</code>, etc.
+     *
+     * The corresponding sensor must be activated with <code>setPositionSensor</code>
+     * or <code>setSpeedSensor</code> for position and speed control.
+     * @param initialPosition initial setpoint
      */
     public void enableClosedLoop(double initialPosition) {
         try {
@@ -257,7 +287,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Disables closed loop control
      */
     public void disableClosedLoop() {
         try {
@@ -268,7 +298,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Will return the input voltage of the jaguar speed controller
+     * Returns the input voltage of the jaguar speed controller
      * @return
      */
     public double getInputVoltage() {
@@ -281,7 +311,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Will return the output voltage of the jaguar
+     * Return the output voltage of the jaguar
      * @return
      */
     public double getOutputVoltage() {
@@ -294,7 +324,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Will return the output current of the jaguar
+     * Returns the output current of the jaguar
      * @return
      */
     public double getOutputCurrent() {
@@ -307,7 +337,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *will return the temperature in the Jaguar
+     * Returns the temperature in the Jaguar
      * @return
      */
     public double getTemperature() {
@@ -320,7 +350,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Get the position of the encoder or potentiometer.
+     * Gets the position of the attached and configured encoder or potentiometer.
+     * Configuration is done with <code>setPositionSensor()</code>
      * @return
      */
     public double getPosition() {
@@ -333,7 +364,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Gets the Speed of the motor in RPM
+     * Gets the speed of the attached and configured encoder or potentiometer.
+     * Configuration is done with <code>setSpeedSensor()</code>
      * @return
      */
     public double getSpeed() {
@@ -346,7 +378,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *The motor can turn forward if true
+     * The motor can turn forward if true
      * @return
      */
     public boolean getLeftLimitStatus() {
@@ -359,7 +391,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *The motor can turn backward if true
+     * The motor can turn backward if true
      * @return
      */
     public boolean getRightLimitStatus() {
@@ -371,19 +403,22 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
         return false;
     }
 
-    public short faults;
+    /**
+     * Gets a bit mask of faults. Bits are in <code>CANJaguar.Faults</code>
+     * @return fault-bit-mask
+     */
     public short getFaults() {
-                    return faults;
 
-//        try {
-//        } catch (CANTimeoutException ex) {
-//            notifyCANTimeout();
-//        }
-//        return 0;
+        try {
+            return jaguar.getFaults();
+        } catch (CANTimeoutException ex) {
+            notifyCANTimeout();
+        }
+        return 0;
     }
 
     /**
-     *Set the maximum voltage change rate.
+     * Sets the maximum voltage change rate.
      *
      * When in percent voltage output mode, the rate at which the voltage changes can
      * be limited to reduce current spikes.  Set this to 0.0 to disable rate limiting.
@@ -399,7 +434,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *Sets the encoder resolution
+     * Sets the encoder resolution
      * @param countsPerRev
      */
     public void setEncoderResolution(int countsPerRev) {
@@ -431,7 +466,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     * Disable soft position limits in position control mode
+     * Disable soft position limits for position control mode
      */
     public void disableSoftLimits() {
         try {
@@ -442,7 +477,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     * Configure what the controller does to the H-Bridge when neutral (not driving the output).
+     * Configures what the controller does to the H-Bridge when neutral (not driving the output).
      *
      * This allows you to override the jumper configuration for brake or coast.
      *
@@ -467,7 +502,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     * Configure the number of turns on the potentiometer.
+     * Configures the number of turns on the potentiometer.
      *
      * There is no special support for continuous turn potentiometers.
      * Only integer numbers of turns are supported.
@@ -483,7 +518,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     * Get the recently set outputValue setpoint.
+     * Gets the recently set outputValue setpoint.
      *
      * In PercentVoltage Mode, the outputValue is in the range -1.0 to 1.0
      *
@@ -499,7 +534,18 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
+     * Behavior is a function of the control mode.
      *
+     * In Percent control, the command must have a value between -1 and 1,
+     * -1 being full reverse and 1 being full forward voltage.
+     *
+     * In Current control, the command is interpreted as a current setpoint(amps).
+     *
+     * In Speed control, the command is interpreted as a speed setpoint(rpm).
+     *
+     * In Position control, the command is interpreted as a position setpoint.
+     *
+     * In Voltage control, the command is interpreted as a raw voltage to output.
      * @param c
      * @throws GRTCANJaguarException
      */
@@ -512,9 +558,13 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
         }
     }
 
+    /**
+     * Halts the jaguar by stopping it completely.
+     */
     protected void halt() {
         try {
             jaguar.setX(0);
+            disableClosedLoop();
         } catch (CANTimeoutException e) {
             notifyCANTimeout();
         }
@@ -529,7 +579,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Gets the encoder wired to the control IO on this CANJaguar.
      * @return
      */
     synchronized public GRTJagEncoder getEncoder() {
@@ -541,9 +591,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     * A JagPotentiometer tracks speed and position associated with the CANJaguar's
-     * control IO. Use <code>setPositionSensor()</code>from this class to get
-     * readings.
+     * Gets the p wired to the control IO on this CANJaguar.
      * @return
      */
     synchronized public GRTJagPotentiometer getPotentiometer() {
@@ -556,7 +604,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Gets a power sensor associated with this CANJaguar
      * @return
      */
     synchronized public GRTJagPowerSensor getPowerSensor() {
@@ -568,12 +616,12 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     }
 
     /**
-     *
+     * Returns a switch-pair sensor.
      * @return
      */
-    synchronized public GRTJagSwitch getSwitches() {
+    synchronized public GRTJagSwitchPair getSwitches() {
         if (switches == null) {
-            switches = new GRTJagSwitch(this, 5, "Switch" + this);
+            switches = new GRTJagSwitchPair(this, 5, "Switch" + this);
             switches.start();
         }
         return switches;
