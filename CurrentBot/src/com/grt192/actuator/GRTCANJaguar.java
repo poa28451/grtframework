@@ -1,17 +1,13 @@
 package com.grt192.actuator;
 
 import com.grt192.actuator.exception.GRTCANJaguarException;
-import com.grt192.actuator.exception.GRTCANTimeoutException;
 import com.grt192.core.Actuator;
 import com.grt192.core.Command;
-import com.grt192.event.ActuatorCommandListener;
-import com.grt192.event.component.CANJaguarFaultListener;
 import com.grt192.event.component.CANTimeoutListener;
 import com.grt192.sensor.canjaguar.GRTJagEncoder;
 import com.grt192.sensor.canjaguar.GRTJagFaultSensor;
 import com.grt192.sensor.canjaguar.GRTJagPowerSensor;
 import com.grt192.sensor.canjaguar.GRTJagSwitch;
-import com.grt192.utils.GRTFileIO;
 
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.CANJaguar;
