@@ -6,6 +6,7 @@ import com.grt192.core.Command;
 import com.grt192.event.component.CANTimeoutListener;
 import com.grt192.sensor.canjaguar.GRTJagEncoder;
 import com.grt192.sensor.canjaguar.GRTJagFaultSensor;
+import com.grt192.sensor.canjaguar.GRTJagPotentiometer;
 import com.grt192.sensor.canjaguar.GRTJagPowerSensor;
 import com.grt192.sensor.canjaguar.GRTJagSwitch;
 
@@ -35,6 +36,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
     private CANJaguar jaguar;
     //sensors
     private GRTJagEncoder encoder;
+    private GRTJagPotentiometer potentiometer;
     private GRTJagPowerSensor powerSensor;
     private GRTJagSwitch switches;
     private GRTJagFaultSensor faultSensor;
@@ -112,7 +114,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
      */
     public void setPositionSensor(int sensor) {
         try {
-            if (sensor == ENCODER) {
+            if (sensor == ENCODER || sensor == QUAD_ENCODER) {
                 jaguar.setPositionReference(CANJaguar.PositionReference.kQuadEncoder);
             } else if (sensor == POTENTIOMETER) {
                 jaguar.setPositionReference(CANJaguar.PositionReference.kPotentiometer);
@@ -139,6 +141,7 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
                 jaguar.setSpeedReference(CANJaguar.SpeedReference.kInvEncoder);
             } else {
                 jaguar.setSpeedReference(CANJaguar.SpeedReference.kNone);
+//                jaguar.setSpeedReference(CANJaguar.SpeedReference.kInvEncoder.kEncoder.);
             }
         } catch (CANTimeoutException e) {
             notifyCANTimeout();
@@ -535,6 +538,21 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
             encoder.start();
         }
         return encoder;
+    }
+
+    /**
+     * A JagPotentiometer tracks speed and position associated with the CANJaguar's
+     * control IO. Use <code>setPositionSensor()</code>from this class to get
+     * readings.
+     * @return
+     */
+    synchronized public GRTJagPotentiometer getPotentiometer() {
+        if (potentiometer == null) {
+            potentiometer =
+                    new GRTJagPotentiometer(this, 25, "Potentiometer" + this);
+            potentiometer.start();
+        }
+        return potentiometer;
     }
 
     /**
