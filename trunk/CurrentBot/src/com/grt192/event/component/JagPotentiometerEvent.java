@@ -11,12 +11,11 @@ import com.grt192.sensor.canjaguar.GRTJagPotentiometer;
 public class JagPotentiometerEvent {
 
     //interesting event ID's
-    public static final int DEFAULT = 0;
     public static final int DISTANCE = 1;
     public static final int STOPPED = 2;
-    public static final int DIRECTION = 3;
-    //TODO implement EncoderEvent Object
-    //TODO implement speed
+    public static final int STARTED = 3;
+    public static final int DIRECTION = 4;
+    //data
     private final GRTJagPotentiometer source;
     private final int id;
     private final double distance;
@@ -30,22 +29,34 @@ public class JagPotentiometerEvent {
         this.forward = direction;
     }
 
-    /** Gets an ID associated with what triggered this event */
+    /**
+     * Gets an ID associated with what triggered this event
+     * @return id
+     */
     public int getId() {
         return id;
     }
 
-    /** Gets the sensor source of this event */
+    /**
+     * Gets the sensor source of this event
+     * @return source <code>GRTJagPotentiometer</code>
+     */
     public GRTJagPotentiometer getSource() {
         return source;
     }
 
-    /** Gets the distance reported at the time of this event **/
+    /**
+     * Gets the distance reported at the time of this event
+     * @return distance
+     */
     public double getDistance() {
         return distance;
     }
 
-    /** Gets the direction reported at the time of this event*/
+    /**
+     * Gets the direction reported at the time of this event
+     * @return isForward
+     */
     public boolean isForward() {
         return forward;
     }

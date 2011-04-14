@@ -32,12 +32,14 @@ public class GRTJagPotentiometer extends Sensor implements PIDSource {
     public static final String SPEED = "Speed";
     public static final String TIME = "Time";
     private static final double MS_PER_SECOND = 1000;
-    private GRTCANJaguar jaguar;
+    //source
+    private final GRTCANJaguar jaguar;
     private Vector potentiometerListeners;
 
     /**
      * Called automatically from GRTCANJaguar's <code>getPotentiometer()</code> method.
      * Therefore use <code>getPotentiometer()</code>, not this.
+     * @see GRTCANJaguar
      */
     public GRTJagPotentiometer(GRTCANJaguar jag, int pollTime, String id) {
         this.jaguar = jag;
@@ -53,7 +55,8 @@ public class GRTJagPotentiometer extends Sensor implements PIDSource {
      */
     private double getSpeed(double prevTime, double prevDistance) {
         //delta Distance / delta Time
-        return ((getState(DISTANCE) - prevDistance) / (getState(TIME) - prevTime)) * MS_PER_SECOND;
+        return ((getState(DISTANCE) - prevDistance) /
+                (getState(TIME) - prevTime)) * MS_PER_SECOND;
     }
 
     public void poll() {
@@ -94,48 +97,72 @@ public class GRTJagPotentiometer extends Sensor implements PIDSource {
         jaguar.setPotentiometerTurns(turns);
     }
 
-    /** adds a provided JagPotentiometerListener to send events, on event */
+    /** 
+     * Adds a provided <code>JagPotentiometerListener</code> to send events,
+     * on event
+     * @param a A <code>JagPotentiometerListener</code> to send events to
+     */
     public void addPotentiometerListener(JagPotentiometerListener a) {
         potentiometerListeners.addElement(a);
     }
 
-    /** removes a provided JagPotentiometerListener to stop sending events, on event */
+    /** 
+     * Removes a provided <code>JagPotentiometerListener</code> to stop sending
+     * events, on event
+     * @param a A <code>JagPotentiometerListener</code> to notify
+     */
     public void removePotentiometerListener(JagPotentiometerListener a) {
         potentiometerListeners.removeElement(a);
     }
 
-    /** Notifies all JagPotentiometerListeners that potentiometer rotation has changed */
+    /**
+     * Notifies all <code>JagPotentiometerListener</code>s that potentiometer 
+     * rotation has changed
+     */
     protected void notifyPotentiometerChange() {
         for (int i = 0; i < potentiometerListeners.size(); i++) {
-            ((JagPotentiometerListener) potentiometerListeners.elementAt(i)).countDidChange(new JagPotentiometerEvent(this,
-                    JagPotentiometerEvent.DEFAULT, getState(DISTANCE),
+            ((JagPotentiometerListener) potentiometerListeners.elementAt(i))
+                    .countDidChange(new JagPotentiometerEvent(this,
+                    JagPotentiometerEvent.DISTANCE, getState(DISTANCE),
                     (getState(DISTANCE) == Sensor.TRUE)));
         }
     }
 
-    /** Notifies all JagPotentiometerListeners that potentiometer rotation has started */
+    /**
+     * Notifies all <code>JagPotentiometerListener</code>s that potentiometer
+     * rotation has started
+     */
     protected void notifyPotentiometerStarted() {
         for (int i = 0; i < potentiometerListeners.size(); i++) {
-            ((JagPotentiometerListener) potentiometerListeners.elementAt(i)).rotationDidStart(new JagPotentiometerEvent(this,
-                    JagPotentiometerEvent.DEFAULT, getState(DISTANCE),
+            ((JagPotentiometerListener) potentiometerListeners.elementAt(i))
+                    .rotationDidStart(new JagPotentiometerEvent(this,
+                    JagPotentiometerEvent.STARTED, getState(DISTANCE),
                     (getState(DISTANCE) == Sensor.TRUE)));
         }
     }
 
-    /** Notifies all JagPotentiometerListeners that potentiometer rotation has stopped */
+    /**
+     * Notifies all <code>JagPotentiometerListener</code>s that potentiometer
+     * rotation has stopped
+     */
     protected void notifyPotentiometerStopped() {
         for (int i = 0; i < potentiometerListeners.size(); i++) {
-            ((JagPotentiometerListener) potentiometerListeners.elementAt(i)).rotationDidStop(new JagPotentiometerEvent(this,
-                    JagPotentiometerEvent.DEFAULT, getState(DISTANCE),
+            ((JagPotentiometerListener) potentiometerListeners.elementAt(i))
+                    .rotationDidStop(new JagPotentiometerEvent(this,
+                    JagPotentiometerEvent.STOPPED, getState(DISTANCE),
                     (getState(DISTANCE) == Sensor.TRUE)));
         }
     }
 
-    /** Notifies all JagPotentiometerListeners that potentiometer direction has changed */
+    /**
+     * Notifies all <code>JagPotentiometerListener</code>s that potentiometer
+     * direction has changed
+     */
     protected void notifyDirectionChanged() {
         for (int i = 0; i < potentiometerListeners.size(); i++) {
-            ((JagPotentiometerListener) potentiometerListeners.elementAt(i)).changedDirection(new JagPotentiometerEvent(this,
-                    JagPotentiometerEvent.DEFAULT, getState(DISTANCE),
+            ((JagPotentiometerListener) potentiometerListeners.elementAt(i))
+                    .changedDirection(new JagPotentiometerEvent(this,
+                    JagPotentiometerEvent.DIRECTION, getState(DISTANCE),
                     (getState(DISTANCE) == Sensor.TRUE)));
         }
     }
