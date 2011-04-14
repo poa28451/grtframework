@@ -12,6 +12,7 @@ import com.grt192.sensor.canjaguar.GRTJagSwitchPair;
 
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.CANJaguar.ControlMode;
 import edu.wpi.first.wpilibj.PIDOutput;
 import java.util.Vector;
 
@@ -26,14 +27,11 @@ import java.util.Vector;
 public class GRTCANJaguar extends Actuator implements PIDOutput {
     // Control Modes
 
-    /*
-     * TODO consider/do Voltage control: ensures 'regulated' voltage?
-     * This would be preferable if bus voltage drops, perhaps 11V: 100%(percent) then becomes 11V.
-     */
     public static final int PERCENT_CONTROL = 1;
     public static final int SPEED_CONTROL = 2;
     public static final int POSITION_CONTROL = 3;
     public static final int CURRENT_CONTROL = 4;
+    public static final int VOLTAGE_CONTROL = 5;
     // Position Sensors
     public static final int POTENTIOMETER = 0;
     public static final int ENCODER = 1;
@@ -85,6 +83,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
                 case CURRENT_CONTROL:
                     jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kCurrent);
                     break;
+                case VOLTAGE_CONTROL:
+                    jaguar = new CANJaguar(channel, CANJaguar.ControlMode.kVoltage);
                 default:
                     jaguar = new CANJaguar(channel);
             }
@@ -112,6 +112,8 @@ public class GRTCANJaguar extends Actuator implements PIDOutput {
                 case CURRENT_CONTROL:
                     jaguar.changeControlMode(CANJaguar.ControlMode.kCurrent);
                     break;
+                case VOLTAGE_CONTROL:
+                    jaguar.changeControlMode(CANJaguar.ControlMode.kVoltage);
                 default:
                     jaguar.changeControlMode(CANJaguar.ControlMode.kPercentVbus);
             }
