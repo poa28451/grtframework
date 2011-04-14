@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj.CANJaguar;
 import java.util.Vector;
 
 /**
- * Reads the jaguar fault bitmask
+ * Reads the jaguar fault bitmask and notifies listeners on changes
  * @author ajc
  */
 public class GRTJagFaultSensor extends Sensor {
 
-    /** Fault boolean array indicies for use with heartbeat **/
+    /** Fault boolean array indicies for use with heartbeat faults array*/
     public static final int FAULTS_CURRENT = 0;
     public static final int FAULTS_TEMPERATURE = 1;
     public static final int FAULTS_VOLTAGE = 2;
     public static final int FAULTS_GATE_DRIVER = 3;
-    /** Fault keys for getState() **/
+    /** Fault keys for getState() */
     public static final String CURRENT_FAULT_KEY = "Current";
     public static final String TEMPERATURE_FAULT_KEY = "Temperature";
     public static final String VOLTAGE_FAULT_KEY = "Voltage";
@@ -27,7 +27,11 @@ public class GRTJagFaultSensor extends Sensor {
     private final GRTCANJaguar jag;
     private short bitmask;
     private Vector listeners;
-
+    /**
+     * Called automatically from GRTCANJaguar's <code>getFaultSensor()</code> method.
+     * Therefore use <code>getFaultSensor()</code>, not this.
+     * @see GRTCANJaguar
+     */
     public GRTJagFaultSensor(GRTCANJaguar jag, int pollTime, String id) {
         this.jag = jag;
         setSleepTime(1000);
@@ -35,22 +39,22 @@ public class GRTJagFaultSensor extends Sensor {
         listeners = new Vector();
     }
 
-    /** True if the CANJag is reading a voltage fault **/
+    /** True if the CANJaguar is reading a voltage fault **/
     public boolean isVoltageFault() {
         return (CANJaguar.Faults.kBusVoltageFault.value & bitmask) != 0;
     }
 
-    /** True if the CANJag is reading a current fault **/
+    /** True if the CANJaguar is reading a current fault **/
     public boolean isCurrentFault() {
         return (CANJaguar.Faults.kCurrentFault.value & bitmask) != 0;
     }
 
-    /** True if the CANJag is reading a GateDriver Fault **/
+    /** True if the CANJaguar is reading a GateDriver Fault **/
     public boolean isGateDriverFault() {
         return (CANJaguar.Faults.kGateDriverFault.value & bitmask) != 0;
     }
 
-    /** True if the CANJag is reading a temperature fault **/
+    /** True if the CANJaguar is reading a temperature fault **/
     public boolean isTemperatureFault() {
         return (CANJaguar.Faults.kTemperatureFault.value & bitmask) != 0;
     }
@@ -104,12 +108,18 @@ public class GRTJagFaultSensor extends Sensor {
 
     }
 
-    /** Starts notifying <code>CANTimeoutListener</code> l for all CANTimeouts **/
+    /**
+     * Starts notifying <code>CANTimeoutListener</code> l for all CANTimeouts
+     * @param l <code>CANTimeoutListener</code> to notify
+     */
     public void addCANFailureListener(CANJaguarFaultListener l) {
         listeners.addElement(l);
     }
 
-    /** Stops notifying <code>CANTimeoutListener</code> l for all CANTimeouts **/
+    /**
+     * Stops notifying <code>CANTimeoutListener</code> l for all CANTimeouts
+     * @param l <code>CANTimeoutListener</code> to stop notifying
+     */
     public void removeCANFailureListener(CANJaguarFaultListener l) {
         listeners.removeElement(l);
     }

@@ -7,65 +7,95 @@ import com.grt192.core.Sensor;
 import com.grt192.event.component.JagPowerEvent;
 import com.grt192.event.component.JagPowerListener;
 
+/**
+ * The power sensor tracks changes in  GRTCANJaguar voltage, current,
+ * and temperature.
+ * 
+ * There is a distinction between this and voltage/current/temperature faults;
+ * this sensor doesn't track them. That is done by a GRTJagFaultSensor.
+ *
+ * @see GRTJagFaultSensor
+ * @author ajc
+ */
 public class GRTJagPowerSensor extends Sensor {
 
-	private GRTCANJaguar jaguar;
-	private Vector powerListeners;
+    /** keys for getState() **/
+    public static final String VOLTAGE = "Voltage";
+    public static final String CURRENT = "Current";
+    public static final String TEMPERATURE = "Temperature";
+    //source
+    private final GRTCANJaguar jaguar;
+    private Vector powerListeners;
 
-	public GRTJagPowerSensor(GRTCANJaguar jag, int pollTime, String id) {
-		jaguar = jag;
-		this.id = id;
-		this.setSleepTime(pollTime);
-		powerListeners = new Vector();
-	}
+    /**
+     * Called automatically from GRTCANJaguar's <code>getPowerSensor()</code> method.
+     * Therefore use <code>getEncoder()</code>, not this.
+     * @see GRTCANJaguar
+     */
+    public GRTJagPowerSensor(GRTCANJaguar jag, int pollTime, String id) {
+        jaguar = jag;
+        this.id = id;
+        this.setSleepTime(pollTime);
+        powerListeners = new Vector();
+    }
 
-	public void poll() {
-		double previous = getState("Voltage");
-		setState("Voltage", jaguar.getOutputVoltage());
-		if (previous != getState("Voltage")) {
-			notifyVoltageChange();
-		}
-		previous = getState("Current");
-		setState("Current", jaguar.getOutputCurrent());
-		if (previous != getState("Current")) {
-			notifyCurrentChange();
-		}
-		previous = getState("Temperature");
-		setState("Temperature", jaguar.getTemperature());
-		if (previous != getState("Temperature")) {
-			notifyTemperatureChange();
-		}
-	}
+    public void poll() {
+        double previous = getState(VOLTAGE);
+        setState(VOLTAGE, jaguar.getOutputVoltage());
+        if (previous != getState(VOLTAGE)) {
+            notifyVoltageChange();
+        }
+        previous = getState(CURRENT);
+        setState(CURRENT, jaguar.getOutputCurrent());
+        if (previous != getState(CURRENT)) {
+            notifyCurrentChange();
+        }
+        previous = getState(TEMPERATURE);
+        setState(TEMPERATURE, jaguar.getTemperature());
+        if (previous != getState(TEMPERATURE)) {
+            notifyTemperatureChange();
+        }
+    }
 
-	public void addPowerListener(JagPowerListener a) {
-		powerListeners.addElement(a);
-	}
+    /**
+     * Adds a provided <code>JagPowerListener</code> to send events,
+     * on event
+     * @param a A <code>JagPowerListener</code> to send events to
+     */
+    public void addPowerListener(JagPowerListener a) {
+        powerListeners.addElement(a);
+    }
 
-	public void removePowerListener(JagPowerListener a) {
-		powerListeners.removeElement(a);
-	}
+    /**
+     * Removes a provided <code>JagPowerListener</code> to stop sending
+     * events, on event
+     * @param a A <code>JagPowerListener</code> to notify
+     */
+    public void removePowerListener(JagPowerListener a) {
+        powerListeners.removeElement(a);
+    }
 
-	protected void notifyVoltageChange() {
-		for (int i = 0; i < powerListeners.size(); i++) {
-			((JagPowerListener) powerListeners.elementAt(i))
-					.voltageChanged(new JagPowerEvent(this,
-							JagPowerEvent.VOLTAGE_CHANGE, getState("Voltage")));
-		}
-	}
+    /** Notifies all listeners that the voltage has changed */
+    protected void notifyVoltageChange() {
+        for (int i = 0; i < powerListeners.size(); i++) {
+            ((JagPowerListener) powerListeners.elementAt(i)).voltageChanged(new JagPowerEvent(this,
+                    JagPowerEvent.VOLTAGE_CHANGE, getState(VOLTAGE)));
+        }
+    }
 
-	protected void notifyCurrentChange() {
-		for (int i = 0; i < powerListeners.size(); i++) {
-			((JagPowerListener) powerListeners.elementAt(i))
-					.currentChanged(new JagPowerEvent(this,
-							JagPowerEvent.CURRENT_CHANGE, getState("Current")));
-		}
-	}
+    /** Notifies all listeners that current has changed */
+    protected void notifyCurrentChange() {
+        for (int i = 0; i < powerListeners.size(); i++) {
+            ((JagPowerListener) powerListeners.elementAt(i)).currentChanged(new JagPowerEvent(this,
+                    JagPowerEvent.CURRENT_CHANGE, getState(CURRENT)));
+        }
+    }
 
-	protected void notifyTemperatureChange() {
-		for (int i = 0; i < powerListeners.size(); i++) {
-			((JagPowerListener) powerListeners.elementAt(i))
-					.temperatureChanged(new JagPowerEvent(this,
-							JagPowerEvent.TEMPERATURE_CHANGE, getState("Temperature")));
-		}
-	}
+    /* Notifies all listeners that temperature has changed */
+    protected void notifyTemperatureChange() {
+        for (int i = 0; i < powerListeners.size(); i++) {
+            ((JagPowerListener) powerListeners.elementAt(i)).temperatureChanged(new JagPowerEvent(this,
+                    JagPowerEvent.TEMPERATURE_CHANGE, getState(TEMPERATURE)));
+        }
+    }
 }
