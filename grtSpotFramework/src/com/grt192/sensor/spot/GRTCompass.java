@@ -1,4 +1,3 @@
-
 package com.grt192.sensor.spot;
 
 import com.grt192.core.Sensor;
@@ -12,12 +11,17 @@ import java.io.IOException;
  */
 public class GRTCompass extends Sensor {
 
-    public static final byte SLA_HMC6352_READ = (byte) 0x42;
-    public static final byte SLA_HMC6352_WRITE = (byte) 0x41;
+    /** State Key ID */
+    public static final String ANGLE = "Angle";
+    //i2c constants
+    private static final byte SLA_HMC6352_SLAVE_ADDRESS = (byte) 0x42;
+    private static final byte SLA_HMC6352_WRITE = (byte) 0x41;
+    private static final byte SLA_HMC6352_READ_COMMAND = 'A';
+    private static final int NUM_BYTES_READ = 2;
     private II2C i2cDevice;
 
     public GRTCompass(double changeThreshold, int pollTime, String id) {
-        this(EDemoBoard.getInstance().getI2C(), changeThreshold,pollTime,id);
+        this(EDemoBoard.getInstance().getI2C(), changeThreshold, pollTime, id);
     }
 
     public GRTCompass(II2C e, double changeThreshold, int pollTime, String id) {
@@ -31,24 +35,27 @@ public class GRTCompass extends Sensor {
             }
         }
         setChangeThreshold(changeThreshold);
-        setState("Angle", 0);
+        setState(ANGLE, 0);
         setSleepTime(pollTime);
         setId(id);
     }
 
-    public void poll() {
-        double angle = 0;
-        byte[] command = new byte[1];
-        command[0] = (byte) ('A');
-        byte[] data = new byte[2];
+    /** Commands the compass to get a reading, and calculates direct heading from it */
+    public double getAngle() {
+
+        byte[] data = new byte[NUM_BYTES_READ];
         try {
-            i2cDevice.read(SLA_HMC6352_READ, command[0], 1, data, 0, 2);
-            angle = ((((data[0]) << 8) + (data[1])) / 10); //(((0xFF & data[0]) << 8) | ((0xFF) & data[1]));
-        } catch (IOException e) {
-            angle = -999;
-            log("Compass reading failed");
+            i2cDevice.read(SLA_HMC6352_SLAVE_ADDRESS, SLA_HMC6352_READ_COMMAND, 1, data, 0, NUM_BYTES_READ);
+            double headingvalue = (data[0] << 8) + data[1];
+            return ((int) headingvalue / 10) + ((headingvalue % 10) / 10);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        setState("Angle", angle);
+        return ERROR;
     }
 
+    public void poll() {
+        //TODO perhaps calculate velocity
+        setState(ANGLE, getAngle());
+    }
 }

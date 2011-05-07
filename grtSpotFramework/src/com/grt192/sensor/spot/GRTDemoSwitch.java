@@ -16,6 +16,7 @@ import java.util.Vector;
  */
 public class GRTDemoSwitch extends Sensor {
 
+    public static final String STATE = "State";
     public static final double CLOSED = Sensor.TRUE;
     public static final double OPEN = Sensor.FALSE;
     private ISwitch s;
@@ -26,15 +27,15 @@ public class GRTDemoSwitch extends Sensor {
         setSleepTime(pollTime);
         setId(name);
         switchListeners = new Vector();
-        setState("State", s.isClosed());
+        setState(STATE, s.isClosed());
 
     }
 
     public void poll() {
-        double previous = getState("State");
-        setState("State", s.isClosed() ? CLOSED : OPEN);
-        if (getState("State") != previous) {
-            notifyListeners(getState("State") == CLOSED);
+        double previous = getState(STATE);
+        setState(STATE, s.isClosed() ? CLOSED : OPEN);
+        if (getState(STATE) != previous) {
+            notifyListeners(getState(STATE) == CLOSED);
         }
     }
 
