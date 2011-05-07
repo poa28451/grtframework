@@ -1,7 +1,7 @@
 package com.grt192.networking;
 
-import com.grt192.spot.networking.RadioClient;
-import com.grt192.spot.networking.RadioServer;
+import com.grt192.networking.spot.RadiogramClient;
+import com.grt192.networking.spot.RadiogramServer;
 
 /**
  * Abstracts socket creation for code carryover between platforms
@@ -15,7 +15,7 @@ public class SocketFactory {
      * @return
      */
     public static GRTSocket createServer(int port) {
-        return new RadioServer(port,true);
+        return new RadiogramServer(port);
     }
 
     /**
@@ -25,6 +25,6 @@ public class SocketFactory {
      * @return
      */
     public static GRTSocket createClient(String spotSerialNumber, int port) {
-        return new RadioClient(spotSerialNumber,port);
+        return new RadiogramClient(spotSerialNumber, port);
     }
 }

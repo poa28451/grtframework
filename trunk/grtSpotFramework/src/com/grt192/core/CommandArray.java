@@ -8,7 +8,7 @@ package com.grt192.core;
 public class CommandArray extends Command {
 
     private double[] values;
-
+    
     public CommandArray(double[] values) {
         this(values, 0);
     }
@@ -42,7 +42,15 @@ public class CommandArray extends Command {
         return values[index];
     }
 
+    public void setValue(int index, double value){
+        values[index] = value;
+    }
+
     public int size() {
         return values.length;
+    }
+
+    public CommandArray clone(){
+        return new CommandArray(values,getSleepTime(), isAtomic());
     }
 }

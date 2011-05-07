@@ -9,7 +9,6 @@ public class SocketEvent {
 	private String data;
 	
 	public SocketEvent(GRTSocket source, int id, String data) {
-		super();
 		this.source = source;
 		this.id = id;
 		this.data = data;
