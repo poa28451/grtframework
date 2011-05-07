@@ -16,6 +16,7 @@ public abstract class Sensor extends GRTObject {
 
     public static final double FALSE = 0.0;
     public static final double TRUE = 1.0;
+    public static final double ERROR = -999;
     protected Hashtable state;
     protected int sleepTime = 50;
     private boolean running;
@@ -84,7 +85,7 @@ public abstract class Sensor extends GRTObject {
         this.sleepTime = sleepTime;
     }
 
-    public void setChangeThreshold(double threshold){
+    public void setChangeThreshold(double threshold) {
         changeThreshold = threshold;
     }
 
@@ -102,6 +103,10 @@ public abstract class Sensor extends GRTObject {
 
     public void suspend() {
         this.suspended = true;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void resume() {
@@ -128,17 +133,14 @@ public abstract class Sensor extends GRTObject {
     }
 
     protected void notifySensorChangeListeners(String key, double previousState) {
-        for (int i = 0; i < sensorChangeListeners.size(); i++) {
-            if (getState(key) != previousState) {
-//                ((SensorChangeListener) sensorChangeListeners.elementAt(i)).sensorStateChanged(new SensorEvent(this,
-//                        SensorEvent.DATA_AVAILABLE, this.state), key);
-            }
-            if( Math.abs(getState(key) - lastDatumSent) > changeThreshold){
-                lastDatumSent = getState(key);
-                ((SensorChangeListener) sensorChangeListeners.elementAt(i)).sensorStateChanged(new SensorEvent(this,
-                        SensorEvent.DATA_AVAILABLE, this.state), key);
+        SensorEvent e = new SensorEvent(this, SensorEvent.DATA_AVAILABLE, this.state);
+
+        if (Math.abs(getState(key) - lastDatumSent) > changeThreshold) {
+            for (int i = 0; i < sensorChangeListeners.size(); i++) {
+                ((SensorChangeListener) sensorChangeListeners.elementAt(i)).sensorStateChanged(e, key);
             }
         }
+        lastDatumSent = getState(key);
     }
 
     public void removeSensorChangeListener(SensorChangeListener s) {

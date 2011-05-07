@@ -1,12 +1,10 @@
 package com.grt192.core;
 
-import com.grt192.spot.actuator.GRTDemoLED;
 import com.grt192.networking.GRTSocket;
 import com.grt192.networking.SocketEvent;
 import com.grt192.networking.SocketFactory;
 import com.grt192.networking.SocketListener;
 import com.grt192.networking.Ports;
-import com.grt192.spot.networking.RadioServer;
 import java.util.Vector;
 
 /**

@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.grt192.event.GlobalEvent;
 import com.grt192.event.GlobalListener;
+import com.sun.spot.service.BootloaderListenerService;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 
@@ -162,6 +163,8 @@ public abstract class GRTRobot extends MIDlet {
      * @throws javax.microedition.midlet.MIDletStateChangeException
      */
     protected final void startApp() throws MIDletStateChangeException {
+
+        BootloaderListenerService.getInstance().start();
 //        boolean errorOnExit = false;
 
 //        Watchdog.getInstance().setExpiration(0.1);
@@ -179,6 +182,7 @@ public abstract class GRTRobot extends MIDlet {
 //                System.err.println("---> Unexpected return from startCompetition() method.");
 //            }
 //        }
+
     }
 
     /**

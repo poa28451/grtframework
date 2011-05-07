@@ -18,18 +18,22 @@ public abstract class GRTObject extends Thread {
         classname = classname.substring(dot + 1);
     }
 
-    public String getClassName(){
+    public String getClassName() {
         return classname;
     }
 
-    protected void setPrinting(boolean b) {
+    public void setPrinting(boolean b) {
         if (b) {
             l.addPrinter(classname);
         } else {
             l.removePrinter(classname);
         }
     }
-
+    
+    public static void extLog(String key,String message){
+        GRTRobot.getInstance().getLogger().write(key, message);
+    }
+    
     protected void log(String message) {
         l.write(classname, message);
     }
