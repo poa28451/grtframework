@@ -1,4 +1,6 @@
-package com.grt192.core;
+package com.grt192.core.controller;
+
+import com.grt192.core.Controller;
 
 /**
  * A Controller that only responds to events

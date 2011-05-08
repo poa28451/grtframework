@@ -27,15 +27,17 @@ public abstract class GRTRobot extends MIDlet {
         this(true);
     }
 
-    public GRTRobot(boolean useLogger){
+    public GRTRobot(boolean useLogger) {
         instance = this;
+        BootloaderListenerService.getInstance().start();
+
         autonomousControllers = new Vector();
         teleopControllers = new Vector();
 
         globals = new Hashtable();
         globalListeners = new Vector();
 
-        if(useLogger){
+        if (useLogger) {
             logger = GRTLogger.getInstance();
             System.out.println("Logger:              \tREADY");
         }
@@ -147,14 +149,17 @@ public abstract class GRTRobot extends MIDlet {
     protected void log(String message) {
         logger.write("GRTRobot", message);
     }
-    protected void log(String type,String message) {
-        logger.write(type,message);
+
+    protected void log(String type, String message) {
+        logger.write(type, message);
     }
-    protected void logVar(String name,String message) {
-        logger.write("(var)"+name, message);
+
+    protected void logVar(String name, String message) {
+        logger.write("(var)" + name, message);
     }
+
     protected void logVar(String string, double i) {
-        logVar(string,Double.toString(i));
+        logVar(string, Double.toString(i));
     }
 
     /**
@@ -163,13 +168,9 @@ public abstract class GRTRobot extends MIDlet {
      * @throws javax.microedition.midlet.MIDletStateChangeException
      */
     protected final void startApp() throws MIDletStateChangeException {
-
-        BootloaderListenerService.getInstance().start();
 //        boolean errorOnExit = false;
-
 //        Watchdog.getInstance().setExpiration(0.1);
 //        Watchdog.getInstance().setEnabled(false);
-
 //        try {
 //            this.startCompetition();
 //        } catch (Throwable t) {
@@ -182,7 +183,6 @@ public abstract class GRTRobot extends MIDlet {
 //                System.err.println("---> Unexpected return from startCompetition() method.");
 //            }
 //        }
-
     }
 
     /**
