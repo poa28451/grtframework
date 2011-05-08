@@ -30,12 +30,8 @@ public void stopListening() {
 }}}
 
 = Partial Event Control =
-Sometimes it may be useful to have a controller actuate on its own without an event. To do this, simply override EventController.start() and EventController.run();
+Sometimes it may be useful to have a controller actuate on its own without an event. To do this, simply implement EventController.run();
 {{{
-    public void start() {
-        super.start();
-    }
-
     public void run() {
         running = true;
         while (running) {
@@ -45,4 +41,4 @@ Sometimes it may be useful to have a controller actuate on its own without an ev
         }
     }
 }}}
-Note super.start() in start(). This calls startListening(), which is available for all instances of Controller, but specifically required for EventControllers. super.start() also runs the thread.
+This will be run when start() is called, in addition to startListening(). No other work is necessary, as run is always called, but in normal instances of EventController it immediately returns.
