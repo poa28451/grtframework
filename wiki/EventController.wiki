@@ -41,4 +41,4 @@ Sometimes it may be useful to have a controller actuate on its own without an ev
         }
     }
 }}}
-This will be run when start() is called, in addition to startListening(). No other work is necessary, as run is always called, but in normal instances of EventController it immediately returns.
+This will be run when start() is called, which also calls startListening(). No other work is necessary, as run is always called, but in normal instances of EventController it immediately returns.
