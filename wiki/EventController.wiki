@@ -34,7 +34,6 @@ Sometimes it may be useful to have a controller actuate on its own without an ev
 {{{
     public void start() {
         super.start();
-        run();
     }
 
     public void run() {
@@ -46,11 +45,4 @@ Sometimes it may be useful to have a controller actuate on its own without an ev
         }
     }
 }}}
-Note super.start() in start(). This simply calls EventController.startListening(); and sets boolean running to true. These can done manually as well;
-{{{
-    public void start() {
-        startListening();
-        running = true;
-        run();
-    }
-}}}
+Note super.start() in start(). This calls startListening(), which is available for all instances of Controller, but specifically required for EventControllers. super.start() also runs the thread.
