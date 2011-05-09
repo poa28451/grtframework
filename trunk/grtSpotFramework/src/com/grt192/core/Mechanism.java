@@ -47,28 +47,28 @@ public abstract class Mechanism extends GRTObject {
 	/**
 	 * Suspend all actuators and sensors on a mechanism
 	 */
-	public void suspend() {
+	public void pause() {
 		Enumeration e = actuators.elements();
 		while (e.hasMoreElements()) {
-			((Actuator) (e.nextElement())).suspend();
+			((Actuator) (e.nextElement())).hold();
 		}
 		e = sensors.elements();
 		while (e.hasMoreElements()) {
-			((Sensor) (e.nextElement())).suspend();
+			((Sensor) (e.nextElement())).pause();
 		}
 	}
 
 	/**
 	 * Resume all actuators and sensors in this mechanism
 	 */
-	public void resume() {
+	public void unpause() {
 		Enumeration e = actuators.elements();
 		while (e.hasMoreElements()) {
-			((Actuator) (e.nextElement())).resume();
+			((Actuator) (e.nextElement())).unpause();
 		}
 		e = sensors.elements();
 		while (e.hasMoreElements()) {
-			((Sensor) (e.nextElement())).resume();
+			((Sensor) (e.nextElement())).unpause();
 		}
 
 	}

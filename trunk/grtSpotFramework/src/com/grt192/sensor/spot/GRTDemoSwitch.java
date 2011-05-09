@@ -25,7 +25,7 @@ public class GRTDemoSwitch extends Sensor {
     public GRTDemoSwitch(int pin, int pollTime, String name) {
         s = EDemoBoard.getInstance().getSwitches()[pin];
         setSleepTime(pollTime);
-        setId(name);
+        setID(name);
         switchListeners = new Vector();
         setState(STATE, s.isClosed());
 

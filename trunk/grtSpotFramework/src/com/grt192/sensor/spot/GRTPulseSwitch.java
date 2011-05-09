@@ -24,7 +24,7 @@ public class GRTPulseSwitch extends Sensor {
     public GRTPulseSwitch(int pin, int pollTime, String name) {
         input = EDemoBoard.getInstance().getIOPins()[pin];
         setSleepTime(pollTime);
-        setId(name);
+        setID(name);
         switchListeners = new Vector();
         spotBoard = EDemoBoard.getInstance();
         input.setAsOutput(false);

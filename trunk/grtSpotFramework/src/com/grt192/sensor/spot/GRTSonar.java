@@ -76,7 +76,7 @@ public class GRTSonar extends Sensor {
                 Assert.shouldNotReachHereFatal("Sensor interface not defined");
         }
         setSleepTime(pollTime);
-        setId(id);
+        setID(id);
         setState(DISTANCE, 0);
     }
 

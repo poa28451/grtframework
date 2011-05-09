@@ -37,7 +37,7 @@ public class GRTCompass extends Sensor {
         setChangeThreshold(changeThreshold);
         setState(ANGLE, 0);
         setSleepTime(pollTime);
-        setId(id);
+        setID(id);
     }
 
     /** Commands the compass to get a reading, and calculates direct heading from it */
