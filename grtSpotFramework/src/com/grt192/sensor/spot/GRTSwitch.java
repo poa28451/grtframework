@@ -25,7 +25,7 @@ public class GRTSwitch extends Sensor {
     public GRTSwitch(int pin, int pollTime, String name) {
         input = EDemoBoard.getInstance().getIOPins()[pin];
         setSleepTime(pollTime);
-        setId(name);
+        setID(name);
         switchListeners = new Vector();
         input.setAsOutput(false);
     }

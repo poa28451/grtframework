@@ -46,7 +46,7 @@ public class IDG500Gyro extends Sensor {
         time = System.currentTimeMillis();
 
         setSleepTime(pollTime);
-        setId(id);
+        setID(id);
         calibrate();
     }
 

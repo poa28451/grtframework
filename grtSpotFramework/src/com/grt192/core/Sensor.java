@@ -89,7 +89,7 @@ public abstract class Sensor extends GRTObject {
         changeThreshold = threshold;
     }
 
-    public Hashtable getState() {
+    public Hashtable getSensorState() {
         return state;
     }
 
@@ -101,7 +101,7 @@ public abstract class Sensor extends GRTObject {
         return suspended;
     }
 
-    public void suspend() {
+    public void pause() {
         this.suspended = true;
     }
 
@@ -109,7 +109,7 @@ public abstract class Sensor extends GRTObject {
         return running;
     }
 
-    public void resume() {
+    public void unpause() {
         this.suspended = false;
     }
 
@@ -155,11 +155,11 @@ public abstract class Sensor extends GRTObject {
         sensorChangeListeners.addElement(s);
     }
 
-    public String getId() {
+    public String getID() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setID(String id) {
         this.id = id;
     }
 }

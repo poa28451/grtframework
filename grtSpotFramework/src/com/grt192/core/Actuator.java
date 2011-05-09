@@ -155,7 +155,7 @@ public abstract class Actuator extends GRTObject {
     public void doCommand(Command c) throws ActuatorException {
         this.pause();
         this.executeCommand(c);
-        this.resume();
+        this.unpause();
     }
 
     public void doCommand(double c) throws ActuatorException {
@@ -203,7 +203,7 @@ public abstract class Actuator extends GRTObject {
     /**
      * Pause execution of commands in the queue and stop the action of this actuator
      */
-    public void suspend() {
+    public void hold() {
         halt();
         this.suspended = true;
     }
@@ -218,7 +218,7 @@ public abstract class Actuator extends GRTObject {
     /**
      * Resume execution of commands in the queue from where Actutator left off
      */
-    public void resume() {
+    public void unpause() {
         suspended = false;
     }
 

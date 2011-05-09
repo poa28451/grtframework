@@ -5,13 +5,12 @@ import java.util.Vector;
 
 import com.grt192.event.GlobalEvent;
 import com.grt192.event.GlobalListener;
-import com.sun.spot.service.BootloaderListenerService;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 
 /**
  * 
- * @author anand, ajc
+ * @author anand
  */
 public abstract class GRTRobot extends MIDlet {
     // Shared objects
@@ -29,7 +28,6 @@ public abstract class GRTRobot extends MIDlet {
 
     public GRTRobot(boolean useLogger) {
         instance = this;
-        BootloaderListenerService.getInstance().start();
 
         autonomousControllers = new Vector();
         teleopControllers = new Vector();
@@ -37,10 +35,8 @@ public abstract class GRTRobot extends MIDlet {
         globals = new Hashtable();
         globalListeners = new Vector();
 
-        if (useLogger) {
-            logger = GRTLogger.getInstance();
-            System.out.println("Logger:              \tREADY");
-        }
+        logger = GRTLogger.getInstance();
+        System.out.println("Logger:              \tREADY");
 
         System.out.println("grtSpotFramework:       \tREADY");
 
@@ -80,7 +76,7 @@ public abstract class GRTRobot extends MIDlet {
      * controllers are started
      */
     public void autonomous() {
-        logger.write("GRTRobot", "AUTO");
+        log("AUTO");
         // Stop teleopcontrollers if started
         for (int i = 0; i < teleopControllers.size(); i++) {
             Controller c = (Controller) teleopControllers.elementAt(i);
@@ -106,7 +102,7 @@ public abstract class GRTRobot extends MIDlet {
      */
     public void operatorControl() {
         // Stop AutonomousControllers if started
-        logger.write("GRTRobot", "OP");
+        log("OP");
         for (int i = 0; i < autonomousControllers.size(); i++) {
             Controller c = (Controller) autonomousControllers.elementAt(i);
             if (c.isRunning()) {
@@ -142,8 +138,9 @@ public abstract class GRTRobot extends MIDlet {
         return instance;
     }
 
+    /** @deprecated  use GRTLogger.getInstance() */
     public GRTLogger getLogger() {
-        return logger;
+        return GRTLogger.getInstance();
     }
 
     protected void log(String message) {
