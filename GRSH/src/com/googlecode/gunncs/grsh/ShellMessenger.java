@@ -1,6 +1,5 @@
 package com.googlecode.gunncs.grsh;
 
-import com.grt192.prototyper.Prototyper;
 import com.grt192.prototyper.PrototyperFactory;
 import com.grt192.rsh.RSHClient;
 
