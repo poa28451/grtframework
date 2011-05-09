@@ -1,12 +1,10 @@
 package com.grt192.prototyper;
 
-import com.grt192.core.GRTObject;
-
 /**
  * A prototyped host represents a host recognized by the Prototyper.
  * @author ajc
  */
-public class PrototypedHost extends GRTObject {
+public class PrototypedHost {
 
     /**
      * Constructs a new prototyped host given a prototype
