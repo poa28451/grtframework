@@ -87,15 +87,18 @@ public class RSHServer extends GRTObject implements Ports, SocketListener {
         //tokenize the command
         String[] commands = Util.separateString(e.getData());
         log("RSHServer receive: " + Util.arraytoString(commands));
-        notifyListeners(commands);
+        //can't send command without arguments for the Commandable
+        if (commands.length > 1) {
+            notifyListeners(commands);
+        }
     }
 
     private void notifyListeners(String[] args) {
         //move all but first argument to new array
         String[] commands = new String[args.length - 1];
 //        (Object[] src, int srcPos, Object[] dest, int destPos, int length)
-        Arrays.copy(args, 1, commands, 0, commands.length - 1);
-//        log("RSHServer arguments: " + Util.arraytoString(commands));
+        Arrays.copy(args, 1, commands, 0, commands.length);
+        log("RSHServer arguments: " + Util.arraytoString(commands));
 
         //find Commandable with key first args.
         Commandable toCommand = (Commandable) listeners.get(args[0]);

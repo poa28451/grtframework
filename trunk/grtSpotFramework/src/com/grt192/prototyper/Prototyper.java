@@ -1,8 +1,5 @@
 package com.grt192.prototyper;
 
-import com.grt192.actuator.spot.GRTDemoLED;
-import com.grt192.core.GRTObject;
-import com.grt192.mechanism.spot.SLight;
 import com.grt192.networking.Ports;
 import com.grt192.utils.Assert;
 import com.grt192.utils.Util;
@@ -20,27 +17,8 @@ import javax.microedition.io.Datagram;
  * as it receives their packets.
  * @author ajc
  */
-public class Prototyper extends GRTObject implements Ports {
+public abstract class Prototyper implements Ports {
 
-    //
-    public static int standardProtocol() {
-        getInstance().setPrinting(true);
-        int controlType = getInstance().getPrototype();
-        getInstance().setPrinting(false);//stop debugging
-        extLog("Prototyper", "prototyping complete!: " + controlType);
-        return controlType;
-    }
-
-    //stores the prototyper singleton
-    private static class PacketRouterSingleton {
-
-        public static final Prototyper INSTANCE = new Prototyper();
-    }
-
-    /** Gets an instance of a Prototyper */
-    public static Prototyper getInstance() {
-        return PacketRouterSingleton.INSTANCE;
-    }
     /** Time between checking for prototype equilibrium */
     public static final int PROTOTYPE_POLLTIME = 125;
     /**
@@ -58,8 +36,6 @@ public class Prototyper extends GRTObject implements Ports {
     private static final int FIRST_BASESTATION = 80;
     /** pseudo prototype assigned to prototyped hosts while Prototyping */
     private static final int PROTOTYPING = -1;
-    /** ID of the statuslight to indicate state in the prototyping process */
-    private static final int STATUSLIGHT = 1;
     /** Base10 representation of our address, to handle multiple prototypers */
     private final long MY_ADDRESS = RadioFactory.getRadioPolicyManager().getIEEEAddress();
     //radio
@@ -73,9 +49,10 @@ public class Prototyper extends GRTObject implements Ports {
     private PrototypedHost vagabond;
     //sensor
     private PrototypeSensor sensor;
+    //debugging
+    private boolean debug;
 
-    private Prototyper() {
-        lightOrange();
+    public Prototyper() {
         //radio
         try {
             tx = (RadiogramConnection) Connector.open("radiogram://broadcast:" + PROTOTYPE_PORT);
@@ -89,6 +66,7 @@ public class Prototyper extends GRTObject implements Ports {
         prototype = PROTOTYPING;
         listening = false;
         broadcasting = false;
+        debug = false;
         hosts = new PrototypedHost[MAX_NUM_HOSTS];
     }
 
@@ -194,15 +172,16 @@ public class Prototyper extends GRTObject implements Ports {
             if (!listening) {
                 listen();
             }
+            indicateUnprototyped();
 
 
-            log("Starting protoTyping...");
+            debug("Starting protoTyping...");
             prototype = PROTOTYPING;
             int tmpType = PROTOTYPING;
             for (int i = 0; i <= NUM_RUNS_FOR_EQUILIBRIUM; i++) {
-                lightBlink();
+                indicatePrototypeBlink();
                 //print a cool slider for progress
-                log(Util.slider(((double) i) / ((double) NUM_RUNS_FOR_EQUILIBRIUM)));
+                debug(Util.slider(((double) i) / ((double) NUM_RUNS_FOR_EQUILIBRIUM)));
                 //save old type
                 int previous = tmpType;
                 //new type
@@ -215,7 +194,7 @@ public class Prototyper extends GRTObject implements Ports {
             }
             prototype = tmpType;
 
-            lightBlueGreen(tmpType);
+            indicatePrototype(tmpType);
 
             //TODO automatic color 
         }
@@ -284,26 +263,20 @@ public class Prototyper extends GRTObject implements Ports {
         }
         return sensor;
     }
+    
+    protected abstract void indicateUnprototyped();
 
-    private void lightOrange() {
-        SLight.get(STATUSLIGHT).rawColor(GRTDemoLED.Color.ORANGE);
-    }
+    protected abstract void indicatePrototype(int type) ;
 
-    private void lightBlueGreen(int percent) {
-        switch (percent) {
-            case 0:
-                SLight.get(STATUSLIGHT).rawColor(GRTDemoLED.Color.BLUE);
-                break;
-            case 1:
-                SLight.get(STATUSLIGHT).rawColor(GRTDemoLED.Color.GREEN);
-                break;
-            default:
-                SLight.get(STATUSLIGHT).rawColor(GRTDemoLED.Color.RED);
+    protected abstract void indicatePrototypeBlink();
+
+    void debug(String message) {
+        if (debug) {
+            System.out.println("[FreeRangeProtototyper]:" + message);
         }
     }
 
-    private void lightBlink() {
-        SLight.get(STATUSLIGHT).blinkonBlack();
-
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

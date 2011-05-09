@@ -6,6 +6,9 @@ import com.grt192.networking.Ports;
 import com.grt192.networking.SocketEvent;
 import com.grt192.networking.SocketFactory;
 import com.grt192.networking.SocketListener;
+import com.grt192.prototyper.spot.FreeRangeProtototyper;
+import com.grt192.prototyper.Prototyper;
+import com.grt192.prototyper.PrototyperFactory;
 import java.util.Hashtable;
 
 /**
@@ -13,11 +16,17 @@ import java.util.Hashtable;
  * @author ajc
  */
 public class RSHClient implements SocketListener,Ports {
+    
+    public synchronized static RSHClient fromPrototype(int id){
+        String host = PrototyperFactory.getInstance().getHost(id).getAddress();
+        return getClient(host);
+    }
 
     public synchronized static RSHClient getClient(String host){
         RSHClient rshc = (RSHClient) instances.get(host);
         if(rshc == null){
             rshc = new RSHClient(host);
+            instances.put(host, rshc);
         }
         return rshc;
     }
