@@ -28,6 +28,14 @@ public class SLight extends Mechanism {
     }
 
     /**
+     * Gets all StatusLights
+     * @return 
+     */
+    public static SLight[] get() {
+        return StatusLightSingletons.INSTANCES;
+    }
+
+    /**
      * Gets an instance of a StatusLight
      * @param i index of the light to get [0-7]
      * @return 
@@ -69,15 +77,20 @@ public class SLight extends Mechanism {
         led.enqueueCommand(color1);
     }
 
-    public void blinkonBlack(CommandArray color, int time) {
-        blink(color, GRTDemoLED.Color.NONE, time);
+    /**
+     * Blink, and return to a previous nonblack color
+     */
+    public void blinkToColor() {
+        blink(GRTDemoLED.Color.NONE, currentColor, BLINK_TIME);
+
     }
 
-//    public void blinkonBlack(CommandArray color) {
-//        blink(color, GRTDemoLED.Color.NONE, BLINK_TIME);
-//    }
-    public void blinkonBlack() {
-        blink(GRTDemoLED.Color.NONE, currentColor, BLINK_TIME);
+    /**
+     * Blink, and return to a black color
+     */
+    public void blinkToBlack() {
+        blink(currentColor, GRTDemoLED.Color.NONE, BLINK_TIME);
+
     }
 
     /**
@@ -95,7 +108,7 @@ public class SLight extends Mechanism {
 
             public void run() {
                 while (blinking) {
-                    blinkonBlack();//sends commands that will take 50ms to run
+                    blinkToBlack();//sends commands that will take 50ms to run
                     //sleep 1 BLINK_TIME for the on, sleep 1 BLINK_TIME for off.
                     Util.sleep(BLINK_TIME * 2);
                 }
@@ -160,43 +173,5 @@ public class SLight extends Mechanism {
 
     public void fadeTo(final CommandArray endColor, final int time) {
         fade(currentColor, endColor, time);
-    }
-
-    /** @deprecated Fades from off to a given color **/
-    public void fadeOffToDim(final CommandArray endColor, final int time) {
-        fade(GRTDemoLED.Color.NONE, endColor, time);
-//        new Thread() {
-//
-//            public void run() {
-//                final int STEP = 50;
-//                CommandArray current = (GRTDemoLED.Color.NONE).clone();
-//                double finalR = endColor.getValue(GRTDemoLED.RED);
-//                double finalG = endColor.getValue(GRTDemoLED.GREEN);
-//                double finalB = endColor.getValue(GRTDemoLED.BLUE);
-//                log("finals" + finalR + "\t" + finalG + "\t" + "\t" + finalB);
-//                long startTime = System.currentTimeMillis();
-//
-//                double numSteps = time / STEP;
-//                double dR = finalR / numSteps;
-//                double dG = finalG / numSteps;
-//                double dB = finalB / numSteps;
-//
-//                double r = 0;
-//                double g = 0;
-//                double b = 0;
-//                for (int i = 0; i <= time; i += STEP) {
-//                    if (System.currentTimeMillis() - startTime > time) {
-//                        log("break at " + i);
-//                        log("" + r + "\t" + g + "\t" + "\t" + b);
-//                        rawColor(new CommandArray(finalR, finalG, finalB));
-//                        break;
-//                    }
-//                    rawColor(new CommandArray(r += dR, g += dG, b += dB));
-//                    log("" + r + "\t" + g + "\t" + "\t" + b);
-//                    Util.sleep(STEP);
-//                }
-//            }
-//        }.start();
-
     }
 }
