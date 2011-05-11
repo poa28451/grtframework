@@ -18,7 +18,7 @@ import java.util.Hashtable;
 public class RSHClient implements SocketListener,Ports {
     
     public synchronized static RSHClient fromPrototype(int id){
-        String host = PrototyperFactory.getInstance().getHost(id).getAddress();
+        String host = PrototyperFactory.getPrototyper().getHost(id).getAddress();
         return getClient(host);
     }
 
