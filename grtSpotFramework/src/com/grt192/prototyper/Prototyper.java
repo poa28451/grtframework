@@ -272,7 +272,7 @@ public abstract class Prototyper implements Ports {
 
     void debug(String message) {
         if (debug) {
-            System.out.println("[FreeRangeProtototyper]:" + message);
+            System.out.println("[ptype]:" + message);
         }
     }
 
