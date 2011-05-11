@@ -40,7 +40,7 @@ public class FreeRangeProtototyper extends Prototyper{
     }
 
     protected void indicatePrototypeBlink() {
-        status.blinkonBlack();
+        status.blinkToBlack();
     }
 
 }

@@ -12,4 +12,6 @@ public abstract class SpotGRTRobot extends GRTRobot {
     public SpotGRTRobot() {
         BootloaderListenerService.getInstance().start();
     }
+    
+    public abstract void startRobot();
 }

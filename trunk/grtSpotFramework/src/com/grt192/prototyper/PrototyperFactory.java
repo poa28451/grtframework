@@ -14,13 +14,13 @@ public class PrototyperFactory {
     }
 
     /** Returns the singleton Prototyper */
-    public static Prototyper getInstance() {
+    public static Prototyper getPrototyper() {
         return PrototyperSingleton.INSTANCE;
     }
 
     /** Automatically prototype with debug */
     public static void debugedStart() {
-        Prototyper p = getInstance();
+        Prototyper p = getPrototyper();
         p.indicateUnprototyped();
         p.setDebug(true);
         int controlType = p.getPrototype();
