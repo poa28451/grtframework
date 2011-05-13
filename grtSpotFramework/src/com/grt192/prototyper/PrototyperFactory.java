@@ -19,7 +19,7 @@ public class PrototyperFactory {
     }
 
     /** Automatically prototype with debug */
-    public static void debugedStart() {
+    public static void debuggedStart() {
         Prototyper p = getPrototyper();
         p.indicateUnprototyped();
         p.setDebug(true);
