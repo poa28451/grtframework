@@ -33,11 +33,11 @@ public abstract class MaxbotixDaisyChain extends Mechanism {
         this.sonars = sonars;
         this.rx = rx;
 
-        for (int i = 0; i < sonars.length; i++) {
-            if (!sonars[i].isRunning()) {
-                sonars[i].start();
-            }
-        }
+//        for (int i = 0; i < sonars.length; i++) {
+//            if (!sonars[i].isRunning()) {
+//                sonars[i].start();
+//            }
+//        }
 
         rx.setAsOutput(true);
         setRxLow();
