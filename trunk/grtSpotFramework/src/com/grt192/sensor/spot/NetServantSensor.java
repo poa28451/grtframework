@@ -4,19 +4,19 @@ import com.grt192.controller.spot.SensorServer;
 import com.grt192.core.Sensor;
 import com.grt192.networking.SocketEvent;
 import com.grt192.networking.SocketListener;
-import com.grt192.networking.spot.RadiogramClient;
+import com.grt192.networking.spot.GRTServant;
 import com.grt192.utils.Util;
 
 /**
- * A NetSensor reads Sensor data from a matching <code>TelemetryServer</code>,
- * effectually making a copy of a remote sensor locally. Events are not
- * replicated.
+ * A NetServentSensor reads Sensor data from a matching
+ * <code>ServentedSensorService</code>.
  * 
  * @author ajc
  */
-public class NetSensor extends Sensor implements SocketListener {
+public class NetServantSensor extends Sensor implements SocketListener {
 
-	private RadiogramClient client;
+	private GRTServant client;
+	private final String sourceAddress;
 
 	/**
 	 * Opens a sensor that reads data from a remote sensor
@@ -26,19 +26,21 @@ public class NetSensor extends Sensor implements SocketListener {
 	 * @param port
 	 *            port remote sensor server is broadcasting on
 	 */
-	public NetSensor(String sourceAddress, int port) {
-		client = new RadiogramClient(sourceAddress, port);
-		client.start();
-		// setPrinting(true);
+	public NetServantSensor(String sourceAddress, int port) {
+		this.sourceAddress = sourceAddress;
+		client = new GRTServant(port);
 	}
 
+	/**
+	 * Starts the sensor by making it start to listen
+	 */
 	public void start() {
-		client.addSocketListener(this);
+		client.addSocketListenerIn(sourceAddress, this);
 		// these don't start.
 	}
 
 	public void poll() {
-		// no poll: only reads data on event
+		// no poll: only on event
 	}
 
 	public void onConnect(SocketEvent e) {
