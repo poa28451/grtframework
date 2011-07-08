@@ -10,8 +10,12 @@ import com.googlecode.grtframework.event.EventPublisher;
  * 
  */
 public interface Sensor extends EventPublisher {
-	/*
-	 * Naming: adequate
+
+	/**
+	 * Used for abstract telemetry
+	 * 
+	 * @return name of this sensor
 	 */
+	public String getName();
 
 }

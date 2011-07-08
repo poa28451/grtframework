@@ -8,5 +8,14 @@ package com.googlecode.grtframework.event;
  * 
  */
 public interface Event {
+	/*
+	 * almost impossible to enforce anything as an interface
+	 */
+
+	/**
+	 * 
+	 * @return the object that sent this event
+	 */
+	public EventPublisher getSource();
 
 }

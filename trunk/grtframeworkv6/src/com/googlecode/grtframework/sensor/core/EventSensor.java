@@ -10,4 +10,7 @@ import com.googlecode.grtframework.event.EventListener;
  */
 public interface EventSensor extends EventListener {
 
+	/*
+	 * Nothing to add, but still useful as a type.
+	 */
 }
