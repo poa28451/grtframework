@@ -8,6 +8,16 @@ package com.googlecode.grtframework.sensor.core;
  */
 public abstract class HardwareSensor {
 
+	/*
+	 * TODO list:
+	 * 
+	 * periodic task stuff
+	 * 
+	 * state saving
+	 * 
+	 * event framework (can this be done abstractly?
+	 */
+
 	// TODO idea: add randomness to polling, also save time of poll?s
 	/**
 	 * 

@@ -10,6 +10,9 @@ package com.googlecode.grtframework.event;
  * 
  */
 public interface EventListener {
+	/*
+	 * status: done
+	 */
 	
 	/**
 	 * Makes this EventListener subscribe to events

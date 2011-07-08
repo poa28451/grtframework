@@ -10,5 +10,8 @@ package com.googlecode.grtframework.event;
  * 
  */
 public interface EventPublisher {
+	/*
+	 * Hard to enforce anything as an interface
+	 */
 
 }
