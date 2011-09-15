@@ -4,6 +4,7 @@ package com.googlecode.grtframework.actuator;
 
 /**
  * A Servo is a motor with precise position control.
+ * 
  */
 public interface IServo {
 
