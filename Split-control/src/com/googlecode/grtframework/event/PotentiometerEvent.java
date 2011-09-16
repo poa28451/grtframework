@@ -14,6 +14,7 @@ public class PotentiometerEvent {
 	 * 
 	 * @return
 	 */
+	
 	public double getAngle() {
 		return angle;
 	}
