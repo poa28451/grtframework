@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
+/**
+ * 
+ * @author ajc
+ * 
+ */
 public class Displayer extends JComponent {
 
 	private ArrayList<Displayable> drawables;
