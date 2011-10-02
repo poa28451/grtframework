@@ -11,30 +11,65 @@ package com.googlecode.grtframework.vis;
  */
 public class MountedPosition {
 
-	// TODO figure out what should be final
 	private final Mountable root;
-	private final int xOffset; // if this isn't constant, then polar forms need
-	// to be
-	// updated
-	private final int yOffset;
-	private final double mountedAngle; // maybe use mountedAngle instead of
-										// angle
+
+	/**
+	 * 2D relative orientation (angle)
+	 */
+	private double mountedAngle;
 
 	// POLAR FORMS
-	private final double mountDistance; // distance between the
-	// mountable(origin) and this component
-	private final double mountTheta; // 'mount angle': polar theta from x and y
 
-	public MountedPosition(Mountable root, int xOffset, int yOffset,
-			double mountedAngle) {
+	/**
+	 * 'r' from polar notation: used for 2D position in polar form
+	 */
+	private double polarR;
+	/**
+	 * theta from polar notation: used for 2D position in polar form
+	 */
+	private double polarTheta;
+
+	public MountedPosition(Mountable root) {
 		this.root = root;
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
+	}
+
+	public MountedPosition(Mountable root, int x, int y, double mountedAngle) {
+		this.root = root;
+		// this.xOffset = xOffset;
+		// this.yOffset = yOffset;
 		this.mountedAngle = mountedAngle;
 
-		mountDistance = Math.sqrt((xOffset * xOffset) + (yOffset * yOffset));
-		mountTheta = Math.atan2(yOffset, xOffset);
+		setPositionRelative(x, y);
+		setHeadingRelative(mountedAngle);
+	}
 
+	public void setHeadingRelative(double heading) {
+		mountedAngle = heading;
+	}
+
+	public void setHeadingAbsolute(double heading) {
+		// TODO unimplemented0
+	}
+
+	public void setPositionRelative(double x, double y) {
+		polarR = Math.sqrt((x * x) + (y * y));
+		polarTheta = Math.atan2(y, x);
+	}
+
+	public void setPositionAbsolute(double x, double y) {
+		setPositionRelative(x - root.getX(), y - root.getY());
+	}
+
+	public double getR() {
+		return polarR;
+	}
+
+	public double getTheta() {
+		return polarTheta;
+	}
+
+	public double getHeadingRelative() {
+		return mountedAngle;
 	}
 
 	/*
@@ -55,8 +90,8 @@ public class MountedPosition {
 	 */
 	public int getX() {
 		// calculates offset using polar form
-		return (int) (root.getX() + mountDistance
-				* Math.cos(root.getHeading() + mountTheta));
+		return (int) (root.getX() + polarR
+				* Math.cos(root.getHeading() + polarTheta));
 	}
 
 	/**
@@ -65,8 +100,12 @@ public class MountedPosition {
 	 */
 	public int getY() {
 		// calculates offset using polar form
-		return (int) (root.getY() + mountDistance
-				* Math.sin(root.getHeading() + mountTheta));
+		return (int) (root.getY() + polarR
+				* Math.sin(root.getHeading() + polarTheta));
+	}
+
+	public Mountable getRoot() {
+		return root;
 	}
 
 }
