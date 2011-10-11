@@ -3,7 +3,6 @@ package com.googlecode.grtframework.actuator;
 import com.googlecode.grtframework.rpc.RPCConnection;
 import com.googlecode.grtframework.rpc.RPCMessage;
 
-
 /**
  * A servo that is actuated on the other side of an RPC connection.
  * 
@@ -63,6 +62,7 @@ public class RPCServo implements IServo {
 	 */
 	protected void setPWM(int value) {
 		// send a message only when able to
+		System.out.println(value);
 		if (out != null) {
 			out.send(new RPCMessage(key, value));
 		}

@@ -1,6 +1,5 @@
 package com.googlecode.grtframework.sensor.gui;
 
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,12 +12,9 @@ import javax.swing.JComponent;
 import com.googlecode.grtframework.event.PotentiometerEvent;
 import com.googlecode.grtframework.event.PotentiometerListener;
 import com.googlecode.grtframework.sensor.IPotentiometer;
-import com.googlecode.grtframework.vis.Displayable;
-import com.googlecode.grtframework.vis.Displayer;
 import com.googlecode.grtframework.vis.Mountable;
 import com.googlecode.grtframework.vis.MountedPosition;
 import com.googlecode.grtframework.vis.Select;
-
 
 /**
  * A simulated Potentiometer that receives input from the graphical environment.
@@ -27,7 +23,7 @@ import com.googlecode.grtframework.vis.Select;
  * 
  */
 public class SimPotentiometer implements IPotentiometer, MouseMotionListener,
-		MouseListener, Mountable, Displayable {
+		MouseListener, Mountable {
 
 	private static final int MAX_SELECT_DISTANCE = 30;
 
@@ -42,12 +38,8 @@ public class SimPotentiometer implements IPotentiometer, MouseMotionListener,
 	// selection
 	private boolean selected;
 
-	private final Displayer display;
-
-	public SimPotentiometer(JComponent jcomp, Displayer display,
-			MountedPosition position) {
+	public SimPotentiometer(JComponent jcomp, MountedPosition position) {
 		this.jcomp = jcomp;
-		this.display = display;
 		this.position = position;
 		listeners = new Vector();
 		selected = false;
@@ -149,17 +141,6 @@ public class SimPotentiometer implements IPotentiometer, MouseMotionListener,
 	@Override
 	public int getY() {
 		return position.getY();
-	}
-
-	@Override
-	public void display(Graphics g) {
-		// display select status
-
-	}
-
-	@Override
-	public void startDisplaying() {
-		display.addDisplayable(this);
 	}
 
 }
