@@ -7,7 +7,6 @@ import java.awt.geom.AffineTransform;
 
 import com.googlecode.grtframework.actuator.IServo;
 import com.googlecode.grtframework.vis.Displayable;
-import com.googlecode.grtframework.vis.Displayer;
 import com.googlecode.grtframework.vis.Mountable;
 import com.googlecode.grtframework.vis.MountedPosition;
 
@@ -33,7 +32,6 @@ public class ServoDisplay implements Displayable, IServo, Mountable {
 	private MountedPosition position;
 
 	private double hornAngle;
-	private final Displayer display;
 
 	/**
 	 * Constructs a Virtual Servo given its displayer, MountPoint, and 2D
@@ -45,8 +43,7 @@ public class ServoDisplay implements Displayable, IServo, Mountable {
 	 * @param y
 	 * @param mountPointAngle
 	 */
-	public ServoDisplay(Displayer display, MountedPosition position) {
-		this.display = display;
+	public ServoDisplay(MountedPosition position) {
 		this.position = position;
 	}
 
@@ -58,14 +55,6 @@ public class ServoDisplay implements Displayable, IServo, Mountable {
 	@Override
 	public void setPosition(double radians) {
 		this.hornAngle = radians;
-	}
-
-	// ******
-	// DISPLAY
-	// *******
-	@Override
-	public void startDisplaying() {
-		display.addDisplayable(this);
 	}
 
 	@Override

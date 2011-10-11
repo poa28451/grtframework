@@ -9,9 +9,9 @@ package com.googlecode.grtframework.vis;
  * @author ajc
  * 
  */
-public class MountedPosition {
+public class MountedPosition implements IMountedPosition {
 
-	private final Mountable root;
+	private final Mountable parent;
 
 	/**
 	 * 2D relative orientation (angle)
@@ -19,7 +19,6 @@ public class MountedPosition {
 	private double mountedAngle;
 
 	// POLAR FORMS
-
 	/**
 	 * 'r' from polar notation: used for 2D position in polar form
 	 */
@@ -29,12 +28,27 @@ public class MountedPosition {
 	 */
 	private double polarTheta;
 
+	/**
+	 * 
+	 * @param root
+	 */
 	public MountedPosition(Mountable root) {
-		this.root = root;
+		this.parent = root;
 	}
 
+	/**
+	 * 
+	 * @param root
+	 *            what this mounted position is mounted on
+	 * @param x
+	 *            relative X offset
+	 * @param y
+	 *            relative Y offset
+	 * @param mountedAngle
+	 *            relative heading
+	 */
 	public MountedPosition(Mountable root, int x, int y, double mountedAngle) {
-		this.root = root;
+		this.parent = root;
 		// this.xOffset = xOffset;
 		// this.yOffset = yOffset;
 		this.mountedAngle = mountedAngle;
@@ -43,31 +57,39 @@ public class MountedPosition {
 		setHeadingRelative(mountedAngle);
 	}
 
+	@Override
 	public void setHeadingRelative(double heading) {
 		mountedAngle = heading;
 	}
 
+	@Override
 	public void setHeadingAbsolute(double heading) {
 		// TODO unimplemented0
 	}
 
+	@Override
 	public void setPositionRelative(double x, double y) {
+		// x/=Math.cos(getHeading());
 		polarR = Math.sqrt((x * x) + (y * y));
 		polarTheta = Math.atan2(y, x);
 	}
 
+	@Override
 	public void setPositionAbsolute(double x, double y) {
-		setPositionRelative(x - root.getX(), y - root.getY());
+		setPositionRelative(x - parent.getX(), y - parent.getY());
 	}
 
+	@Override
 	public double getR() {
 		return polarR;
 	}
 
+	@Override
 	public double getTheta() {
 		return polarTheta;
 	}
 
+	@Override
 	public double getHeadingRelative() {
 		return mountedAngle;
 	}
@@ -75,37 +97,52 @@ public class MountedPosition {
 	/*
 	 * ABSOLUTE 2D POSITION
 	 */
-
-	/**
-	 * 
-	 * @return absolute angle with respect to screen
-	 */
+	@Override
 	public double getHeading() {
-		return root.getHeading() + mountedAngle;
+		return parent.getHeading() + mountedAngle;
 	}
 
-	/**
-	 * 
-	 * @return absolute x position with respect to screen
-	 */
+	@Override
 	public int getX() {
 		// calculates offset using polar form
-		return (int) (root.getX() + polarR
-				* Math.cos(root.getHeading() + polarTheta));
+		return (int) (parent.getX() + polarR
+				* Math.cos(parent.getHeading() + polarTheta));
+	}
+
+	@Override
+	public int getY() {
+		// calculates offset using polar form
+		return (int) (parent.getY() + polarR
+				* Math.sin(parent.getHeading() + polarTheta));
 	}
 
 	/**
-	 * 
-	 * @return absolute y position with respect to screen
+	 * @deprecated poor word choice; not really a root
+	 * @return
 	 */
-	public int getY() {
-		// calculates offset using polar form
-		return (int) (root.getY() + polarR
-				* Math.sin(root.getHeading() + polarTheta));
-	}
-
 	public Mountable getRoot() {
-		return root;
+		return parent;
 	}
 
+	@Override
+	public Mountable[] getParents() {
+		return new Mountable[] { parent };
+	}
+
+	public MountedPosition clone() {
+		return new MountedPosition(parent, (int) (polarR * Math.cos(parent
+				.getHeading()
+				+ polarTheta)), (int) (polarR * Math.sin(parent.getHeading()
+				+ polarTheta)), mountedAngle);
+	}
+
+	@Override
+	public double getXRelative() {
+		return polarR * Math.sin(parent.getHeading());
+	}
+
+	@Override
+	public double getYRelative() {
+		return polarR * Math.cos(parent.getHeading());
+	}
 }

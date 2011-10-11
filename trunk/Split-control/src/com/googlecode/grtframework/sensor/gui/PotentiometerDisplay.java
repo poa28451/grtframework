@@ -7,10 +7,8 @@ import com.googlecode.grtframework.event.PotentiometerEvent;
 import com.googlecode.grtframework.event.PotentiometerListener;
 import com.googlecode.grtframework.sensor.IPotentiometer;
 import com.googlecode.grtframework.vis.Displayable;
-import com.googlecode.grtframework.vis.Displayer;
+import com.googlecode.grtframework.vis.IMountedPosition;
 import com.googlecode.grtframework.vis.Mountable;
-import com.googlecode.grtframework.vis.MountedPosition;
-
 
 /**
  * Draws a potentiometer given its events
@@ -26,18 +24,15 @@ public class PotentiometerDisplay implements Displayable,
 	private static final int POTENTIOMETER_OVAL_START = -(POTENTIOMETER_DIAMETER / 2);
 	private static final int ID_SIZE = 3;
 
-	private final MountedPosition position;
+	private final IMountedPosition position;
 
 	// source
 	private final IPotentiometer pot;
 
 	// heading received by Potentiometer, radians
 	private double angle = 0;
-	private final Displayer sim;
 
-	public PotentiometerDisplay(Displayer sim, IPotentiometer pot,
-			MountedPosition position) {
-		this.sim = sim;
+	public PotentiometerDisplay(IPotentiometer pot, IMountedPosition position) {
 		this.pot = pot;
 		this.position = position;
 	}
@@ -100,11 +95,6 @@ public class PotentiometerDisplay implements Displayable,
 		g.setColor(Color.GREEN);
 		g.fillRect(realX, realY, ID_SIZE, ID_SIZE);
 
-	}
-
-	@Override
-	public void startDisplaying() {
-		sim.addDisplayable(this);
 	}
 
 	// *********
