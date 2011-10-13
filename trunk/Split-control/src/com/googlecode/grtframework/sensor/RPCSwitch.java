@@ -10,7 +10,6 @@ import com.googlecode.grtframework.rpc.RPCMessage;
 import com.googlecode.grtframework.rpc.RPCMessageListener;
 import com.googlecode.grtframework.rpc.component.RPCSwitchComponent;
 
-
 public class RPCSwitch implements RPCMessageListener, RPCSwitchComponent,
 		ISwitch {
 
@@ -42,14 +41,16 @@ public class RPCSwitch implements RPCMessageListener, RPCSwitchComponent,
 	@Override
 	public void messageReceived(RPCMessage message) {
 		if (message.getKey() == rpc_key) {
+
 			if (message.getData() == PRESSED) {
-				SwitchEvent ev = new SwitchEvent();
+
+				SwitchEvent ev = new SwitchEvent(this, SwitchEvent.PRESSED);
 				for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 					((SwitchListener) e.nextElement()).switchPressed(ev);
 				}
 				// System.out.println("press!");
 			} else if (message.getData() == RELEASED) {
-				SwitchEvent ev = new SwitchEvent();
+				SwitchEvent ev = new SwitchEvent(this, SwitchEvent.PRESSED);
 				for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 					((SwitchListener) e.nextElement()).switchReleased(ev);
 				}
