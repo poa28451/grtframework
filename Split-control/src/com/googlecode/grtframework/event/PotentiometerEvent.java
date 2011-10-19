@@ -1,10 +1,14 @@
 package com.googlecode.grtframework.event;
 
+import com.googlecode.grtframework.sensor.IPotentiometer;
+
 public class PotentiometerEvent {
 
 	private final double angle;
+	private final IPotentiometer source;
 
-	public PotentiometerEvent(double angle) {
+	public PotentiometerEvent(IPotentiometer source, double angle) {
+		this.source = source;
 		this.angle = angle;
 
 	}
@@ -14,9 +18,12 @@ public class PotentiometerEvent {
 	 * 
 	 * @return
 	 */
-	
 	public double getAngle() {
 		return angle;
+	}
+
+	public IPotentiometer getSource() {
+		return source;
 	}
 
 }

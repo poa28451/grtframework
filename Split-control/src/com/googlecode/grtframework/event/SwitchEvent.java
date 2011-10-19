@@ -32,4 +32,8 @@ public class SwitchEvent {
 		return id == RELEASED;
 	}
 
+	public ISwitch getSource() {
+		return source;
+	}
+
 }

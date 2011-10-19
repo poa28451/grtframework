@@ -8,7 +8,6 @@ import com.googlecode.grtframework.event.RangefinderListener;
 import com.googlecode.grtframework.event.VoltageChangeEvent;
 import com.googlecode.grtframework.event.VoltageSensorListener;
 
-
 public class Maxbotix implements IRangeFinder, VoltageSensorListener {
 
 	private static final double V_PER_INCH = .0098;
@@ -33,7 +32,7 @@ public class Maxbotix implements IRangeFinder, VoltageSensorListener {
 	}
 
 	public void voltageChanged(VoltageChangeEvent ev) {
-		RangefinderEvent rfev = new RangefinderEvent(ev.getVoltage()
+		RangefinderEvent rfev = new RangefinderEvent(this, ev.getVoltage()
 				/ V_PER_INCH);
 		for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 			((RangefinderListener) e.nextElement()).distanceChanged(rfev);
