@@ -118,7 +118,7 @@ public class SimPotentiometer implements IPotentiometer, MouseMotionListener,
 
 	// TODO uncertain if we need to provide an angle
 	public void notifyAngleChange(double angle) {
-		PotentiometerEvent ev = new PotentiometerEvent(angle);
+		PotentiometerEvent ev = new PotentiometerEvent(this, angle);
 		for (Enumeration<PotentiometerListener> e = listeners.elements(); e
 				.hasMoreElements();) {
 			e.nextElement().rotationChanged(ev);

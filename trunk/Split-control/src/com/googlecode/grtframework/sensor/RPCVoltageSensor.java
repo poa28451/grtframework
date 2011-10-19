@@ -9,7 +9,6 @@ import com.googlecode.grtframework.rpc.RPCConnection;
 import com.googlecode.grtframework.rpc.RPCMessage;
 import com.googlecode.grtframework.rpc.RPCMessageListener;
 
-
 public class RPCVoltageSensor implements RPCMessageListener, IVoltageSensor {
 
 	private final RPCConnection in;
@@ -36,7 +35,8 @@ public class RPCVoltageSensor implements RPCMessageListener, IVoltageSensor {
 
 	public void messageReceived(RPCMessage message) {
 		if (message.getKey() == key) {
-			VoltageChangeEvent ev = new VoltageChangeEvent(message.getData());
+			VoltageChangeEvent ev = new VoltageChangeEvent(this, message
+					.getData());
 			for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 				((VoltageSensorListener) e.nextElement()).voltageChanged(ev);
 			}
