@@ -43,7 +43,7 @@ public class GRTClientSocket extends Thread implements GRTSocket {
 			socket = new Socket(host, port);
 			socket.setSoTimeout(1000);
 			in = new BufferedReader(new InputStreamReader(socket
-					.getInputStream()));
+					.getInputStream()), 1);
 
 			// in = new InputStreamReader(socket.getInputStream());
 			// socket.getI
@@ -103,6 +103,7 @@ public class GRTClientSocket extends Thread implements GRTSocket {
 			connect();
 		}
 		try {
+			// in.r
 			// in.read
 			String latest = in.readLine();
 			if (latest != null && !latest.equals("")) {
