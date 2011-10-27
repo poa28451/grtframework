@@ -138,11 +138,11 @@ public class MountedPosition implements IMountedPosition {
 
 	@Override
 	public double getXRelative() {
-		return polarR * Math.sin(parent.getHeading());
+		return polarR * Math.cos(polarTheta);// TODO + parent.getHeading()?
 	}
 
 	@Override
 	public double getYRelative() {
-		return polarR * Math.cos(parent.getHeading());
+		return polarR * Math.sin(polarTheta);
 	}
 }
