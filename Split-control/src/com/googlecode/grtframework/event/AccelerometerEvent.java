@@ -9,16 +9,16 @@ import com.googlecode.grtframework.sensor.IAccelerometer;
  */
 public class AccelerometerEvent {
 
-	public static final int AXIS_X = 0;
-	public static final int AXIS_Y = 1;
-	public static final int AXIS_Z = 2;
+	// public static final int AXIS_X = 0;
+	// public static final int AXIS_Y = 1;
+	// public static final int AXIS_Z = 2;
 
 	private IAccelerometer source;
 	private int id;
 	private int axis;
 	private double acceleration;
 
-	public void AccelerometerEvent(IAccelerometer source, int id, int axis,
+	public AccelerometerEvent(IAccelerometer source, int id, int axis,
 			double acceleration) {
 		this.source = source;
 		this.id = id;
