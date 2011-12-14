@@ -81,6 +81,16 @@ public class USBUtil {
 			if (commPort instanceof SerialPort) {
 				// System.out.println("We're serial!");
 				SerialPort serialPort = (SerialPort) commPort;
+				// try {
+				// serialPort.setBaudBase(115200);
+				System.out.println(serialPort.getBaudRate());
+				// } catch (UnsupportedCommOperationException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// } catch (IOException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 				return serialPort;
 				// in = serialPort.getInputStream();
 				//
