@@ -2,8 +2,8 @@ package com.googlecode.grtframework.sensor;
 
 import java.util.ArrayList;
 
-import com.googlecode.grtframework.event.AccelerometerEvent;
-import com.googlecode.grtframework.event.AccelerometerListener;
+import com.googlecode.grtframework.event.RangefinderEvent;
+import com.googlecode.grtframework.event.RangefinderListener;
 import com.googlecode.grtframework.rpc.RPCConnection;
 import com.googlecode.grtframework.rpc.RPCMessage;
 import com.googlecode.grtframework.rpc.RPCMessageListener;
@@ -14,12 +14,12 @@ import com.googlecode.grtframework.rpc.RPCMessageListener;
  * @author ajc
  * 
  */
-public class RPCAccelerometer implements RPCMessageListener, IAccelerometer {
+public class RPCRangeFinder implements RPCMessageListener, IRangeFinder {
 
 	private final RPCConnection conn;
-	private final int[] keys;
+	private final int keys;
 
-	private ArrayList<AccelerometerListener> listeners;
+	private ArrayList<RangefinderListener> listeners;
 
 	/**
 	 * 
@@ -28,32 +28,26 @@ public class RPCAccelerometer implements RPCMessageListener, IAccelerometer {
 	 * @param keys
 	 *            X, Y,and Z rpc keys
 	 */
-	public RPCAccelerometer(RPCConnection conn, int[] keys) {
+	public RPCRangeFinder(RPCConnection conn, int keys) {
 		this.conn = conn;
 		this.keys = keys;
-		listeners = new ArrayList<AccelerometerListener>();
+		listeners = new ArrayList<RangefinderListener>();
 	}
 
 	@Override
 	public void messageReceived(RPCMessage message) {
-		int axis = -1;
 		// assigns axis to the index of the keys array that message is from
-		for (int i = 0; i < keys.length; i++) {
-			if (message.getKey() == keys[i]) {
-				axis = i;
-			}
+		if (message.getKey() == keys) {
+			notify(message.getData());
 		}
-		notify(axis, message.getData());
 
 	}
 
-	private void notify(int axis, double acceleration) {
-		AccelerometerEvent ev = new AccelerometerEvent(this, -1, axis,
-				acceleration);// id currently not useds
-
+	private void notify(double distance) {
+		RangefinderEvent e = new RangefinderEvent(this, distance);
 		// notify all listeners
-		for (AccelerometerListener l : listeners) {
-			l.accelerationChanged(ev);
+		for (RangefinderListener l : listeners) {
+			l.distanceChanged(e);
 		}
 	}
 
@@ -73,13 +67,18 @@ public class RPCAccelerometer implements RPCMessageListener, IAccelerometer {
 	}
 
 	@Override
-	public void addAccelerometerListener(AccelerometerListener l) {
+	public void addRangefinderListener(RangefinderListener l) {
 		listeners.add(l);
 	}
 
 	@Override
-	public void removeAccelerometerListener(AccelerometerListener l) {
+	public void removeRangefinderListener(RangefinderListener l) {
 		listeners.remove(l);
+	}
+
+	@Override
+	public void start() {
+
 	}
 
 }
