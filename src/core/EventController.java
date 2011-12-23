@@ -5,7 +5,7 @@
 package core;
 
 /**
- * A controller describes behavior that can be started/stopped. 
+ * An EventController describes behavior based on received events.
  * @author ajc
  */
 public abstract class EventController extends GRTLoggedProcess {
@@ -17,7 +17,6 @@ public abstract class EventController extends GRTLoggedProcess {
 
     /**
      * Adds listeners.
-     * Requires a call to super.enable.
      */
     protected abstract void addListeners();
 
