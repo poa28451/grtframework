@@ -16,10 +16,10 @@ public class Driver extends EventController{
         super(name);
     }
 
-    protected void addListeners() {
+    protected void startListening() {
     }
 
-    protected void removeListeners() {
+    protected void stopListening() {
     }
 
 }
