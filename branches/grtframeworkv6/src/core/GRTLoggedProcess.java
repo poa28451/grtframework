@@ -5,7 +5,6 @@ package core;
  * 
  * When a GRTLoggedProcess is constructed, it is immediately run, but not enabled.
  * 
- * 
  * @author ajc
  * 
  */
