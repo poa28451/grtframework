@@ -30,6 +30,10 @@ public class GRTDriveTrain {
         this.leftBack = leftBack;
         this.rightFront = rightFront;
         this.rightBack = rightBack;
+        leftFront.enable();
+        leftBack.enable();
+        rightFront.enable();
+        rightBack.enable();
     }
 
     /**

@@ -25,16 +25,15 @@ public abstract class EventController extends GRTLoggedProcess {
      */
     protected abstract void stopListening();
 
+    
     public void enable() {
-        if (running) {
-            super.enable();
-            startListening();
-        }
+        //enable() always works because an EventController is always running
+        super.enable();
+        startListening();
     }
 
     public void disable() {
         super.disable();
         stopListening();
     }
-    
 }

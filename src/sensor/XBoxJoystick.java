@@ -53,7 +53,6 @@ public class XBoxJoystick extends PollingSensor {
         
         buttonListeners = new Vector();
         joystickListeners = new Vector();
-        start();
     }
 
     protected void poll() {

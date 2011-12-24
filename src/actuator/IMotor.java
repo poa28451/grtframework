@@ -4,11 +4,13 @@
  */
 package actuator;
 
+import core.IProcess;
+
 /**
  *
  * @author ajc
  */
-public interface IMotor {
+public interface IMotor extends IProcess{
     
     /**
      * 
