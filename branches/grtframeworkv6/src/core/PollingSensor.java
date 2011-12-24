@@ -15,13 +15,13 @@ package core;
  * @author ajc
  */
 public abstract class PollingSensor extends Sensor {
-    
-    private double[] data;
 
+    private double[] data;
     private final int sleepTime;
 
     /**
-     * Construct and starts a sensor.
+     * Construct a polling sensor. 
+     * Subclasses need to start themselves-- make a call to start();
      * @param name name of the sensor
      * @param sleepTime time between polls [ms]
      * @param numData number of pieces of data
@@ -30,7 +30,6 @@ public abstract class PollingSensor extends Sensor {
         super(name);
         this.sleepTime = sleepTime;
         data = new double[numData];
-        start(); //starts running sensor
     }
 
     /**
@@ -41,12 +40,12 @@ public abstract class PollingSensor extends Sensor {
     public void run() {
         running = true;
         while (running) {
-            
+
             //only poll, and thus only send events, if enabled
             if (enabled) {
                 poll();
             }
-            
+
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException ex) {
@@ -54,32 +53,32 @@ public abstract class PollingSensor extends Sensor {
             }
         }
     }
-    
+
     /**
      * Stores a datum, and notifies listeners if the state of it has changed.
      * 
      * @param id key of the data
      * @param datum fresh datum
      */
-    protected void setState(int id, double datum){
+    protected void setState(int id, double datum) {
         double previous = data[id];
         //notify self and state change listeners if the datum has changed
-        if(previous != datum){
+        if (previous != datum) {
             notifyListeners(id, previous, datum);
             notifyStateChange(id, datum);
         }
         data[id] = datum;
     }
-    
+
     /**
      * Retrieves sensor data
      * @param id
      * @return 
      */
-    public double getState(int id){
+    public double getState(int id) {
         return data[id];
     }
-    
+
     /**
      * Calls the listener events based on what has changed
      * @param id the key of the data that changed
@@ -87,6 +86,4 @@ public abstract class PollingSensor extends Sensor {
      * @param newDatum  the datum's new value
      */
     protected abstract void notifyListeners(int id, double oldDatum, double newDatum);
-    
-    
 }

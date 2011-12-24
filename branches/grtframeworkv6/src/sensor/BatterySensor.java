@@ -24,6 +24,7 @@ public class BatterySensor extends PollingSensor {
         super(name, pollTime, 1);
         ds = DriverStation.getInstance();
         listeners = new Vector();
+        start();
     }
 
     protected void poll() {

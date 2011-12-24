@@ -43,13 +43,17 @@ public class XBoxJoystick extends PollingSensor {
     private static final int NUM_OF_BUTTONS = 10;
     public static final double PRESSED = TRUE;
     public static final double RELEASED = FALSE;
-    private Joystick joystick;
-    private Vector buttonListeners;
-    private Vector joystickListeners;
+    private final Joystick joystick;
+    private final Vector buttonListeners;
+    private final Vector joystickListeners;
 
     public XBoxJoystick(int channel, String name, int pollTime) {
         super(name, pollTime, NUM_DATA);
         joystick = new Joystick(channel);
+        
+        buttonListeners = new Vector();
+        joystickListeners = new Vector();
+        start();
     }
 
     protected void poll() {
