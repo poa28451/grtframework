@@ -4,6 +4,8 @@
  */
 package mechanism;
 
+import sensor.BatterySensor;
+
 /**
  * Encapsulates all components on the robot base.
  * 
@@ -12,14 +14,20 @@ package mechanism;
 public class GRTRobotBase {
 
     private final GRTDriveTrain dt;
+    private final BatterySensor s;
 
-    public GRTRobotBase(GRTDriveTrain dt) {
+    public GRTRobotBase(GRTDriveTrain dt, BatterySensor s) {
         this.dt = dt;
-
+        this.s = s;
+        s.enable();
     }
 
     public GRTDriveTrain getDriveTrain() {
         return dt;
+    }
+    
+    public BatterySensor getBatterySensor(){
+        return s;
     }
     
     public void tankDrive(double leftVelocity, double rightVelocity){

@@ -17,6 +17,7 @@ import java.util.Vector;
 public class BatterySensor extends PollingSensor {
 
     public static final int BATTERY_VOLTAGE = 0;
+    
     private final DriverStation ds;
     private final Vector listeners;
 
