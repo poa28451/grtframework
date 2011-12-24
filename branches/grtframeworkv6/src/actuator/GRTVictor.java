@@ -18,7 +18,6 @@ public class GRTVictor extends Actuator implements IMotor {
     public GRTVictor(int id, String name) {
         super(name);
         victor = new Victor(id);
-        enabled = true;
     }
 
     public void executeCommand(double command) {

@@ -16,9 +16,17 @@ public class GRTDriverStation {
     private final XBoxJoystick primary;
     private final XBoxJoystick secondary;
 
+    /**
+     * @param primary 
+     * @param secondary 
+     */
     public GRTDriverStation(XBoxJoystick primary, XBoxJoystick secondary) {
         this.primary = primary;
         this.secondary = secondary;
+        primary.start();
+        primary.enable();
+        secondary.start();
+        secondary.enable();
 
     }
 
