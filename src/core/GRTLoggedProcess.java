@@ -1,7 +1,10 @@
 package core;
 
 /**
- * A GRTLoggedProcess is a controllable process. It can be initiated/terminated
+ * A GRTLoggedProcess is a controllable process. It can be initiated/terminated.
+ * 
+ * When a GRTLoggedProcess is constructed, it is immediately run, but not enabled.
+ * 
  * 
  * @author ajc
  * 
@@ -9,12 +12,11 @@ package core;
 public abstract class GRTLoggedProcess extends Thread implements IProcess {
 
     protected final String name;
-    protected boolean enabled;
-    protected boolean running;
+    protected boolean enabled = false;
+    protected boolean running = true;
 
     public GRTLoggedProcess(String name) {
         this.name = name;
-        start();//TODO does this belong
     }
 
     /**
