@@ -6,6 +6,8 @@ package controller;
 
 import core.EventController;
 import edu.wpi.first.wpilibj.DriverStation;
+import event.DrivingEvent;
+import event.DrivingListener;
 import event.XboxJoystickEvent;
 import event.XboxJoystickListener;
 import mechanism.GRTDriveTrain;
@@ -17,49 +19,33 @@ import sensor.XBoxJoystick;
  * Xbox linear control
  * @author ajc
  */
-public class Driver extends EventController implements XboxJoystickListener {
+public class Driver extends EventController implements DrivingListener {
 
-    private final XBoxJoystick primary;
+    private final GRTDriverStation ds;
     private final GRTRobotBase dt;
-    
     private double leftVelocity;
     private double rightVelocity;
 
     public Driver(String name, GRTRobotBase dt, GRTDriverStation ds) {
         super(name);
         this.dt = dt;
-        primary = ds.getPrimary();
+        this.ds = ds;
     }
 
     protected void startListening() {
-        primary.addJoystickListener(this);
+        ds.addDrivingListener(this);
     }
 
     protected void stopListening() {
-        primary.removeJoystickListener(this);
+        ds.removeDrivingListener(this);
     }
 
-    public void leftXAxisMoved(XboxJoystickEvent e) {
+    public void driverLeftSpeed(DrivingEvent e) {
+        leftVelocity = e.getPercentSpeed();
     }
 
-    public void leftYAxisMoved(XboxJoystickEvent e) {
-        //right Y axis sets the right velocity
-        leftVelocity = e.getValue();
-        dt.tankDrive(leftVelocity, rightVelocity);
+    public void driverRightSpeed(DrivingEvent e) {
+        rightVelocity = e.getPercentSpeed();
     }
 
-    public void rightXAxisMoved(XboxJoystickEvent e) {
-    }
-
-    public void rightYAxisMoved(XboxJoystickEvent e) {
-        //right Y axis sets the right velocity
-        rightVelocity = e.getValue();
-        dt.tankDrive(leftVelocity, rightVelocity);
-    }
-
-    public void padMoved(XboxJoystickEvent e) {
-    }
-
-    public void triggerMoved(XboxJoystickEvent e) {
-    }
 }

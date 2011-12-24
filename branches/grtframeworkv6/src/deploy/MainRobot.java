@@ -36,8 +36,8 @@ public class MainRobot extends GRTRobot {
         NetworkRPC rpcConn = new NetworkRPC(180);
 
         //Driver station components
-        XBoxJoystick primary = new XBoxJoystick(1, "primary", 12);
-        XBoxJoystick secondary = new XBoxJoystick(2, "secondary", 12);
+        XBoxJoystick primary = new XBoxJoystick(1, 12,"primary");
+        XBoxJoystick secondary = new XBoxJoystick(2, 12, "secondary");
         System.out.println("Joysticks initialized");
 
         //Battery Sensor
@@ -53,7 +53,7 @@ public class MainRobot extends GRTRobot {
         //Mechanisms
         GRTDriveTrain dt = new GRTDriveTrain(leftDT1, leftDT2, rightDT1, rightDT2);
         robotBase = new GRTRobotBase(dt, batterySensor);
-        driverStation = new GRTDriverStation(primary, secondary);
+        driverStation = new GRTDriverStation(primary, secondary, "driverStation");
         System.out.println("Mechanisms initialized");
 
         //Controllers
