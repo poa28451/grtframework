@@ -45,13 +45,13 @@ public class MainRobot extends GRTRobot {
 
         // PWM outputs
         GRTVictor leftDT1 = new GRTVictor(4, "leftDT1");
-        GRTVictor leftDT2 = new GRTVictor(4, "leftDT2");
-        GRTVictor rightDT1 = new GRTVictor(4, "rightDT1");
-        GRTVictor rightDT2 = new GRTVictor(4, "rightDT2");
+        GRTVictor leftDT2 = new GRTVictor(3, "leftDT2");
+        GRTVictor rightDT1 = new GRTVictor(6, "rightDT1");
+        GRTVictor rightDT2 = new GRTVictor(10, "rightDT2");
         System.out.println("Motors initialized");
 
         //Mechanisms
-        GRTDriveTrain dt = new GRTDriveTrain(leftDT2, leftDT2, rightDT2, rightDT2);
+        GRTDriveTrain dt = new GRTDriveTrain(leftDT1, leftDT2, rightDT1, rightDT2);
         robotBase = new GRTRobotBase(dt, batterySensor);
         driverStation = new GRTDriverStation(primary, secondary);
         System.out.println("Mechanisms initialized");
