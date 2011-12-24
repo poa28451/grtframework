@@ -86,4 +86,13 @@ public abstract class PollingSensor extends Sensor {
      * @param newDatum  the datum's new value
      */
     protected abstract void notifyListeners(int id, double oldDatum, double newDatum);
+
+    /*
+     * Polling sensors do not listen to things, necesserily
+     */
+    protected void startListening() {
+    }
+
+    protected void stopListening() {
+    }
 }

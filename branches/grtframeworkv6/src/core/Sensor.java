@@ -13,33 +13,52 @@ import java.util.Vector;
  * 
  * @author ajc
  */
-public abstract class Sensor extends GRTLoggedProcess{
-    
+public abstract class Sensor extends GRTLoggedProcess {
+
     public static final double TRUE = 1.0;
     public static final double FALSE = 0.0;
     public static final double ERROR = -999;
-    
     private Vector listeners;
-    
-    public Sensor(String name){
+
+    public Sensor(String name) {
         super(name);
         listeners = new Vector();
         running = true;
     }
-    
-    protected void notifyStateChange(int id, double data){
+
+    /**
+     * Adds listeners.
+     */
+    protected abstract void startListening();
+
+    /**
+     * Removes listeners
+     */
+    protected abstract void stopListening();
+
+    public void enable() {
+        //enable() always works because a Sensor is always running
+        super.enable();
+        startListening();
+    }
+
+    public void disable() {
+        super.disable();
+        stopListening();
+    }
+
+    protected void notifyStateChange(int id, double data) {
         SensorEvent e = new SensorEvent(this, id, data);
-        for(int i = 0; i<listeners.size(); i++){
+        for (int i = 0; i < listeners.size(); i++) {
             ((SensorChangeListener) listeners.elementAt(i)).sensorStateChanged(e);
         }
     }
-    
-    public void addSensorStateChangeListener(SensorChangeListener l){
+
+    public void addSensorStateChangeListener(SensorChangeListener l) {
         listeners.addElement(l);
     }
-    
-    public void removeSensorStateChangeListener(SensorChangeListener l){
+
+    public void removeSensorStateChangeListener(SensorChangeListener l) {
         listeners.removeElement(l);
     }
-    
 }
