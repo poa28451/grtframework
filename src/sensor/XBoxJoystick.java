@@ -47,7 +47,7 @@ public class XBoxJoystick extends PollingSensor {
     private final Vector buttonListeners;
     private final Vector joystickListeners;
 
-    public XBoxJoystick(int channel, String name, int pollTime) {
+    public XBoxJoystick(int channel, int pollTime, String name) {
         super(name, pollTime, NUM_DATA);
         joystick = new Joystick(channel);
         
