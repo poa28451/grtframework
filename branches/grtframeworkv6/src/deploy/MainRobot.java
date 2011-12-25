@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import mechanism.GRTDriveTrain;
 import mechanism.GRTDriverStation;
 import mechanism.GRTRobotBase;
+import mechanism.LinearDrive;
 import rpc.connection.NetworkRPC;
 import rpc.telemetry.SensorLogger;
 import sensor.BatterySensor;
@@ -36,7 +37,7 @@ public class MainRobot extends GRTRobot {
         NetworkRPC rpcConn = new NetworkRPC(180);
 
         //Driver station components
-        XBoxJoystick primary = new XBoxJoystick(1, 12,"primary");
+        XBoxJoystick primary = new XBoxJoystick(1, 12, "primary");
         XBoxJoystick secondary = new XBoxJoystick(2, 12, "secondary");
         System.out.println("Joysticks initialized");
 
@@ -53,11 +54,13 @@ public class MainRobot extends GRTRobot {
         //Mechanisms
         GRTDriveTrain dt = new GRTDriveTrain(leftDT1, leftDT2, rightDT1, rightDT2);
         robotBase = new GRTRobotBase(dt, batterySensor);
-        driverStation = new GRTDriverStation(primary, secondary, "driverStation");
+        driverStation = new GRTDriverStation(primary, secondary, new int[]{1, 2},
+                "driverStation");
+        driverStation.enable();
         System.out.println("Mechanisms initialized");
 
         //Controllers
-        driveControl = new Driver("driveControl", robotBase, driverStation);
+        driveControl = new Driver(robotBase, driverStation, new LinearDrive(), "driveControl");
         batteryLogger = new SensorLogger(batterySensor, rpcConn, new int[]{23}, "batterylogger");
         System.out.println("Controllers Initialized");
 
