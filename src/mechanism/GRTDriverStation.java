@@ -23,9 +23,21 @@ import sensor.XBoxJoystick;
  */
 public class GRTDriverStation extends Sensor implements XboxJoystickListener, ButtonListener {
 
+    /*
+     * State Keys
+     */
+    public static final int KEY_LEFT_VELOCITY = 0;
+    public static final int KEY_RIGHT_VELOCITY = 1;
+    public static final int KEY_PROFILE_ID = 2;
+
+    /*
+     * Profile definitions
+     */
     public static final int PROFILE_LINEAR = 0;
     public static final int PROFILE_SQUARED = 1;
+    //profiles
     private static IDriverProfile[] CURVES = new IDriverProfile[]{new LinearDrive(), new SquareDrive()};
+    //data sources
     private final XBoxJoystick primary;
     private final XBoxJoystick secondary;
     /*
@@ -34,6 +46,7 @@ public class GRTDriverStation extends Sensor implements XboxJoystickListener, Bu
      * while button 4 will register PROFILE_SQUARED.
      */
     private final int[] profileButtons;
+    //listeners
     private final Vector drivingListeners;
     private final Vector profileListeners;
 
@@ -101,6 +114,7 @@ public class GRTDriverStation extends Sensor implements XboxJoystickListener, Bu
     public void leftYAxisMoved(XboxJoystickEvent e) {
         if (e.getSource() == primary) {
             notifyLeftDriveSpeed(e.getValue());
+            notifyStateChange(KEY_LEFT_VELOCITY, e.getValue());
         }
     }
 
@@ -110,6 +124,7 @@ public class GRTDriverStation extends Sensor implements XboxJoystickListener, Bu
     public void rightYAxisMoved(XboxJoystickEvent e) {
         if (e.getSource() == primary) {
             notifyRightDriveSpeed(e.getValue());
+            notifyStateChange(KEY_RIGHT_VELOCITY, e.getValue());
         }
     }
 
@@ -132,7 +147,8 @@ public class GRTDriverStation extends Sensor implements XboxJoystickListener, Bu
         //we need to find the index from that array that the button ID is
         int profileID = getIndex(profileButtons, e.getButtonID());
         if (profileID != -1) {//meaning it exists, see #getIndex(int[], int)
-            notifyProfileChange(CURVES[profileID]);
+            notifyProfileChange(profileID);
+            notifyStateChange(KEY_PROFILE_ID, profileID);
         }
     }
 
@@ -165,8 +181,8 @@ public class GRTDriverStation extends Sensor implements XboxJoystickListener, Bu
         }
     }
 
-    private void notifyProfileChange(IDriverProfile profile) {
-        DrivingProfileEvent e = new DrivingProfileEvent(this, profile);
+    private void notifyProfileChange(int profileID) {
+        DrivingProfileEvent e = new DrivingProfileEvent(this, CURVES[profileID]);
         for (int i = 0; i < profileListeners.size(); i++) {
             ((DrivingProfileListener) profileListeners.elementAt(i)).drivingProfileChanged(e);
 

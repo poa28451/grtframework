@@ -16,7 +16,7 @@ import java.util.Vector;
  */
 public class BatterySensor extends PollingSensor {
 
-    public static final int BATTERY_VOLTAGE = 0;
+    public static final int KEY_BATTERY_VOLTAGE = 0;
     
     private final DriverStation ds;
     private final Vector listeners;
@@ -28,7 +28,7 @@ public class BatterySensor extends PollingSensor {
     }
 
     protected void poll() {
-        setState(BATTERY_VOLTAGE, ds.getBatteryVoltage());
+        setState(KEY_BATTERY_VOLTAGE, ds.getBatteryVoltage());
     }
 
     protected void notifyListeners(int id, double oldDatum, double newDatum) {
