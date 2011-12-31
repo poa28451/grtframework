@@ -25,11 +25,16 @@ public class GRTVictor extends Actuator implements IMotor {
             victor.set(command);
         }
     }
-    
-    //override
+
+    /*
+     * Set the Victor's speed
+     * @param speed the new speed to set
+     */
     public void setSpeed(double speed){
         if(enabled){
             victor.set(speed);
+            
+            log(speed);
         }
     }
 }

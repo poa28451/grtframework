@@ -15,10 +15,13 @@ import java.util.Vector;
  */
 public abstract class Sensor extends GRTLoggedProcess {
 
+    //Constants
     public static final double TRUE = 1.0;
     public static final double FALSE = 0.0;
     public static final double ERROR = -999;
-    private Vector listeners;
+    
+    //Instance variables
+    private Vector listeners;   //Collection of things that listen to this sensor
 
     public Sensor(String name) {
         super(name);
