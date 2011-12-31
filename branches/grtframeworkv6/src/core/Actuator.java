@@ -9,7 +9,8 @@ package core;
  * physical world. Actuators can perform actions.
  * @author ajc
  */
-public abstract class Actuator extends GRTLoggedProcess{
+public abstract class Actuator extends GRTLoggedProcess {
+    
     
     public Actuator(String name){
         super(name);
@@ -20,7 +21,5 @@ public abstract class Actuator extends GRTLoggedProcess{
      * @param command 
      */
     public abstract void executeCommand(double command);
-    
-    
     
 }
