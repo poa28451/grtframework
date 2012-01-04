@@ -4,7 +4,7 @@
  */
 package event;
 
-import mechanism.GRTDriverStation;
+import sensor.base.GRTDriverStation;
 
 /**
  *
