@@ -13,17 +13,21 @@ import event.DrivingProfileListener;
 import event.XboxJoystickEvent;
 import event.XboxJoystickListener;
 import mechanism.GRTDriveTrain;
-import mechanism.GRTDriverStation;
+import sensor.base.GRTXboxDriverStation;
 import mechanism.GRTRobotBase;
-import mechanism.IDriverProfile;
-import mechanism.LinearDrive;
+import sensor.base.IDriverProfile;
+import sensor.base.LinearDrive;
 import sensor.XBoxJoystick;
+import sensor.base.GRTDriverStation;
 
 /**
- * Xbox robot base driving
+ * Robot base driving.
+ *
+ * Operates for any DriverStation
+ * 
  * @author ajc
  */
-public class Driver extends EventController implements DrivingListener, DrivingProfileListener {
+public class PrimaryDriver extends EventController implements DrivingListener, DrivingProfileListener {
 
     //sensor
     private final GRTDriverStation ds;
@@ -35,7 +39,7 @@ public class Driver extends EventController implements DrivingListener, DrivingP
     private double leftVelocity;
     private double rightVelocity;
 
-    public Driver(GRTRobotBase dt, GRTDriverStation ds, IDriverProfile driveProfile, String name) {
+    public PrimaryDriver(GRTRobotBase dt, GRTDriverStation ds, IDriverProfile driveProfile, String name) {
         super(name);
         this.dt = dt;
         this.ds = ds;

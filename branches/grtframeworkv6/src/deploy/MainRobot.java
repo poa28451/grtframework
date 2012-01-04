@@ -5,16 +5,18 @@
 package deploy;
 
 import actuator.GRTVictor;
-import controller.Driver;
-import edu.wpi.first.wpilibj.DriverStation;
+import controller.PrimaryDriver;
 import mechanism.GRTDriveTrain;
-import mechanism.GRTDriverStation;
+import sensor.base.GRTXboxDriverStation;
 import mechanism.GRTRobotBase;
-import mechanism.LinearDrive;
+import sensor.base.LinearDrive;
+import sensor.base.SquareDrive;
+import sensor.base.IDriverProfile;
 import rpc.connection.NetworkRPC;
 import rpc.telemetry.SensorLogger;
 import sensor.BatterySensor;
 import sensor.XBoxJoystick;
+import sensor.base.GRTDriverStation;
 
 /**
  *
@@ -22,10 +24,20 @@ import sensor.XBoxJoystick;
  */
 public class MainRobot extends GRTRobot {
 
+    /**
+     * Buttons which refer to enumerated driver curve profiles.
+     * First index refers to Linear drive
+     * Second index refers to Square drive
+     */
+    public static final int[] DRIVER_PROFILE_KEYS = new int[] {1,2};
+    public static final IDriverProfile[] DRIVER_PROFILES = new IDriverProfile[] {new LinearDrive(), new SquareDrive()};
+    
+
+    
     //Global Controllers
     private SensorLogger batteryLogger;
     //Teleop Controllers
-    private Driver driveControl;
+    private PrimaryDriver driveControl;
     private GRTDriverStation driverStation;
     private GRTRobotBase robotBase;
 
@@ -54,13 +66,13 @@ public class MainRobot extends GRTRobot {
         //Mechanisms
         GRTDriveTrain dt = new GRTDriveTrain(leftDT1, leftDT2, rightDT1, rightDT2);
         robotBase = new GRTRobotBase(dt, batterySensor);
-        driverStation = new GRTDriverStation(primary, secondary, new int[]{1, 2},
+        driverStation = new GRTXboxDriverStation(primary, secondary, DRIVER_PROFILE_KEYS, DRIVER_PROFILES,
                 "driverStation");
         driverStation.enable();
         System.out.println("Mechanisms initialized");
 
         //Controllers
-        driveControl = new Driver(robotBase, driverStation, new LinearDrive(), "driveControl");
+        driveControl = new PrimaryDriver(robotBase, driverStation, new LinearDrive(), "driveControl");
         batteryLogger = new SensorLogger(batterySensor, rpcConn, new int[]{23}, "batterylogger");
         System.out.println("Controllers Initialized");
 
