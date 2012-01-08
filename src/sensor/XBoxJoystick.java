@@ -120,7 +120,7 @@ public class XBoxJoystick extends PollingSensor {
                 }
                 case KEY_JOYSTICK_ANGLE: {
                     for (int i = 0; i < joystickListeners.size(); i++) {
-                        ((XboxJoystickListener) joystickListeners.elementAt(i)).leftXAxisMoved(e);
+                        ((XboxJoystickListener) joystickListeners.elementAt(i)).leftAngleChanged(e);
                     }
                     break;
                 }

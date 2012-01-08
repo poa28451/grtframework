@@ -14,9 +14,10 @@ import sensor.base.SquareDrive;
 import sensor.base.IDriverProfile;
 import rpc.connection.NetworkRPC;
 import rpc.telemetry.SensorLogger;
+import sensor.Attack3Joystick;
 import sensor.BatterySensor;
 import sensor.XBoxJoystick;
-import sensor.base.GRTDriverStation;
+import sensor.base.*;
 
 /**
  *
@@ -49,8 +50,8 @@ public class MainRobot extends GRTRobot {
         NetworkRPC rpcConn = new NetworkRPC(180);
 
         //Driver station components
-        XBoxJoystick primary = new XBoxJoystick(1, 12, "primary");
-        XBoxJoystick secondary = new XBoxJoystick(2, 12, "secondary");
+        Attack3Joystick primary = new Attack3Joystick(1, 12, "primary");
+        Attack3Joystick secondary = new Attack3Joystick(2, 12, "secondary");
         System.out.println("Joysticks initialized");
 
         //Battery Sensor
@@ -66,7 +67,7 @@ public class MainRobot extends GRTRobot {
         //Mechanisms
         GRTDriveTrain dt = new GRTDriveTrain(leftDT1, leftDT2, rightDT1, rightDT2);
         robotBase = new GRTRobotBase(dt, batterySensor);
-        driverStation = new GRTXboxDriverStation(primary, secondary, DRIVER_PROFILE_KEYS, DRIVER_PROFILES,
+        driverStation = new GRTAttack3DriverStation(primary, secondary, DRIVER_PROFILE_KEYS, DRIVER_PROFILES,
                 "driverStation");
         driverStation.enable();
         System.out.println("Mechanisms initialized");
