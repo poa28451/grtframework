@@ -107,4 +107,7 @@ public class GRTXboxDriverStation extends GRTDriverStation implements XboxJoysti
         }
         return -1;
     }
+
+    public void leftAngleChanged(XboxJoystickEvent e) {
+    }
 }
