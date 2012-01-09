@@ -5,7 +5,7 @@
 
 package event;
 
-import sensor.BatterySensor;
+import sensor.GRTBatterySensor;
 
 
 /**
@@ -13,15 +13,15 @@ import sensor.BatterySensor;
  * @author ajc
  */
 public class BatteryVoltageEvent {
-    private final BatterySensor sensor;
+    private final GRTBatterySensor sensor;
     private final double voltage;
 
-    public BatteryVoltageEvent(BatterySensor sensor, double voltage){
+    public BatteryVoltageEvent(GRTBatterySensor sensor, double voltage){
         this.sensor = sensor;
         this.voltage = voltage;
     }
 
-    public BatterySensor getSource(){
+    public GRTBatterySensor getSource(){
         return sensor;
     }
 

@@ -14,14 +14,14 @@ import java.util.Vector;
  * A battery sensor that retrieves main battery voltage from the analog sidecar
  * @author ajc
  */
-public class BatterySensor extends PollingSensor {
+public class GRTBatterySensor extends PollingSensor {
 
     public static final int KEY_BATTERY_VOLTAGE = 0;
     
     private final DriverStation ds;
     private final Vector listeners;
 
-    public BatterySensor(int pollTime, String name) {
+    public GRTBatterySensor(int pollTime, String name) {
         super(name, pollTime, 1);
         ds = DriverStation.getInstance();
         listeners = new Vector();

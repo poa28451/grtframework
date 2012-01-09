@@ -6,7 +6,7 @@ package balancer;
 
 import com.sun.squawk.util.MathUtils;
 import core.PollingSensor;
-import sensor.ADXL345;
+import sensor.GRTADXL345;
 import event.RobotTiltEvent;
 import event.RobotTiltListener;
 import java.util.Vector;
@@ -26,7 +26,7 @@ public class RobotTiltAccel  extends PollingSensor{
 
     public RobotTiltAccel(int pollTime, String name){
         super(name, pollTime, NUM_DATA);
-        ADXL345 accelerometer = new ADXL345(I2C_SLOT, RANGE_VALUE, POLLTIME, "Accelerometer Angle");
+        GRTADXL345 accelerometer = new GRTADXL345(I2C_SLOT, RANGE_VALUE, POLLTIME, "Accelerometer Angle");
         double normalDeviation = Math.sqrt(((accelerometer.getXAxis())*(accelerometer.getXAxis()))+
             ((accelerometer.getYAxis())*(accelerometer.getYAxis())));
         angle = MathUtils.atan(normalDeviation / accelerometer.getZAxis());

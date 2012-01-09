@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package event;
-import sensor.Attack3Joystick;
+import sensor.GRTAttack3Joystick;
 /**
  *
  * @author dan
@@ -12,9 +12,9 @@ public class Attack3JoystickEvent {
     public static final int DEFAULT = 0;
     private int id;
     private double value;
-    private Attack3Joystick source;
+    private GRTAttack3Joystick source;
     
-    public Attack3JoystickEvent(Attack3Joystick source, int id, double value){
+    public Attack3JoystickEvent(GRTAttack3Joystick source, int id, double value){
         this.source = source;
         this.id = id;
         this.value = value;
@@ -22,7 +22,7 @@ public class Attack3JoystickEvent {
     public int getId() {
         return id;
     }
-    public Attack3Joystick getSource(){
+    public GRTAttack3Joystick getSource(){
         return source;
     }
     public double getValue() {

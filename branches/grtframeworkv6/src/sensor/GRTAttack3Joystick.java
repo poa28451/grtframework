@@ -13,7 +13,7 @@ import java.util.Vector;
  *
  * @author dan
  */
-public class Attack3Joystick extends PollingSensor {
+public class GRTAttack3Joystick extends PollingSensor {
     private final Vector joystickListeners;
     private final Vector buttonListeners;
     private final Joystick joystick;
@@ -35,7 +35,7 @@ public class Attack3Joystick extends PollingSensor {
     public static final double PRESSED = TRUE;
     public static final double RELEASED = FALSE;
 
-    public Attack3Joystick(int channel, int pollTime, String name){
+    public GRTAttack3Joystick(int channel, int pollTime, String name){
         super(name, pollTime, NUM_DATA);
         joystick = new Joystick(channel);
         joystickListeners = new Vector();

@@ -3,27 +3,28 @@
  * and open the template in the editor.
  */
 package event;
-import sensor.ADXL345;
+import sensor.GRTADXL345;
 
 /**
  *
  * @author calvin
  */
 public class ADXL345Event {
-    public static final int X = 0;
-    public static final int Y = 1;
-    public static final int Z = 2;
+    public static final int KEY_X = 0;
+    public static final int KEY_Y = 1;
+    public static final int KEY_Z = 2;
 
-    private ADXL345 source;
+    private GRTADXL345 source;
     private int id;
     private double acceleration;
 
-    public ADXL345Event(ADXL345 source, int id, double acceleration) {
+    public ADXL345Event(GRTADXL345 source, int id, double acceleration) {
         this.source = source;
         this.id = id;
         this.acceleration = acceleration;
     }
 
+    //TODO what units
     public double getAcceleration() {
         return acceleration;
     }
@@ -32,7 +33,7 @@ public class ADXL345Event {
         return id;
     }
 
-    public ADXL345 getSource() {
+    public GRTADXL345 getSource() {
         return source;
     }
 }

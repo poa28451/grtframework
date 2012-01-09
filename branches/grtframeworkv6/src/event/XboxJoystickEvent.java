@@ -4,7 +4,7 @@
  */
 package event;
 
-import sensor.XBoxJoystick;
+import sensor.GRTXBoxJoystick;
 
 /**
  *
@@ -13,11 +13,11 @@ import sensor.XBoxJoystick;
 public class XboxJoystickEvent {
 
     public static final int DEFAULT = 0;
-    private XBoxJoystick source;
+    private GRTXBoxJoystick source;
     private int id;
     private double value;
 
-    public XboxJoystickEvent(XBoxJoystick source, int id, double value) {
+    public XboxJoystickEvent(GRTXBoxJoystick source, int id, double value) {
         this.source = source;
         this.id = id;
         this.value = value;
@@ -27,7 +27,7 @@ public class XboxJoystickEvent {
         return id;
     }
 
-    public XBoxJoystick getSource() {
+    public GRTXBoxJoystick getSource() {
         return source;
     }
 

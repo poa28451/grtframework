@@ -16,7 +16,7 @@ import java.util.Vector;
  * 
  * @author ajc
  */
-public class XBoxJoystick extends PollingSensor {
+public class GRTXBoxJoystick extends PollingSensor {
 
     /**
      * Keys of data
@@ -52,7 +52,7 @@ public class XBoxJoystick extends PollingSensor {
     private final Vector buttonListeners;
     private final Vector joystickListeners;
 
-    public XBoxJoystick(int channel, int pollTime, String name) {
+    public GRTXBoxJoystick(int channel, int pollTime, String name) {
         super(name, pollTime, NUM_DATA);
         joystick = new Joystick(channel);
         
