@@ -14,9 +14,9 @@ import sensor.base.SquareDrive;
 import sensor.base.IDriverProfile;
 import rpc.connection.NetworkRPC;
 import rpc.telemetry.SensorLogger;
-import sensor.Attack3Joystick;
-import sensor.BatterySensor;
-import sensor.XBoxJoystick;
+import sensor.GRTAttack3Joystick;
+import sensor.GRTBatterySensor;
+import sensor.GRTXBoxJoystick;
 import sensor.base.*;
 
 /**
@@ -50,12 +50,12 @@ public class MainRobot extends GRTRobot {
         NetworkRPC rpcConn = new NetworkRPC(180);
 
         //Driver station components
-        Attack3Joystick primary = new Attack3Joystick(1, 12, "primary");
-        Attack3Joystick secondary = new Attack3Joystick(2, 12, "secondary");
+        GRTAttack3Joystick primary = new GRTAttack3Joystick(1, 12, "primary");
+        GRTAttack3Joystick secondary = new GRTAttack3Joystick(2, 12, "secondary");
         System.out.println("Joysticks initialized");
 
         //Battery Sensor
-        BatterySensor batterySensor = new BatterySensor(10, "battery");
+        GRTBatterySensor batterySensor = new GRTBatterySensor(10, "battery");
 
         // PWM outputs
         GRTVictor leftDT1 = new GRTVictor(4, "leftDT1");

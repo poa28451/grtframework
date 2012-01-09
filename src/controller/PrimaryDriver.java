@@ -17,7 +17,7 @@ import sensor.base.GRTXboxDriverStation;
 import mechanism.GRTRobotBase;
 import sensor.base.IDriverProfile;
 import sensor.base.LinearDrive;
-import sensor.XBoxJoystick;
+import sensor.GRTXBoxJoystick;
 import sensor.base.GRTDriverStation;
 
 /**

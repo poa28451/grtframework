@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package event;
 
 /**
@@ -10,5 +9,6 @@ package event;
  * @author calvin
  */
 public interface GyroListener {
-    public void AngleChange(GyroEvent e);
+
+    public void angleChanged(GyroEvent e);
 }

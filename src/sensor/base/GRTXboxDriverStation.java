@@ -8,7 +8,7 @@ import event.ButtonEvent;
 import event.ButtonListener;
 import event.XboxJoystickEvent;
 import event.XboxJoystickListener;
-import sensor.XBoxJoystick;
+import sensor.GRTXBoxJoystick;
 
 /**
  * Driverstation using XBoxJoysticks
@@ -17,8 +17,8 @@ import sensor.XBoxJoystick;
  */
 public class GRTXboxDriverStation extends GRTDriverStation implements XboxJoystickListener, ButtonListener {
 
-    private final XBoxJoystick primary;
-    private final XBoxJoystick secondary;
+    private final GRTXBoxJoystick primary;
+    private final GRTXBoxJoystick secondary;
 
     /**
      * 
@@ -28,7 +28,7 @@ public class GRTXboxDriverStation extends GRTDriverStation implements XboxJoysti
      * @param curves
      * @param name
      */
-    public GRTXboxDriverStation(XBoxJoystick primary, XBoxJoystick secondary,
+    public GRTXboxDriverStation(GRTXBoxJoystick primary, GRTXBoxJoystick secondary,
             int[] profileButtons, IDriverProfile[] curves, String name) {
         super(profileButtons, curves, name);
         this.primary = primary;

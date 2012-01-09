@@ -15,7 +15,7 @@ import java.util.Vector;
  */
 
 
-public class ADXL345 extends PollingSensor{
+public class GRTADXL345 extends PollingSensor{
     private static final int X_AXIS = 0;
     private static final int Y_AXIS = 1;
     private static final int Z_AXIS = 2;
@@ -76,7 +76,7 @@ public class ADXL345 extends PollingSensor{
     public static final byte DATA_FORMAT_16G = 0x03;
     // default address
    
-    public ADXL345(int slot, int range_value, int Polltime, String id){
+    public GRTADXL345(int slot, int range_value, int Polltime, String id){
         super(id, Polltime, NUM_DATA);
         this.setRange(range_value);
         i2c = new I2C( DigitalModule.getInstance(slot), kAddress );

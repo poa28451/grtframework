@@ -8,17 +8,17 @@ import event.Attack3JoystickEvent;
 import event.Attack3JoystickListener;
 import event.ButtonEvent;
 import event.ButtonListener;
-import sensor.Attack3Joystick;
+import sensor.GRTAttack3Joystick;
 
 /**
  * Driver station using 2 Logitech Attack 3 Joysticks
  * @author dan
  */
 public class GRTAttack3DriverStation extends GRTDriverStation implements Attack3JoystickListener, ButtonListener{
-    private final Attack3Joystick left;
-    private final Attack3Joystick right;
+    private final GRTAttack3Joystick left;
+    private final GRTAttack3Joystick right;
     
-    public GRTAttack3DriverStation(Attack3Joystick left, Attack3Joystick right,
+    public GRTAttack3DriverStation(GRTAttack3Joystick left, GRTAttack3Joystick right,
             int[] profileButtons, IDriverProfile[] curves, String name){
         super(profileButtons, curves, name);
         this.left= left;
