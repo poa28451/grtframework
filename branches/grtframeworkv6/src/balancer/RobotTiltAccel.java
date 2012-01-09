@@ -19,17 +19,18 @@ public class RobotTiltAccel  extends PollingSensor{
     private static final int POLLTIME = 10;
     private static final int I2C_SLOT = 4;
     private static final int RANGE_VALUE = 8;
+
+    private static final int NUM_DATA = 4;//TODO change
     private int ANGLE = 1;
     public double angle;
-    
-    public void RobotTiltAccel(int pollTime, String name){
-        super(name, pollTime, 1);
+
+    public RobotTiltAccel(int pollTime, String name){
+        super(name, pollTime, NUM_DATA);
         ADXL345 accelerometer = new ADXL345(I2C_SLOT, RANGE_VALUE, POLLTIME, "Accelerometer Angle");
         double normalDeviation = Math.sqrt(((accelerometer.getXAxis())*(accelerometer.getXAxis()))+
             ((accelerometer.getYAxis())*(accelerometer.getYAxis())));
         angle = MathUtils.atan(normalDeviation / accelerometer.getZAxis());
         robotTiltListeners = new Vector();
-
     }
     
     protected void poll() {
