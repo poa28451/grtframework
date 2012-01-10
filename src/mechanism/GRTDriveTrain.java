@@ -31,10 +31,6 @@ public class GRTDriveTrain {
         this.leftBack = leftBack;
         this.rightFront = rightFront;
         this.rightBack = rightBack;
-        leftFront.enable();
-        leftBack.enable();
-        rightFront.enable();
-        rightBack.enable();
     }
 
     /**
@@ -43,9 +39,9 @@ public class GRTDriveTrain {
      * @param rightVelocity
      */
     public void tankDrive(double leftVelocity, double rightVelocity) {
-        leftFront.setSpeed(leftVelocity);
-        leftBack.setSpeed(leftVelocity);
-        rightFront.setSpeed(rightVelocity);
-        rightBack.setSpeed(rightVelocity);
+        leftFront.setSpeed(-leftVelocity);
+        leftBack.setSpeed(-leftVelocity);
+        rightFront.setSpeed(-rightVelocity);
+        rightBack.setSpeed(-rightVelocity);
     }
 }
