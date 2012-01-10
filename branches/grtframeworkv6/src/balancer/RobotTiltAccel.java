@@ -5,7 +5,9 @@
 package balancer;
 
 import com.sun.squawk.util.MathUtils;
-import core.PollingSensor;
+import core.Sensor;
+import event.ADXL345Event;
+import event.ADXL345Listener;
 import sensor.GRTADXL345;
 import event.RobotTiltEvent;
 import event.RobotTiltListener;
@@ -14,27 +16,19 @@ import java.util.Vector;
  *
  * @author calvin
  */
-public class RobotTiltAccel  extends PollingSensor{
+public class RobotTiltAccel  extends Sensor implements ADXL345Listener {
     private Vector robotTiltListeners;
-    private static final int POLLTIME = 10;
-    private static final int I2C_SLOT = 4;
-    private static final int RANGE_VALUE = 8;
 
     private static final int NUM_DATA = 4;//TODO change
     private int ANGLE = 1;
-    public double angle;
+    private double angle;
+    private double xAccel;
+    private double yAccel;
+    private double zAccel;
 
     public RobotTiltAccel(int pollTime, String name){
-        super(name, pollTime, NUM_DATA);
-        GRTADXL345 accelerometer = new GRTADXL345(I2C_SLOT, RANGE_VALUE, POLLTIME, "Accelerometer Angle");
-        double normalDeviation = Math.sqrt(((accelerometer.getXAxis())*(accelerometer.getXAxis()))+
-            ((accelerometer.getYAxis())*(accelerometer.getYAxis())));
-        angle = MathUtils.atan(normalDeviation / accelerometer.getZAxis());
+        super(name);
         robotTiltListeners = new Vector();
-    }
-    
-    protected void poll() {
-        setState(ANGLE, angle);
     }
 
     protected void notifyListeners(int id, double oldDatum, double newDatum) {
@@ -42,5 +36,44 @@ public class RobotTiltAccel  extends PollingSensor{
         for (int i = 0; i < robotTiltListeners.size(); i++) {
             ((RobotTiltListener) robotTiltListeners.elementAt(i)).RobotTiltChange(e);
         }
+    }
+    
+    private void updateAngle(){
+        double normalDeviation = Math.sqrt(((xAccel)*(xAccel))+
+            ((yAccel)*(yAccel)));
+        angle = MathUtils.atan(normalDeviation / zAccel);
+    }
+    
+    public double getTilt(){
+        return angle;
+    }
+    
+    public void addRobotTiltListeners(RobotTiltListener l){
+        robotTiltListeners.addElement(l);
+    }
+    
+    public void removeRobotTiltListeners(RobotTiltListener l){
+        robotTiltListeners.removeElement(l);
+    }
+
+    protected void startListening() {
+    }
+
+    protected void stopListening() {
+    }
+
+    public void XAccelChange(ADXL345Event e) {
+        xAccel = e.getAcceleration();
+        updateAngle();
+    }
+
+    public void YAccelChange(ADXL345Event e) {
+        yAccel = e.getAcceleration();
+        updateAngle();
+    }
+
+    public void ZAccelChange(ADXL345Event e) {
+        zAccel = e.getAcceleration();
+        updateAngle();
     }
 }
