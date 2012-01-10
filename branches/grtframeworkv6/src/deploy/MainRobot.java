@@ -43,6 +43,10 @@ public class MainRobot extends GRTRobot {
     private PrimaryDriver driveControl;
     private GRTDriverStation driverStation;
     private GRTRobotBase robotBase;
+    private final GRTADXL345 primaryADXL;
+    private final RobotTiltAccel tiltSensor;
+    private final SensorLogger tiltLogger;
+    
 
     public MainRobot() {
 
