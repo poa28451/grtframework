@@ -2,6 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * Public methods:
+ * getAxisX() (and Y and Z) returns a double of the current acceleration in that direction
+ * setRange(int range) sets the range to +-(range) g's, where range is 2,4,8, or 16
+ * for events, there is addADXL345Listener() and removeADXL345Listener()
+ */
+
 package sensor;
 import core.PollingSensor;
 import edu.wpi.first.wpilibj.*;
@@ -170,7 +177,7 @@ public class GRTADXL345 extends PollingSensor{
     }
     
     
-    private void setRange(int value) {
+    public void setRange(int value) {
         switch (value) {
             case 2:
                     range = DATA_FORMAT_02G;

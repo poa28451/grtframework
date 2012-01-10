@@ -25,6 +25,10 @@ public class GRTGyro extends PollingSensor {
         gyro = new Gyro(channel);
         gyroListeners = new Vector();
     }
+    
+    public double getAngle(){
+        return gyro.getAngle();
+    }
 
     protected void poll() {
         setState(KEY_ANGLE, gyro.getAngle());
