@@ -5,6 +5,7 @@
 package deploy;
 
 import actuator.GRTVictor;
+import balancer.RobotTiltAccel;
 import controller.PrimaryDriver;
 import mechanism.GRTDriveTrain;
 import sensor.base.GRTXboxDriverStation;
@@ -14,6 +15,7 @@ import sensor.base.SquareDrive;
 import sensor.base.IDriverProfile;
 import rpc.connection.NetworkRPC;
 import rpc.telemetry.SensorLogger;
+import sensor.GRTADXL345;
 import sensor.GRTAttack3Joystick;
 import sensor.GRTBatterySensor;
 import sensor.GRTXBoxJoystick;
@@ -86,16 +88,20 @@ public class MainRobot extends GRTRobot {
         driveControl = new PrimaryDriver(robotBase, driverStation, new LinearDrive(), "driveControl");
         batteryLogger = new SensorLogger(batterySensor, rpcConn, new int[]{23}, "batterylogger");
         System.out.println("Controllers Initialized");
-
-
+        
+        //Start Accelerometers
+        primaryADXL = new GRTADXL345(4, 2, 10, "Primary ADXL");
+        tiltSensor = new RobotTiltAccel(primaryADXL, "TiltSensor");
+        tiltLogger = new SensorLogger(tiltSensor, rpcConn, new int[]{210}, "tiltLogger");
+        
         // Start/prepare controllers
+        primaryADXL.enable();
         batteryLogger.enable();
+        tiltSensor.enable();
+        
         addTeleopController(driveControl);
-
+        addAutonomousController(tiltLogger);
 
         System.out.println("Robot initialized OK");
-
-
-
     }
 }
