@@ -52,16 +52,26 @@ public class MainRobot extends GRTRobot {
         //Driver station components
         GRTAttack3Joystick primary = new GRTAttack3Joystick(1, 12, "primary");
         GRTAttack3Joystick secondary = new GRTAttack3Joystick(2, 12, "secondary");
+        primary.start();
+        secondary.start();
+        primary.enable();
+        secondary.enable();
         System.out.println("Joysticks initialized");
 
         //Battery Sensor
         GRTBatterySensor batterySensor = new GRTBatterySensor(10, "battery");
+        batterySensor.start();
+        batterySensor.enable();
 
         // PWM outputs
-        GRTVictor leftDT1 = new GRTVictor(4, "leftDT1");
+        GRTVictor leftDT1 = new GRTVictor(2, "leftDT1");
         GRTVictor leftDT2 = new GRTVictor(3, "leftDT2");
-        GRTVictor rightDT1 = new GRTVictor(6, "rightDT1");
-        GRTVictor rightDT2 = new GRTVictor(10, "rightDT2");
+        GRTVictor rightDT1 = new GRTVictor(8, "rightDT1");
+        GRTVictor rightDT2 = new GRTVictor(9, "rightDT2");
+        leftDT1.enable();
+        leftDT2.enable();
+        rightDT1.enable();
+        rightDT2.enable();
         System.out.println("Motors initialized");
 
         //Mechanisms

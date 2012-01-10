@@ -19,8 +19,6 @@ public class GRTRobotBase {
     public GRTRobotBase(GRTDriveTrain dt, GRTBatterySensor s) {
         this.dt = dt;
         this.s = s;
-        s.start();
-        s.enable();
     }
 
     public GRTDriveTrain getDriveTrain() {
