@@ -102,7 +102,7 @@ public class MainRobot extends GRTRobot {
         
         GRTADXL345 adxl = new  GRTADXL345(2, 10, "ADXL345");
         
-        adxl.disable();
+        adxl.enable();
         adxl.start();
         
 //        s.enable();
