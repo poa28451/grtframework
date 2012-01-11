@@ -51,7 +51,6 @@ public class balancePD extends EventController implements RobotTiltListener{
         deltaAngle = currentAngle - previousAngle;
         double drivePower = P_CONSTANT * currentAngle - D_CONSTANT * deltaAngle;
         base.tankDrive(drivePower, drivePower);
-        
     }
     
     

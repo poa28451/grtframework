@@ -8,10 +8,10 @@ import com.sun.squawk.util.MathUtils;
 import core.Sensor;
 import event.ADXL345Event;
 import event.ADXL345Listener;
-import sensor.GRTADXL345;
 import event.RobotTiltEvent;
 import event.RobotTiltListener;
 import java.util.Vector;
+import sensor.GRTADXL345;
 
 /**
  *
