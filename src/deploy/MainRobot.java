@@ -15,9 +15,11 @@ import sensor.base.SquareDrive;
 import sensor.base.IDriverProfile;
 import rpc.connection.NetworkRPC;
 import rpc.telemetry.SensorLogger;
+import sensor.ADXL345DigitalAccelerometer;
 import sensor.GRTADXL345;
 import sensor.GRTAttack3Joystick;
 import sensor.GRTBatterySensor;
+import sensor.GRTSwitch;
 import sensor.GRTXBoxJoystick;
 import sensor.base.*;
 
@@ -43,7 +45,8 @@ public class MainRobot extends GRTRobot {
     private PrimaryDriver driveControl;
     private GRTDriverStation driverStation;
     private GRTRobotBase robotBase;
-    private final GRTADXL345 primaryADXL;
+    private GRTADXL345 adxl;
+//    private final ADXL345DigitalAccelerometer primaryADXL;
     private final RobotTiltAccel tiltSensor;
     private final SensorLogger tiltLogger;
     
@@ -93,19 +96,39 @@ public class MainRobot extends GRTRobot {
         batteryLogger = new SensorLogger(batterySensor, rpcConn, new int[]{23}, "batterylogger");
         System.out.println("Controllers Initialized");
         
+        
+//        GRTSwitch s = new GRTSwitch(2, 10, "SWITCH");
+//        s.start();
+        
+        GRTADXL345 adxl = new  GRTADXL345(2, 10, "ADXL345");
+        
+        adxl.disable();
+        adxl.start();
+        
+//        s.enable();
         //Start Accelerometers
-        primaryADXL = new GRTADXL345(4, 2, 10, "Primary ADXL");
-        tiltSensor = new RobotTiltAccel(primaryADXL, "TiltSensor");
+//        primaryADXL = new ADXL345DigitalAccelerometer(2);
+//        primaryADXL.initialize();
+//        primaryADXL.setRange(ADXL345DigitalAccelerometer.DATA_FORMAT_02G);
+//        
+        
+        
+//        primaryADXL = new ADXL345DigitalAccelerometer(2);
+//        primaryADXL.setRange(ADXL345DigitalAccelerometer.DATA_FORMAT_02G);
+        
+        
+        
+        tiltSensor = new RobotTiltAccel(adxl, "TiltSensor");
         tiltLogger = new SensorLogger(tiltSensor, rpcConn, new int[]{210}, "tiltLogger");
         
         // Start/prepare controllers
-        primaryADXL.enable();
-        batteryLogger.enable();
-        tiltSensor.enable();
+//        primaryADXL.enable();
+//        batteryLogger.enable();
+//        tiltSensor.enable();
         
         addTeleopController(driveControl);
         addAutonomousController(tiltLogger);
 
-        System.out.println("Robot initialized OK");
+
     }
 }
