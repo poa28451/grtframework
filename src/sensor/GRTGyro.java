@@ -5,6 +5,7 @@
 package sensor;
 
 import core.PollingSensor;
+import edu.wpi.first.wpilibj.AnalogModule;
 import edu.wpi.first.wpilibj.Gyro;
 import java.util.Vector;
 import event.GyroEvent;
@@ -17,12 +18,13 @@ import event.GyroListener;
 public class GRTGyro extends PollingSensor {
 
     public static final int KEY_ANGLE = 0;
+    public static final int NUM_DATA = 1;
     private Gyro gyro;
     private Vector gyroListeners;
 
     public GRTGyro(int channel, int pollTime, String name) {
-        super(name, pollTime, 1);
-        gyro = new Gyro(channel);
+        super(name, pollTime, NUM_DATA);
+        gyro = new Gyro(AnalogModule.getDefaultAnalogModule(), channel);
         gyroListeners = new Vector();
     }
     
@@ -43,8 +45,6 @@ public class GRTGyro extends PollingSensor {
                 ((GyroListener) gyroListeners.elementAt(i)).angleChanged(e);
             }
         }
-
-
     }
 
     public void addListener(GyroListener l) {

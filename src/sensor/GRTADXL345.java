@@ -22,7 +22,11 @@ public class GRTADXL345  extends PollingSensor{
     private static final int Z_AXIS = 2;
     private static final int NUM_DATA = 3;
     
+    
+    
     private Vector listeners;
+    
+    private ADXL345_I2C.AllAxes accelerations;
     
     public GRTADXL345(int slot, int pollTime, String id){
         super (id, pollTime, NUM_DATA);
