@@ -19,6 +19,8 @@ import sensor.ADXL345DigitalAccelerometer;
 import sensor.GRTADXL345;
 import sensor.GRTAttack3Joystick;
 import sensor.GRTBatterySensor;
+import sensor.GRTEncoder;
+import sensor.GRTGyro;
 import sensor.GRTSwitch;
 import sensor.GRTXBoxJoystick;
 import sensor.base.*;
@@ -47,8 +49,8 @@ public class MainRobot extends GRTRobot {
     private GRTRobotBase robotBase;
     private GRTADXL345 adxl;
 //    private final ADXL345DigitalAccelerometer primaryADXL;
-    private final RobotTiltAccel tiltSensor;
-    private final SensorLogger tiltLogger;
+//    private final RobotTiltAccel tiltSensor;
+//    private final SensorLogger tiltLogger;
     
 
     public MainRobot() {
@@ -96,30 +98,17 @@ public class MainRobot extends GRTRobot {
         batteryLogger = new SensorLogger(batterySensor, rpcConn, new int[]{23}, "batterylogger");
         System.out.println("Controllers Initialized");
         
+//        adxl = new  GRTADXL345(1, 25, "ADXL345");
+//        adxl.enable();
+//        adxl.start();
+
         
-//        GRTSwitch s = new GRTSwitch(2, 10, "SWITCH");
-//        s.start();
+//        GRTGyro gyro = new GRTGyro(1, 10, "Gyro");
+//        gyro.enable();
+//        gyro.start();
         
-        GRTADXL345 adxl = new  GRTADXL345(2, 10, "ADXL345");
-        
-        adxl.enable();
-        adxl.start();
-        
-//        s.enable();
-        //Start Accelerometers
-//        primaryADXL = new ADXL345DigitalAccelerometer(2);
-//        primaryADXL.initialize();
-//        primaryADXL.setRange(ADXL345DigitalAccelerometer.DATA_FORMAT_02G);
-//        
-        
-        
-//        primaryADXL = new ADXL345DigitalAccelerometer(2);
-//        primaryADXL.setRange(ADXL345DigitalAccelerometer.DATA_FORMAT_02G);
-        
-        
-        
-        tiltSensor = new RobotTiltAccel(adxl, "TiltSensor");
-        tiltLogger = new SensorLogger(tiltSensor, rpcConn, new int[]{210}, "tiltLogger");
+//        tiltSensor = new RobotTiltAccel(adxl, "TiltSensor");
+//        tiltLogger = new SensorLogger(tiltSensor, rpcConn, new int[]{210}, "tiltLogger");
         
         // Start/prepare controllers
 //        primaryADXL.enable();
@@ -127,8 +116,21 @@ public class MainRobot extends GRTRobot {
 //        tiltSensor.enable();
         
         addTeleopController(driveControl);
-        addAutonomousController(tiltLogger);
+//        addAutonomousController(tiltLogger);
 
-
+        GRTEncoder encoder1 =  new GRTEncoder(2, 1, 4.0, 10, "EncoderLeft");
+        
+        GRTEncoder encoder2 = new GRTEncoder(3, 4, 4.0, 10, "EncoderRight");
+        
+        
+        encoder1.start(); encoder1.enable();
+        encoder2.start(); encoder2.enable();
+        
+        SensorLogger encoderLogger1 = new SensorLogger(encoder1, rpcConn, new int[]{81, 82, 83}, null);
+        SensorLogger encoderLogger2 = new SensorLogger(encoder2, rpcConn, new int[]{84,85,86}, null);
+        
+        
+        encoderLogger1.enable();
+        encoderLogger2.enable();
     }
 }

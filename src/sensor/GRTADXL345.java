@@ -36,7 +36,7 @@ public class GRTADXL345  extends PollingSensor{
         setState(Y_AXIS, i2c.getAcceleration(ADXL345_I2C.Axes.kY));
         setState(Z_AXIS, i2c.getAcceleration(ADXL345_I2C.Axes.kZ));
         
-        System.out.println(getState(X_AXIS) + "\t" + getState(Y_AXIS) + "\t" + getState(Z_AXIS));
+        System.out.println("ADXL345:\t" + getState(X_AXIS) + "\t" + getState(Y_AXIS) + "\t" + getState(Z_AXIS));
     }
     
     public void addADXL345Listener(ADXL345Listener l){
