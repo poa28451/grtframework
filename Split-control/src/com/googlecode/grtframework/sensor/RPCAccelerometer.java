@@ -43,7 +43,7 @@ public class RPCAccelerometer implements RPCMessageListener, IAccelerometer {
 				axis = i;
 			}
 		}
-		notify(axis, message.getData());
+		notify(axis, Double.parseDouble(message.getData()) );
 
 	}
 

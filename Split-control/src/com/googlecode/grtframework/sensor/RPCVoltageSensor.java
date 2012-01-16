@@ -35,8 +35,8 @@ public class RPCVoltageSensor implements RPCMessageListener, IVoltageSensor {
 
 	public void messageReceived(RPCMessage message) {
 		if (message.getKey() == key) {
-			VoltageChangeEvent ev = new VoltageChangeEvent(this, message
-					.getData());
+			VoltageChangeEvent ev = new VoltageChangeEvent(this, Double.parseDouble(message
+					.getData()) );
 			for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 				((VoltageSensorListener) e.nextElement()).voltageChanged(ev);
 			}

@@ -3,9 +3,14 @@ package com.googlecode.grtframework.rpc;
 public class RPCMessage {
 
 	private final int key;
-	private final double data;
+	private final String data;
 
 	public RPCMessage(int key, double data) {
+		this.key = key;
+		this.data = "" + data;
+	}
+	
+	public RPCMessage(int key, String data){
 		this.key = key;
 		this.data = data;
 	}
@@ -14,7 +19,7 @@ public class RPCMessage {
 		return key;
 	}
 
-	public double getData() {
+	public String getData() {
 		return data;
 	}
 
