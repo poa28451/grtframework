@@ -38,7 +38,7 @@ public class RPCRangeFinder implements RPCMessageListener, IRangeFinder {
 	public void messageReceived(RPCMessage message) {
 		// assigns axis to the index of the keys array that message is from
 		if (message.getKey() == keys) {
-			notify(message.getData());
+			notify(Double.parseDouble(message.getData()) );
 		}
 
 	}

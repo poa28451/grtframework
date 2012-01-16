@@ -42,14 +42,14 @@ public class RPCSwitch implements RPCMessageListener, RPCSwitchComponent,
 	public void messageReceived(RPCMessage message) {
 		if (message.getKey() == rpc_key) {
 
-			if (message.getData() == PRESSED) {
+			if ( Double.parseDouble( message.getData() ) == PRESSED ) {
 
 				SwitchEvent ev = new SwitchEvent(this, SwitchEvent.PRESSED);
 				for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 					((SwitchListener) e.nextElement()).switchPressed(ev);
 				}
 				// System.out.println("press!");
-			} else if (message.getData() == RELEASED) {
+			} else if ( Double.parseDouble(message.getData()) == RELEASED) {
 				SwitchEvent ev = new SwitchEvent(this, SwitchEvent.PRESSED);
 				for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
 					((SwitchListener) e.nextElement()).switchReleased(ev);
