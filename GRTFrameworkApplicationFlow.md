@@ -1,0 +1,1 @@
+https://dl.dropbox.com/s/1ruxwpcqxei3ar5/GRTFrameworkCartoon.png?dl=1
